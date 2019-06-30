@@ -4,7 +4,7 @@ public class DefaultPage extends Page {
 
 	private static final long serialVersionUID = 1L;
 
-	private final JBTN back = new JBTN(0, "back");
+	private final JBTN back = new JBTN("back");
 
 	protected DefaultPage(Page p) {
 		super(p);

@@ -16,7 +16,6 @@ import main.MainBCU;
 import main.Opts;
 import main.Printer;
 import page.MainFrame;
-import page.MainLocale;
 
 public class Writer extends DataIO {
 
@@ -59,7 +58,7 @@ public class Writer extends DataIO {
 		try {
 			writeOptions();
 			if (save && MainBCU.loaded && MainBCU.trueRun) {
-				//writeData();
+				// writeData();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,8 +70,9 @@ public class Writer extends DataIO {
 		ph.deleteOnExit();
 		if (log.length() == 0)
 			log.deleteOnExit();
-		else;
-			//BCJSON.report(log);
+		else
+			;
+		// BCJSON.report(log);
 	}
 
 	public static void logPrepare() {
@@ -205,7 +205,6 @@ public class Writer extends DataIO {
 
 	private static void writeOptions() {
 		PrintStream out = newFile("./user/data.ini");
-		out.println("lang= " + MainLocale.lang);
 		Rectangle r = MainFrame.crect;
 		out.println("rect= {" + r.x + ',' + r.y + ',' + r.width + ',' + r.height + '}');
 		out.close();

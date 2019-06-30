@@ -7,54 +7,50 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 public strictfp class P {
-	
-	private static double randpi() {
-		return Math.PI*Math.random();
-	}
-	
+
 	public static class Polygon {
-		
+
 		public P[] ps;
 		public double rad;
-		
-		public Polygon(P[] parr,double r) {
-			ps=parr;
-			rad=r;
+
+		public Polygon(P[] parr, double r) {
+			ps = parr;
+			rad = r;
 		}
-		
+
 		public double dis(P p) {
-			double dire=randpi();
-			int count=0;
-			double dis=Double.MAX_VALUE;
-			P up=polar(1,dire);
-			for(int i=0;i<ps.length;i++) {
-				P p0=get(i-1);
-				P p1=get(i);
-				P v0=p0.sf(p);
-				P v1=p1.sf(p);
-				P l=p0.sf(p1);
+			double dire = randpi();
+			int count = 0;
+			double dis = Double.MAX_VALUE;
+			P up = polar(1, dire);
+			for (int i = 0; i < ps.length; i++) {
+				P p0 = get(i - 1);
+				P p1 = get(i);
+				P v0 = p0.sf(p);
+				P v1 = p1.sf(p);
+				P l = p0.sf(p1);
 				// dis to point
-				dis=Math.min(dis,v0.abs());
+				dis = Math.min(dis, v0.abs());
 				// dis to line
-				if(l.dotP(v0)>=0&&l.dotP(v1)<=0)
-					dis=Math.min(dis,Math.abs(l.crossP(v0))/l.abs());
+				if (l.dotP(v0) >= 0 && l.dotP(v1) <= 0)
+					dis = Math.min(dis, Math.abs(l.crossP(v0)) / l.abs());
 				// intersect
-				if(v0.crossP(up)*v0.crossP(v1)<0&&-v0.dotP(up)*v1.abs()>v0.dotP(v1))
+				if (v0.crossP(up) * v0.crossP(v1) < 0 && -v0.dotP(up) * v1.abs() > v0.dotP(v1))
 					count++;
 			}
-			if(count%2>0)
+			if (count % 2 > 0)
 				return -dis;
 			return dis;
 		}
-		
+
 		private P get(int i) {
-			if(i<0)
-				return ps[i+ps.length];
-			if(i>=ps.length)
-				return ps[i-ps.length];
+			if (i < 0)
+				return ps[i + ps.length];
+			if (i >= ps.length)
+				return ps[i - ps.length];
 			return ps[i];
 		}
-		
+
 	}
 
 	public static P polar(double r, double t) {
@@ -67,6 +63,10 @@ public strictfp class P {
 		if (cx > 1)
 			return 1;
 		return cx;
+	}
+
+	private static double randpi() {
+		return Math.PI * Math.random();
 	}
 
 	public double x, y;

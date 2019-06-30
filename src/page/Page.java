@@ -26,25 +26,6 @@ public abstract class Page extends JPanel implements RetFunc {
 		ToolTipManager.sharedInstance().setInitialDelay(100);
 	}
 
-	public static String get(int i, String s) {
-		return MainLocale.getLoc(i, s);
-	}
-
-	public static String[] get(int i, String s, int m) {
-		return MainLocale.getLoc(i, s, m);
-	}
-
-	public static void renewLoc(Page p) {
-		MainLocale.redefine();
-		while (p != null) {
-			for (Component c : p.getComponents())
-				if (c instanceof LocComp)
-					((LocComp) c).reLoc();
-			p.renew();
-			p = p.front;
-		}
-	}
-
 	public static void set(Component jc, int winx, int winy, int x, int y, int w, int h) {
 		jc.setBounds(x * winx / 2300, y * winy / 1300, w * winx / 2300, h * winy / 1300);
 	}

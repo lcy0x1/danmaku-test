@@ -6,28 +6,19 @@ import java.util.function.Consumer;
 
 import javax.swing.JToggleButton;
 
-public class JTG extends JToggleButton implements LocComp {
+public class JTG extends JToggleButton {
 
 	private static final long serialVersionUID = 1L;
 
-	private final LocSubComp lsc;
-
 	public JTG() {
-		lsc = new LocSubComp(this);
 	}
 
 	public JTG(int i, String str) {
-		this();
-		lsc.init(i, str);
+		this(str);
 	}
 
 	public JTG(String str) {
-		this(-1, str);
-	}
-
-	@Override
-	public LocSubComp getLSC() {
-		return lsc;
+		super(str);
 	}
 
 	public void setLnr(Consumer<ActionEvent> c) {

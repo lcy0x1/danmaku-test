@@ -7,7 +7,6 @@ public class MainPage extends Page {
 	private static final long serialVersionUID = 1L;
 
 	private final JLabel memo = new JLabel();
-	
 
 	public MainPage() {
 		super(null);

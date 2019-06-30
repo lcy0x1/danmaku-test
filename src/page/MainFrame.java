@@ -78,7 +78,7 @@ public class MainFrame extends JFrame {
 	private boolean settingsize = false, changingPanel = false;
 
 	public MainFrame(String ver) {
-		super(Page.get(0, "title") + " Ver " + ver);
+		super("TH03" + " Ver " + ver);
 		setLayout(null);
 		addListener();
 		sizer();

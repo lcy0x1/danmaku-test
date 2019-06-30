@@ -3,29 +3,21 @@ package page;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
-public class JL extends JLabel implements LocComp {
+public class JL extends JLabel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final LocSubComp lsc;
-
 	public JL() {
-		lsc = new LocSubComp(this);
-		setBorder(BorderFactory.createEtchedBorder());
+		this("");
 	}
 
 	public JL(int i, String str) {
-		this();
-		lsc.init(i, str);
+		this(str);
 	}
 
 	public JL(String str) {
-		this(-1, str);
-	}
-
-	@Override
-	public LocSubComp getLSC() {
-		return lsc;
+		super(str);
+		setBorder(BorderFactory.createEtchedBorder());
 	}
 
 }

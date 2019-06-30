@@ -12,7 +12,6 @@ import java.util.Queue;
 
 import main.Opts;
 import page.MainFrame;
-import page.MainLocale;
 
 public class Reader extends DataIO {
 
@@ -118,10 +117,6 @@ public class Reader extends DataIO {
 
 	}
 
-	private static int parseInt(String str) {
-		return parseInts(1, str)[0];
-	}
-
 	private static int[] parseInts(int n, String str) {
 		ArrayList<String> lstr = new ArrayList<>();
 		int t = -1;
@@ -154,7 +149,6 @@ public class Reader extends DataIO {
 			if (f.exists()) {
 				try {
 					Queue<String> qs = readLines(f);
-					MainLocale.lang = parseInt(qs.poll());
 					int[] r = parseInts(4, qs.poll());
 					MainFrame.crect = new Rectangle(r[0], r[1], r[2], r[3]);
 				} catch (Exception e) {

@@ -100,7 +100,7 @@ public strictfp class P {
 	}
 
 	public double atan2(P p) {
-		return sf(p).atan2();
+		return Math.atan2(p.y - y, p.x - x);
 	}
 
 	public P copy() {
@@ -109,6 +109,10 @@ public strictfp class P {
 
 	public double crossP(P p) {
 		return x * p.y - y * p.x;
+	}
+
+	public double dis(double px, double py) {
+		return Math.sqrt(Math.pow(px - x, 2) + Math.pow(py - y, 2));
 	}
 
 	public double dis(P p) {

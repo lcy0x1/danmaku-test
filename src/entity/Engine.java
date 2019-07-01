@@ -5,7 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import util.P;
+
 public class Engine {
+
+	public static final P BOUND = new P(800, 1000);
 
 	public int time;
 

@@ -28,6 +28,10 @@ public interface FakeGraphics {
 
 	public void drawImage(GLImage bimg, double x, double y, double d, double e);
 
+	public void drawImages(GLImage gl, int n, double[] x, double[] y, double[] w, double[] h, double[] a);
+
+	public void drawImages(GLImage gl, int m, float[][] rect, int[] n, double[][]... param);
+
 	public void drawLine(int i, int j, int x, int y);
 
 	public void drawOval(int i, int j, int k, int l);
@@ -55,6 +59,52 @@ public interface FakeGraphics {
 	public void setTransform(GLT at);
 
 	public void translate(double x, double y);
+
+}
+
+interface GeoAuto extends FakeGraphics {
+
+	@Override
+	public default void colRect(int x, int y, int w, int h, int r, int gr, int b, int... a) {
+		getGeo().colRect(x, y, w, h, r, gr, b, a);
+	}
+
+	@Override
+	public default void drawLine(int i, int j, int x, int y) {
+		getGeo().drawLine(i, j, x, y);
+	}
+
+	@Override
+	public default void drawOval(int i, int j, int k, int l) {
+		getGeo().drawOval(i, j, k, l);
+	}
+
+	@Override
+	public default void drawRect(int x, int y, int x2, int y2) {
+		getGeo().drawRect(x, y, x2, y2);
+	}
+
+	@Override
+	public default void fillOval(int i, int j, int k, int l) {
+		getGeo().fillOval(i, j, k, l);
+	}
+
+	@Override
+	public default void fillRect(int x, int y, int w, int h) {
+		getGeo().fillRect(x, y, w, h);
+	}
+
+	public GeomG getGeo();
+
+	@Override
+	public default void gradRect(int x, int y, int w, int h, int a, int b, int[] c, int d, int e, int[] f) {
+		getGeo().gradRect(x, y, w, h, a, b, c, d, e, f);
+	}
+
+	@Override
+	public default void setColor(int c) {
+		getGeo().setColor(c);
+	}
 
 }
 
@@ -267,6 +317,67 @@ class GLGraphics implements GeoAuto {
 	}
 
 	@Override
+	public void drawImages(GLImage gl, int n, double[] x, double[] y, double[] w, double[] h, double[] a) {
+		checkMode(IMG);
+		if (gl == null)
+			return;
+		compImpl();
+		bind(tm.load(this, gl));
+		g.glBegin(GL2ES3.GL_QUADS);
+		float[] r = gl.getRect();
+		GLT glt = getTransform();
+		for (int i = 0; i < n; i++) {
+			translate(x[i], y[i]);
+			rotate(a[i]);
+			translate(-w[i] / 2, -h[i] / 2);
+			g.glTexCoord2f(r[0], r[1]);
+			addP(x[i], y[i]);
+			g.glTexCoord2f(r[0] + r[2], r[1]);
+			addP(x[i] + w[i], y[i]);
+			g.glTexCoord2f(r[0] + r[2], r[1] + r[3]);
+			addP(x[i] + w[i], y[i] + h[i]);
+			g.glTexCoord2f(r[0], r[1] + r[3]);
+			addP(x[i], y[i] + h[i]);
+			setTransform(glt);
+		}
+		g.glEnd();
+	}
+
+	@Override
+	public void drawImages(GLImage gl, int m, float[][] rect, int[] n, double[][]... param) {
+		checkMode(IMG);
+		if (gl == null)
+			return;
+		compImpl();
+		bind(tm.load(this, gl));
+		g.glBegin(GL2ES3.GL_QUADS);
+		GLT glt = getTransform();
+		for (int i = 0; i < m; i++) {
+			float[] r = rect[i];
+			double[] x = param[0][i];
+			double[] y = param[1][i];
+			double[] w = param[2][i];
+			double[] h = param[3][i];
+			double[] a = param[4][i];
+			for (int j = 0; j < n[i]; j++) {
+				translate(x[j], y[j]);
+				rotate(a[j]);
+				translate(-w[j] / 2, -h[j] / 2);
+				g.glTexCoord2f(r[0], r[1]);
+				addP(x[j], y[j]);
+				g.glTexCoord2f(r[0] + r[2], r[1]);
+				addP(x[j] + w[j], y[j]);
+				g.glTexCoord2f(r[0] + r[2], r[1] + r[3]);
+				addP(x[j] + w[j], y[j] + h[j]);
+				g.glTexCoord2f(r[0], r[1] + r[3]);
+				addP(x[j], y[j] + h[j]);
+				setTransform(glt);
+			}
+		}
+		g.glEnd();
+	}
+
+	@Override
 	public GeomG getGeo() {
 		return geo;
 	}
@@ -391,52 +502,6 @@ class GLGraphics implements GeoAuto {
 				g.glUniform1i(tm.mode, 3);// sA=-sA*p
 			}
 		}
-	}
-
-}
-
-interface GeoAuto extends FakeGraphics {
-
-	@Override
-	public default void colRect(int x, int y, int w, int h, int r, int gr, int b, int... a) {
-		getGeo().colRect(x, y, w, h, r, gr, b, a);
-	}
-
-	@Override
-	public default void drawLine(int i, int j, int x, int y) {
-		getGeo().drawLine(i, j, x, y);
-	}
-
-	@Override
-	public default void drawOval(int i, int j, int k, int l) {
-		getGeo().drawOval(i, j, k, l);
-	}
-
-	@Override
-	public default void drawRect(int x, int y, int x2, int y2) {
-		getGeo().drawRect(x, y, x2, y2);
-	}
-
-	@Override
-	public default void fillOval(int i, int j, int k, int l) {
-		getGeo().fillOval(i, j, k, l);
-	}
-
-	@Override
-	public default void fillRect(int x, int y, int w, int h) {
-		getGeo().fillRect(x, y, w, h);
-	}
-
-	public GeomG getGeo();
-
-	@Override
-	public default void gradRect(int x, int y, int w, int h, int a, int b, int[] c, int d, int e, int[] f) {
-		getGeo().gradRect(x, y, w, h, a, b, c, d, e, f);
-	}
-
-	@Override
-	public default void setColor(int c) {
-		getGeo().setColor(c);
 	}
 
 }

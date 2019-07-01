@@ -10,6 +10,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
 
+import entity.Sprite;
 import main.Opts;
 import page.MainFrame;
 
@@ -21,6 +22,10 @@ public class Reader extends DataIO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void getData$1() {
+		Sprite.read();
 	}
 
 	public static int parseIntN(String str) {

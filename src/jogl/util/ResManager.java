@@ -19,7 +19,7 @@ import com.jogamp.opengl.util.glsl.ShaderCode;
 import com.jogamp.opengl.util.glsl.ShaderProgram;
 import com.jogamp.opengl.util.texture.TextureData;
 import jogl.GLStatic;
-import main.MainBCU;
+import main.MainTH;
 
 public class ResManager {
 
@@ -34,7 +34,7 @@ public class ResManager {
 	}
 
 	private static String load(String name) throws IOException {
-		String path = (MainBCU.WRITE ? "src/" : "") + "jogl/util/shader/" + name;
+		String path = (MainTH.WRITE ? "src/" : "") + "jogl/util/shader/" + name;
 		List<String> ls = IOUtils.readLines(ClassLoader.getSystemResourceAsStream(path), Charset.defaultCharset());
 		String source = "";
 		for (String str : ls)

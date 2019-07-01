@@ -19,7 +19,7 @@ import static jogl.GLStatic.*;
 
 public class GLImage {
 
-	protected static GLImage build(Object o) {
+	public static GLImage build(Object o) {
 		try {
 			TextureData data = null;
 			if (o instanceof byte[])

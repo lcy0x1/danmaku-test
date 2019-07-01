@@ -3,7 +3,7 @@ package jogl;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 
-import main.MainBCU;
+import main.MainTH;
 
 public class GLStatic {
 
@@ -12,7 +12,7 @@ public class GLStatic {
 	public static final GLCapabilities GLC;
 
 	public static boolean ALWAYS_GLIMG = true;
-	public static boolean GLTEST = !MainBCU.WRITE;
+	public static boolean GLTEST = !MainTH.WRITE;
 	public static boolean JOGL_SHADER = true;
 	public static boolean ALL_BIMG = true;
 

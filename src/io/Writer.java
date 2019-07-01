@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import main.MainBCU;
+import main.MainTH;
 import main.Opts;
 import main.Printer;
 import page.MainFrame;
@@ -57,9 +57,6 @@ public class Writer extends DataIO {
 	public static void logClose(boolean save) {
 		try {
 			writeOptions();
-			if (save && MainBCU.loaded && MainBCU.trueRun) {
-				// writeData();
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -70,9 +67,6 @@ public class Writer extends DataIO {
 		ph.deleteOnExit();
 		if (log.length() == 0)
 			log.deleteOnExit();
-		else
-			;
-		// BCJSON.report(log);
 	}
 
 	public static void logPrepare() {
@@ -104,7 +98,7 @@ public class Writer extends DataIO {
 	}
 
 	public static void logSetup() {
-		if (MainBCU.WRITE) {
+		if (MainTH.WRITE) {
 			System.setErr(ps);
 			System.setOut(ps);
 		}

@@ -10,7 +10,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
 
-import entity.Sprite;
+import battle.Sprite;
 import main.Opts;
 import page.MainFrame;
 

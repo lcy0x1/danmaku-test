@@ -1,4 +1,4 @@
-package entity;
+package battle;
 
 import main.Printer;
 import util.P;

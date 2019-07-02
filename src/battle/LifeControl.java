@@ -1,4 +1,4 @@
-package entity;
+package battle;
 
 import util.P;
 

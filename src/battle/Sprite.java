@@ -1,4 +1,4 @@
-package entity;
+package battle;
 
 import java.io.File;
 import java.util.ArrayDeque;
@@ -8,8 +8,43 @@ import java.util.TreeMap;
 
 import jogl.util.FakeGraphics;
 import jogl.util.GLImage;
+import util.P;
 
 public class Sprite implements Comparable<Sprite> {
+
+	public static class ESprite {
+
+		public static interface Dire {
+
+			public double getDire();
+
+			public P getPos();
+
+		}
+
+		public final Sprite s;
+
+		private double w, h;
+
+		private int mode;
+
+		private Dire dire;
+
+		public ESprite(Dire d, double r, Sprite img) {
+			s = img;
+			dire = d;
+			w = img.coordination(r);
+			h = img.coordination(r);
+			mode = 0;
+		}
+
+		public void draw() {
+			P p = dire.getPos();
+			// TODO coordination
+			Engine.RENDERING.draw(s, p.x, p.y, w, h, dire.getDire(), mode);
+		}
+
+	}
 
 	public static class Pool {
 
@@ -61,21 +96,21 @@ public class Sprite implements Comparable<Sprite> {
 
 		private Map<Sprite, SubPool> map = new TreeMap<>();
 
-		public void draw(Sprite s, double x, double y, double w, double h, double a, int mode) {
-			SubPool p;
-			if (!map.containsKey(s))
-				map.put(s, p = new SubPool(s));
-			else
-				p = map.get(s);
-			(mode == 0 ? p.reg : p.lit).add(new Coord(x, y, w, h, a));
-		}
-
 		public void flush(FakeGraphics fg) {
 			map.forEach((s, p) -> {
 				p.flush(fg, 0);
 				p.flush(fg, 1);
 			});
 			map.clear();
+		}
+
+		private void draw(Sprite s, double x, double y, double w, double h, double a, int mode) {
+			SubPool p;
+			if (!map.containsKey(s))
+				map.put(s, p = new SubPool(s));
+			else
+				p = map.get(s);
+			(mode == 0 ? p.reg : p.lit).add(new Coord(x, y, w, h, a));
 		}
 
 	}
@@ -189,6 +224,10 @@ public class Sprite implements Comparable<Sprite> {
 	@Override
 	public int compareTo(Sprite o) {
 		return Integer.compare(getLayer(), o.getLayer());
+	}
+
+	private double coordination(double r) {
+		return r;// FIXME
 	}
 
 	private int getLayer() {

@@ -1,11 +1,14 @@
-package entity;
+package battle.entity;
 
-import entity.LifeControl.MoveControl;
+import battle.Engine;
+import battle.Shape;
+import battle.Sprite;
+import battle.LifeControl;
 import util.P;
 
-public class Dot {
+public class Dot implements Sprite.ESprite.Dire {
 
-	public static class CurveMover extends TimeMover implements MoveControl {
+	public static class CurveMover extends TimeMover {
 
 		private final double ir, ia, v, w, ar;
 
@@ -48,7 +51,36 @@ public class Dot {
 
 	}
 
-	public static class LineMover extends TimeMover implements MoveControl {
+	public static class HomingLM extends LineMover {
+
+		private final double s;
+
+		private boolean invoked = false;
+
+		public HomingLM(double a) {
+			super(new P(0, 0));
+			s = a;
+		}
+
+		public void check(P p) {
+			if (!invoked)
+				invoke(p);
+		}
+
+		public void invoke(P p) {
+			invoked = true;
+			v.setTo(P.polar(s, p.atan2(Engine.RUNNING.pl.pos)));
+		}
+
+		@Override
+		public void update(Dot d, int dt) {
+			check(d.pos);
+			super.update(d, dt);
+		}
+
+	}
+
+	public static class LineMover extends TimeMover {
 
 		public final P a, v;
 
@@ -96,7 +128,7 @@ public class Dot {
 
 	}
 
-	public static interface Mover {
+	public static interface Mover extends LifeControl.MoveControl {
 
 		public static final int TYPE_TIME = 1, TYPE_LINE = 2;
 
@@ -106,7 +138,7 @@ public class Dot {
 
 	}
 
-	public static class RefMover implements Mover, MoveControl {
+	public static class RefMover implements Mover {
 
 		private static final int LEFT = 1, RIGHT = 2, UP = 4, DOWN = 8;
 
@@ -190,17 +222,58 @@ public class Dot {
 	}
 
 	public final P pos, tmp;
-	public final Sprite sprite;
+	public final Sprite.ESprite sprite;
 	public final Shape.PosShape shape;
 
 	public double dire;
 	public Mover move = null;
 
+	/** curve with varying axial and constant angular speed */
+	public Dot(P p, double r, double ir, double ia, double v, double w, double aa, int t, Sprite img) {
+		this(P.polar(ir, ia).plus(p), r, img);
+		move = new CurveMover(ir, ia, v, w, aa, t);
+	}
+
+	/** curve with constant axial and angular speed */
+	public Dot(P p, double r, double ir, double ia, double v, double w, Sprite img) {
+		this(P.polar(ir, ia).plus(p), r, img);
+		move = new CurveMover(ir, ia, v, w);
+	}
+
+	/** linear varying speed */
+	public Dot(P p, double r, P v, int a, int t, Sprite img) {
+		this(p, r, img);
+		move = new LineMover(a, t, v);
+	}
+
+	/** semi-linear */
+	public Dot(P p, double r, P v, P a, int t, Sprite img) {
+		this(p, r, img);
+		move = new LineMover(a, t, v);
+	}
+
+	/** linear constant speed */
+	public Dot(P p, double r, P v, Sprite img) {
+		this(p, r, img);
+		move = new LineMover(v);
+	}
+
+	/** static */
 	public Dot(P p, double r, Sprite img) {
 		pos = p;
 		tmp = p.copy();
 		shape = new Shape.Circle(pos, r);
-		sprite = img;
+		sprite = new Sprite.ESprite(this, r, img);
+	}
+
+	@Override
+	public double getDire() {
+		return dire;
+	}
+
+	@Override
+	public P getPos() {
+		return pos;
 	}
 
 	public void post() {

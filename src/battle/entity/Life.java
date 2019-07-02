@@ -1,4 +1,6 @@
-package entity;
+package battle.entity;
+
+import battle.Entity;
 
 public abstract class Life extends Entity {
 

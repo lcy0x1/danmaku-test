@@ -1,4 +1,4 @@
-package entity;
+package battle;
 
 public abstract class Entity {
 
@@ -11,8 +11,12 @@ public abstract class Entity {
 		atk = i1;
 	}
 
+	public abstract Shape getShape();
+
 	/** this entity attacks the entity e */
 	protected abstract void collide(Entity e);
+
+	protected abstract void draw();
 
 	protected abstract boolean isDead();
 

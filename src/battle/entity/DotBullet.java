@@ -9,6 +9,7 @@ public class DotBullet extends Bullet {
 
 	public DotBullet(Dot d) {
 		dot = d;
+		ctrl.move = d;
 	}
 
 	@Override
@@ -31,21 +32,14 @@ public class DotBullet extends Bullet {
 	}
 
 	@Override
-	protected boolean isDead() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	protected void post() {
-		// TODO Auto-generated method stub
-
+		dot.post();
 	}
 
 	@Override
 	protected void update(int t) {
-		// TODO Auto-generated method stub
-
+		super.update(t);
+		dot.update(t);
 	}
 
 }

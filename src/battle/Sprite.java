@@ -226,12 +226,16 @@ public class Sprite implements Comparable<Sprite> {
 		return Integer.compare(getLayer(), o.getLayer());
 	}
 
+	public double radius() {
+		return 0;// FIXME
+	}
+
 	private double coordination(double r) {
 		return r;// FIXME
 	}
 
 	private int getLayer() {
-		return id;// FXIME
+		return id;// FIXME
 	}
 
 }

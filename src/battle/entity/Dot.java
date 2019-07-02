@@ -6,7 +6,7 @@ import battle.Sprite;
 import battle.LifeControl;
 import util.P;
 
-public class Dot implements Sprite.ESprite.Dire {
+public class Dot implements Sprite.ESprite.Dire, LifeControl.MoveControl {
 
 	public static class CurveMover extends TimeMover {
 
@@ -128,11 +128,13 @@ public class Dot implements Sprite.ESprite.Dire {
 
 	}
 
-	public static interface Mover extends LifeControl.MoveControl {
+	public static interface Mover {
 
 		public static final int TYPE_TIME = 1, TYPE_LINE = 2;
 
 		public int getType();
+
+		public boolean out(P pos, double r);
 
 		public void update(Dot d, int t);
 
@@ -274,6 +276,13 @@ public class Dot implements Sprite.ESprite.Dire {
 	@Override
 	public P getPos() {
 		return pos;
+	}
+
+	@Override
+	public boolean out() {
+		if (move == null)
+			return false;
+		return move.out(pos, sprite.s.radius());
 	}
 
 	public void post() {

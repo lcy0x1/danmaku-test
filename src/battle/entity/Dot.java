@@ -42,7 +42,7 @@ public class Dot implements Sprite.ESprite.Dire, LifeControl.MoveControl {
 			if (!pos.out(o, r))
 				return false;
 			P ori = pos.copy().plus(disp(t), -1);
-			double dis = Math.max(Math.max(ori.dis(0, 0), ori.dis(o.x, 0)), Math.max(ori.dis(0, o.y), ori.dis(o)));
+			double dis = ori.toBound(o);
 			double rm = ir + v * t + ar * it * it / 2;
 			if (t > it && Math.abs(rm) > dis && rm * v > 0)
 				return true;
@@ -265,7 +265,7 @@ public class Dot implements Sprite.ESprite.Dire, LifeControl.MoveControl {
 		pos = p;
 		tmp = p.copy();
 		shape = new Shape.Circle(pos, r);
-		sprite = new Sprite.ESprite(this, r, img);
+		sprite = new Sprite.ESprite(this, r, r, img);
 	}
 
 	@Override
@@ -282,7 +282,7 @@ public class Dot implements Sprite.ESprite.Dire, LifeControl.MoveControl {
 	public boolean out() {
 		if (move == null)
 			return false;
-		return move.out(pos, sprite.s.radius());
+		return move.out(pos, sprite.radius());
 	}
 
 	public void post() {

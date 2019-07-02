@@ -7,6 +7,7 @@ import java.util.Queue;
 import java.util.TreeMap;
 
 import jogl.util.FakeGraphics;
+import jogl.util.FakeGraphics.Coord;
 import jogl.util.GLImage;
 import util.P;
 
@@ -30,37 +31,25 @@ public class Sprite implements Comparable<Sprite> {
 
 		private Dire dire;
 
-		public ESprite(Dire d, double r, Sprite img) {
+		public ESprite(Dire d, double sw, double sh, Sprite img) {
 			s = img;
 			dire = d;
-			w = img.coordination(r);
-			h = img.coordination(r);
+			w = sw;
+			h = sh;
 			mode = 0;
 		}
 
 		public void draw() {
-			P p = dire.getPos();
-			// TODO coordination
-			Engine.RENDERING.draw(s, p.x, p.y, w, h, dire.getDire(), mode);
+			Engine.RENDERING.draw(s, dire.getPos(), w, h, dire.getDire(), mode);
+		}
+
+		public double radius() {
+			return new P(w, h).times(s.piv).toBound(w, h);
 		}
 
 	}
 
 	public static class Pool {
-
-		private static class Coord {
-
-			private double x, y, w, h, a;
-
-			private Coord(double x2, double y2, double w2, double h2, double a2) {
-				x = x2;
-				y = y2;
-				w = w2;
-				h = h2;
-				a = a2;
-			}
-
-		}
 
 		private static class SubPool {
 
@@ -75,21 +64,8 @@ public class Sprite implements Comparable<Sprite> {
 
 			private void flush(FakeGraphics fg, int mode) {
 				Queue<Coord> qs = mode == 0 ? reg : lit;
-				int n = qs.size();
-				double[] x = new double[n];
-				double[] y = new double[n];
-				double[] w = new double[n];
-				double[] h = new double[n];
-				double[] a = new double[n];
-				int i = 0;
-				for (Coord c : qs) {
-					x[i] = c.x;
-					y[i] = c.y;
-					w[i] = c.w;
-					h[i] = c.h;
-					a[i] = c.a;
-				}
-				fg.drawImages(s.img, n, x, y, w, h, a);
+
+				fg.drawImages(s.img, qs.size(), s.piv, qs.toArray(new Coord[0]));
 			}
 
 		}
@@ -104,13 +80,13 @@ public class Sprite implements Comparable<Sprite> {
 			map.clear();
 		}
 
-		private void draw(Sprite s, double x, double y, double w, double h, double a, int mode) {
+		private void draw(Sprite s, P pos, double w, double h, double a, int mode) {
 			SubPool p;
 			if (!map.containsKey(s))
 				map.put(s, p = new SubPool(s));
 			else
 				p = map.get(s);
-			(mode == 0 ? p.reg : p.lit).add(new Coord(x, y, w, h, a));
+			(mode == 0 ? p.reg : p.lit).add(new Coord(pos.x, pos.y, w, h, a + s.rot));
 		}
 
 	}
@@ -216,22 +192,19 @@ public class Sprite implements Comparable<Sprite> {
 	private final GLImage img;
 	private final int id;
 
+	private final P piv;
+	private final double rot;
+
 	private Sprite(GLImage gl, int lv) {
 		img = gl;
 		id = lv;
+		piv = new P(0.5, 0.5);
+		rot = id / 100 == 114 ? 0 : Math.PI / 2;
 	}
 
 	@Override
 	public int compareTo(Sprite o) {
 		return Integer.compare(getLayer(), o.getLayer());
-	}
-
-	public double radius() {
-		return 0;// FIXME
-	}
-
-	private double coordination(double r) {
-		return r;// FIXME
 	}
 
 	private int getLayer() {

@@ -258,6 +258,14 @@ public strictfp class P {
 		return this;
 	}
 
+	public double toBound(double px, double py) {
+		return Math.max(Math.max(dis(0, 0), dis(px, 0)), Math.max(dis(0, py), dis(px, py)));
+	}
+
+	public double toBound(P o) {
+		return toBound(o.x, o.y);
+	}
+
 	public Dimension toDimension() {
 		return new Dimension((int) x, (int) y);
 	}

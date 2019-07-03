@@ -32,7 +32,8 @@ public class TestStage implements StageControl {
 	}
 
 	private void add(P p, int ext) {
-		Dot d = new Dot(p, 10, P.polar(0.2, Math.PI / 2), Sprite.REG[Sprite.SRB_KNIFE][Sprite.SRC_BLUE]);
+		Sprite.ESParam esp = new Sprite.ESParam(20201, 1, 1);
+		Dot d = new Dot(p, P.polar(0.2, Math.PI / 2), esp);
 		DotBullet b = new DotBullet(d);
 		b.update(ext);
 		Engine.RUNNING.add(b);

@@ -231,41 +231,41 @@ public class Dot implements Sprite.ESprite.Dire, LifeControl.MoveControl {
 	public Mover move = null;
 
 	/** curve with varying axial and constant angular speed */
-	public Dot(P p, double r, double ir, double ia, double v, double w, double aa, int t, Sprite img) {
-		this(P.polar(ir, ia).plus(p), r, img);
+	public Dot(P o, double ir, double ia, double v, double w, double aa, int t, Sprite.ESParam img) {
+		this(P.polar(ir, ia).plus(o), img);
 		move = new CurveMover(ir, ia, v, w, aa, t);
 	}
 
 	/** curve with constant axial and angular speed */
-	public Dot(P p, double r, double ir, double ia, double v, double w, Sprite img) {
-		this(P.polar(ir, ia).plus(p), r, img);
+	public Dot(P o, double ir, double ia, double v, double w, Sprite.ESParam img) {
+		this(P.polar(ir, ia).plus(o), img);
 		move = new CurveMover(ir, ia, v, w);
 	}
 
 	/** linear varying speed */
-	public Dot(P p, double r, P v, int a, int t, Sprite img) {
-		this(p, r, img);
+	public Dot(P p, P v, int a, int t, Sprite.ESParam img) {
+		this(p, img);
 		move = new LineMover(a, t, v);
 	}
 
 	/** semi-linear */
-	public Dot(P p, double r, P v, P a, int t, Sprite img) {
-		this(p, r, img);
+	public Dot(P p, P v, P a, int t, Sprite.ESParam img) {
+		this(p, img);
 		move = new LineMover(a, t, v);
 	}
 
 	/** linear constant speed */
-	public Dot(P p, double r, P v, Sprite img) {
-		this(p, r, img);
+	public Dot(P p, P v, Sprite.ESParam img) {
+		this(p, img);
 		move = new LineMover(v);
 	}
 
 	/** static */
-	public Dot(P p, double r, Sprite img) {
+	public Dot(P p, Sprite.ESParam img) {
 		pos = p;
 		tmp = p.copy();
-		shape = new Shape.Circle(pos, r);
-		sprite = new Sprite.ESprite(this, r, r, img);
+		shape = new Shape.Circle(pos, img.r);
+		sprite = img.getEntity(this);
 	}
 
 	@Override

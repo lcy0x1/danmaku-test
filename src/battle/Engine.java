@@ -74,6 +74,16 @@ public class Engine {
 
 	public void update(int t) {
 		RUNNING = this;
+		temp.forEach(e -> {
+			int key = e.atk << 16 | e.base;
+			List<Entity> l;
+			if (entities.containsKey(key))
+				l = entities.get(key);
+			else
+				entities.put(key, l = new ArrayList<Entity>());
+			l.add(e);
+		});
+		temp.clear();
 		time.start(t);
 		stage.update(t);
 		entities.forEach((i, l) -> l.forEach(e -> e.update(time.dispach(e))));
@@ -92,16 +102,6 @@ public class Engine {
 		});
 		entities.forEach((i, l) -> l.forEach(e -> e.post()));
 		entities.forEach((i, l) -> l.removeIf(e -> e.isDead()));
-		temp.forEach(e -> {
-			int key = e.atk << 16 | e.base;
-			List<Entity> l;
-			if (entities.containsKey(key))
-				l = entities.get(key);
-			else
-				entities.put(key, l = new ArrayList<Entity>());
-			l.add(e);
-		});
-		temp.clear();
 		time.end();
 		RUNNING = null;
 	}

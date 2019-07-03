@@ -6,12 +6,37 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.TreeMap;
 
+import battle.entity.Dot;
 import jogl.util.FakeGraphics;
 import jogl.util.FakeGraphics.Coord;
 import jogl.util.GLImage;
 import util.P;
 
 public class Sprite implements Comparable<Sprite> {
+
+	public static class ESParam {
+
+		public final Sprite s;
+
+		public final int mode;
+
+		public final double r;
+
+		public ESParam(int id, int t, double m) {
+			this(get(id), t, m);
+		}
+
+		public ESParam(Sprite spr, int t, double m) {
+			s = spr;
+			mode = t;
+			r = m * MAGNIFY;
+		}
+
+		public ESprite getEntity(Dot d) {
+			return new ESprite(d, s.size * r, s.size * r, s, mode);
+		}
+
+	}
 
 	public static class ESprite {
 
@@ -31,12 +56,12 @@ public class Sprite implements Comparable<Sprite> {
 
 		private Dire dire;
 
-		public ESprite(Dire d, double sw, double sh, Sprite img) {
+		public ESprite(Dire d, double sw, double sh, Sprite img, int m) {
 			s = img;
 			dire = d;
 			w = sw;
 			h = sh;
-			mode = 0;
+			mode = m;
 		}
 
 		public void draw() {
@@ -64,6 +89,10 @@ public class Sprite implements Comparable<Sprite> {
 
 			private void flush(FakeGraphics fg, int mode) {
 				Queue<Coord> qs = mode == 0 ? reg : lit;
+				if (mode == 0)
+					fg.setComposite(FakeGraphics.DEF);
+				else
+					fg.setComposite(FakeGraphics.BLEND, 256, 1);
 				fg.drawImages(s, qs.size(), qs.toArray(new Coord[0]));
 				if (DEBUG)
 					fg.drawRects(s, qs.size(), qs.toArray(new Coord[0]));
@@ -95,9 +124,10 @@ public class Sprite implements Comparable<Sprite> {
 
 	}
 
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 
 	public static final int SRC_GREY = 0;
+
 	public static final int SRC_REDX = 1;
 	public static final int SRC_RED = 2;
 	public static final int SRC_PINKX = 3;
@@ -113,8 +143,8 @@ public class Sprite implements Comparable<Sprite> {
 	public static final int SRC_YELLOW = 13;
 	public static final int SRC_ORANGE = 14;
 	public static final int SRC_WHITE = 15;
-
 	public static final int SRB_SLASER = 0;
+
 	public static final int SRB_SCALE = 1;
 	public static final int SRB_CIRCLE = 2;
 	public static final int SRB_BALL = 3;
@@ -130,8 +160,8 @@ public class Sprite implements Comparable<Sprite> {
 	public static final int SRB_S_BALL = 13;
 	public static final int SRB_LONG = 14;
 	public static final int SRB_DROP = 15;
-
 	public static final int SOC_GREY = 0;
+
 	public static final int SOC_RED = 1;
 	public static final int SOC_PINK = 2;
 	public static final int SOC_BLUE = 3;
@@ -139,8 +169,8 @@ public class Sprite implements Comparable<Sprite> {
 	public static final int SOC_GREEN = 5;
 	public static final int SOC_YELLOW = 6;
 	public static final int SOC_WHITE = 7;
-
 	public static final int SOB_LIGHT = 0;
+
 	public static final int SOB_STAR = 1;
 	public static final int SOB_BALL = 2;
 	public static final int SOB_BUTTERFLY = 3;
@@ -148,20 +178,30 @@ public class Sprite implements Comparable<Sprite> {
 	public static final int SOB_OVAL = 5;
 	public static final int SOB_LIGHTX = 6;
 	public static final int SOB_HEART = 7;
-
 	public static final int SLC_RED = 0;
+
 	public static final int SLC_BLUE = 1;
 	public static final int SLC_GREEN = 2;
 	public static final int SLC_YELLOW = 3;
-
 	public static final int SLB_BALL = 0;
-	public static final int SLB_ROSE = 1;
 
+	public static final int SLB_ROSE = 1;
 	public static final Sprite[][] REG = new Sprite[16][16];
+
 	public static final Sprite[][] OCT = new Sprite[8][8];
 	public static final Sprite[][] LRG = new Sprite[2][4];
-
 	public static final Sprite[][] OTH = new Sprite[4][];
+
+	public static final Sprite[][][] TOT = { null, REG, OCT, OTH };
+
+	public static final double MAGNIFY = 4;
+
+	private static final double[][] SIZE = { { 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 0, 2.4, 2.4, 0, 2.4 },
+			{ 0, 7, 8.5, 7, 6, 7, 0, 10 }, { 14, 14 } };
+
+	public static Sprite get(int id) {
+		return TOT[id / 10000][id / 100 % 100][id % 100];
+	}
 
 	public static void read() {
 
@@ -189,8 +229,8 @@ public class Sprite implements Comparable<Sprite> {
 				OCT[i + 1][j] = new Sprite(gli.getSubimage(1 + j * 32, 257 + i * 32, 32, 32), 20100 + i * 100 + j);
 
 		for (int i = 0; i < 4; i++) {
-			LRG[SLB_BALL][i] = new Sprite(gli.getSubimage(1 + i * 64, 449, 64, 64), 30100 + i);
-			LRG[SLB_ROSE][i] = new Sprite(gli.getSubimage(258 + i * 64, 290, 64, 64), 30200 + i);
+			LRG[SLB_BALL][i] = new Sprite(gli.getSubimage(1 + i * 64, 449, 64, 64), 30000 + i);
+			LRG[SLB_ROSE][i] = new Sprite(gli.getSubimage(258 + i * 64, 290, 64, 64), 30100 + i);
 		}
 
 	}
@@ -199,14 +239,15 @@ public class Sprite implements Comparable<Sprite> {
 	private final int id;
 
 	public final P piv;
-	public final double rot, rad;
+	public final double rot, rad, size;
 
 	private Sprite(GLImage gl, int lv) {
 		img = gl;
 		id = lv;
 		piv = new P(0.5, 0.5);
 		rot = id / 100 == 114 ? 0 : Math.PI / 2;
-		rad = 0.3;
+		size = SIZE[lv / 10000 - 1][lv / 100 % 100];
+		rad = size * 2 / gl.getHeight();
 	}
 
 	@Override

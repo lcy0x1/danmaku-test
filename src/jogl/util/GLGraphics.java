@@ -22,6 +22,8 @@ public class GLGraphics implements GeoAuto {
 
 	static class GeomG {
 
+		private static final int CIR = 12;
+
 		private final GLGraphics gra;
 
 		private final GL2 g;
@@ -85,9 +87,9 @@ public class GLGraphics implements GeoAuto {
 				Coord c = cs[i];
 				c.size(s.rad);
 				gra.translate(c.x, c.y);
-				for (int j = 0; j < 8; j++) {
-					double t0 = j * Math.PI * 2 / 8;
-					double t1 = t0 + Math.PI * 2 / 8;
+				for (int j = 0; j < CIR; j++) {
+					double t0 = j * Math.PI * 2 / CIR;
+					double t1 = t0 + Math.PI * 2 / CIR;
 					addP(0, 0);
 					addP(c.w / 2 * Math.cos(t0), c.h / 2 * Math.sin(t0));
 					addP(c.w / 2 * Math.cos(t1), c.h / 2 * Math.sin(t1));

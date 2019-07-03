@@ -18,6 +18,12 @@ public class DotBullet extends Bullet {
 	}
 
 	@Override
+	public void update(int t) {
+		super.update(t);
+		dot.update(t);
+	}
+
+	@Override
 	protected void collide(Entity e) {
 		if (getShape() == null || e.getShape() == null)
 			return;
@@ -34,12 +40,6 @@ public class DotBullet extends Bullet {
 	@Override
 	protected void post() {
 		dot.post();
-	}
-
-	@Override
-	protected void update(int t) {
-		super.update(t);
-		dot.update(t);
 	}
 
 }

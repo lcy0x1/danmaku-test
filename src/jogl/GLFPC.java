@@ -10,7 +10,11 @@ public class GLFPC extends GLCstd {
 
 	private static final long serialVersionUID = 1L;
 
-	public Engine e;
+	public final Engine e;
+
+	public GLFPC(Engine eng) {
+		e = eng;
+	}
 
 	@Override
 	public void display(GLAutoDrawable drawable) {

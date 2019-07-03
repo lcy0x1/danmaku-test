@@ -1,7 +1,7 @@
 package jogl.util;
 
+import battle.Sprite;
 import jogl.util.GLGraphics.GeomG;
-import util.P;
 
 public interface FakeGraphics {
 
@@ -15,6 +15,18 @@ public interface FakeGraphics {
 			w = w2;
 			h = h2;
 			a = a2;
+		}
+
+		public void size(double r) {
+			w *= r;
+			h *= r;
+		}
+
+		public void times(double r) {
+			x *= r;
+			y *= r;
+			w *= r;
+			h *= r;
 		}
 
 	}
@@ -34,13 +46,15 @@ public interface FakeGraphics {
 
 	public void drawImage(GLImage bimg, double x, double y, double d, double e);
 
-	public void drawImages(GLImage gl, int n, P piv, Coord[] coords);
+	public void drawImages(Sprite s, int size, Coord[] array);
 
 	public void drawLine(int i, int j, int x, int y);
 
 	public void drawOval(int i, int j, int k, int l);
 
 	public void drawRect(int x, int y, int x2, int y2);
+
+	public void drawRects(Sprite s, int size, Coord[] array);
 
 	public void fillOval(int i, int j, int k, int l);
 
@@ -86,6 +100,11 @@ interface GeoAuto extends FakeGraphics {
 	@Override
 	public default void drawRect(int x, int y, int x2, int y2) {
 		getGeo().drawRect(x, y, x2, y2);
+	}
+
+	@Override
+	public default void drawRects(Sprite s, int size, Coord[] array) {
+		getGeo().drawRects(s, size, array);
 	}
 
 	@Override

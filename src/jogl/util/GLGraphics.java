@@ -15,6 +15,7 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2ES3;
 
+import battle.Sprite;
 import util.P;
 
 public class GLGraphics implements GeoAuto {
@@ -72,6 +73,27 @@ public class GLGraphics implements GeoAuto {
 			addP(x + w, y);
 			addP(x + w, y + h);
 			addP(x, y + h);
+			g.glEnd();
+		}
+
+		protected void drawRects(Sprite s, int n, Coord[] cs) {
+			checkMode();
+			setColor();
+			g.glBegin(GL.GL_TRIANGLES);
+			GLT glt = gra.getTransform();
+			for (int i = 0; i < n; i++) {
+				Coord c = cs[i];
+				c.size(s.rad);
+				gra.translate(c.x, c.y);
+				for (int j = 0; j < 8; j++) {
+					double t0 = j * Math.PI * 2 / 8;
+					double t1 = t0 + Math.PI * 2 / 8;
+					addP(0, 0);
+					addP(c.w / 2 * Math.cos(t0), c.h / 2 * Math.sin(t0));
+					addP(c.w / 2 * Math.cos(t1), c.h / 2 * Math.sin(t1));
+				}
+				gra.setTransform(glt);
+			}
 			g.glEnd();
 		}
 
@@ -135,7 +157,7 @@ public class GLGraphics implements GeoAuto {
 				color = Color.WHITE.getRGB();
 		}
 
-		private void addP(int x, int y) {
+		private void addP(double x, double y) {
 			gra.addP(x, y);
 		}
 
@@ -193,6 +215,7 @@ public class GLGraphics implements GeoAuto {
 		count++;
 		g.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		g.glLoadIdentity();
+		geo.setColor(RED);
 	}
 
 	public void dispose() {
@@ -226,28 +249,30 @@ public class GLGraphics implements GeoAuto {
 	}
 
 	@Override
-	public void drawImages(GLImage gl, int n, P piv, Coord[] cs) {
+	public void drawImages(Sprite s, int n, Coord[] cs) {
 		checkMode(IMG);
-		if (gl == null)
+		if (s.img == null)
 			return;
 		compImpl();
-		bind(tm.load(this, gl));
+		bind(tm.load(this, s.img));
 		g.glBegin(GL2ES3.GL_QUADS);
-		float[] r = gl.getRect();
+		float[] r = s.img.getRect();
 		GLT glt = getTransform();
 		for (int i = 0; i < n; i++) {
 			Coord c = cs[i];
+			c.times(sh);
+			c.size(1 / s.rad);
 			translate(c.x, c.y);
 			rotate(c.a);
-			translate(-c.w * piv.x, -c.h * piv.y);
+			translate(-c.w * s.piv.x, -c.h * s.piv.y);
 			g.glTexCoord2f(r[0], r[1]);
-			addP(c.x, c.y);
+			addP(0, 0);
 			g.glTexCoord2f(r[0] + r[2], r[1]);
-			addP(c.x + c.w, c.y);
+			addP(c.w, 0);
 			g.glTexCoord2f(r[0] + r[2], r[1] + r[3]);
-			addP(c.x + c.w, c.y + c.h);
+			addP(c.w, c.h);
 			g.glTexCoord2f(r[0], r[1] + r[3]);
-			addP(c.x, c.y + c.h);
+			addP(0, c.h);
 			setTransform(glt);
 		}
 		g.glEnd();

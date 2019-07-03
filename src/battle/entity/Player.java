@@ -21,6 +21,12 @@ public class Player extends Entity {
 	}
 
 	@Override
+	public void update(int t) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	protected void collide(Entity e) {
 		// TODO Auto-generated method stub
 
@@ -40,12 +46,6 @@ public class Player extends Entity {
 
 	@Override
 	protected void post() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void update(int t) {
 		// TODO Auto-generated method stub
 
 	}

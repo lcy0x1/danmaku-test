@@ -64,8 +64,9 @@ public class Sprite implements Comparable<Sprite> {
 
 			private void flush(FakeGraphics fg, int mode) {
 				Queue<Coord> qs = mode == 0 ? reg : lit;
-
-				fg.drawImages(s.img, qs.size(), s.piv, qs.toArray(new Coord[0]));
+				fg.drawImages(s, qs.size(), qs.toArray(new Coord[0]));
+				if (DEBUG)
+					fg.drawRects(s, qs.size(), qs.toArray(new Coord[0]));
 			}
 
 		}
@@ -86,10 +87,15 @@ public class Sprite implements Comparable<Sprite> {
 				map.put(s, p = new SubPool(s));
 			else
 				p = map.get(s);
-			(mode == 0 ? p.reg : p.lit).add(new Coord(pos.x, pos.y, w, h, a + s.rot));
+			double r = Engine.BOUND.y;
+			Coord c = new Coord(pos.x, pos.y, w, h, a + s.rot);
+			c.times(1 / r);
+			(mode == 0 ? p.reg : p.lit).add(c);
 		}
 
 	}
+
+	public static boolean DEBUG = true;
 
 	public static final int SRC_GREY = 0;
 	public static final int SRC_REDX = 1;
@@ -189,17 +195,18 @@ public class Sprite implements Comparable<Sprite> {
 
 	}
 
-	private final GLImage img;
+	public final GLImage img;
 	private final int id;
 
-	private final P piv;
-	private final double rot;
+	public final P piv;
+	public final double rot, rad;
 
 	private Sprite(GLImage gl, int lv) {
 		img = gl;
 		id = lv;
 		piv = new P(0.5, 0.5);
 		rot = id / 100 == 114 ? 0 : Math.PI / 2;
+		rad = 0.3;
 	}
 
 	@Override

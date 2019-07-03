@@ -13,13 +13,13 @@ public abstract class Bullet extends Entity {
 	}
 
 	@Override
-	protected boolean isDead() {
-		return ctrl.isDead();
+	public void update(int t) {
+		ctrl.update(t);
 	}
 
 	@Override
-	protected void update(int t) {
-		ctrl.update(t);
+	protected boolean isDead() {
+		return ctrl.isDead();
 	}
 
 }

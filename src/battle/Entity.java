@@ -1,6 +1,6 @@
 package battle;
 
-public abstract class Entity {
+public abstract class Entity implements Updatable {
 
 	public static final int C_ENEMY = 1, C_PLAYER = 2, C_BULLET = 4, C_PATK = 8;
 
@@ -21,7 +21,5 @@ public abstract class Entity {
 	protected abstract boolean isDead();
 
 	protected abstract void post();
-
-	protected abstract void update(int t);
 
 }

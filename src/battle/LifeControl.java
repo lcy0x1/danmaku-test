@@ -25,7 +25,7 @@ public class LifeControl {
 	public boolean isDead() {
 		if (move != null && move.out())
 			return true;
-		if (rem < 0)
+		if (rem == 0)
 			return true;
 		if (killed)
 			return true;
@@ -37,7 +37,11 @@ public class LifeControl {
 	}
 
 	public void update(int t) {
-		rem -= t;
+		if (rem > 0) {
+			rem -= t;
+			if (rem < 0)
+				rem = 0;
+		}
 	}
 
 }

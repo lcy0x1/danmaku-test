@@ -41,20 +41,28 @@ public class Engine {
 	public final TimeDispach time;
 
 	private final Map<Integer, List<Entity>> entities = new TreeMap<>();
+	private final List<Entity> temp = new ArrayList<>();
+
+	public StageControl stage;
 
 	public Engine() {
 		pl = new Player();
 		time = new TimeDispach();
 	}
 
+	public Engine(StageControl sc) {
+		this();
+		stage = sc;
+	}
+
 	public void add(Entity e) {
-		int key = e.atk << 16 | e.base;
-		List<Entity> l;
-		if (entities.containsKey(key))
-			l = entities.get(key);
-		else
-			entities.put(key, l = new ArrayList<Entity>());
-		l.add(e);
+		temp.add(e);
+	}
+
+	public int count() {
+		int[] c = new int[1];
+		entities.values().forEach(l -> c[0] += l.size());
+		return c[0];
 	}
 
 	public void draw(FakeGraphics fg) {
@@ -67,6 +75,7 @@ public class Engine {
 	public void update(int t) {
 		RUNNING = this;
 		time.start(t);
+		stage.update(t);
 		entities.forEach((i, l) -> l.forEach(e -> e.update(time.dispach(e))));
 		entities.forEach((i, l) -> {
 			int atk = i >> 16 & 65535;
@@ -83,6 +92,16 @@ public class Engine {
 		});
 		entities.forEach((i, l) -> l.forEach(e -> e.post()));
 		entities.forEach((i, l) -> l.removeIf(e -> e.isDead()));
+		temp.forEach(e -> {
+			int key = e.atk << 16 | e.base;
+			List<Entity> l;
+			if (entities.containsKey(key))
+				l = entities.get(key);
+			else
+				entities.put(key, l = new ArrayList<Entity>());
+			l.add(e);
+		});
+		temp.clear();
 		time.end();
 		RUNNING = null;
 	}

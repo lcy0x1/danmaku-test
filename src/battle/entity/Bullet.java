@@ -1,25 +1,25 @@
 package battle.entity;
 
+import battle.Control;
 import battle.Entity;
-import battle.LifeControl;
 
 public abstract class Bullet extends Entity {
 
-	public LifeControl ctrl;
+	protected final Control.TimeCtrl ctrl;
 
 	public Bullet() {
 		super(C_BULLET, C_PLAYER);
-		ctrl = new LifeControl();
+		ctrl = new Control.TimeCtrl();
+	}
+
+	public Bullet(int t) {
+		super(C_BULLET, C_PLAYER);
+		ctrl = new Control.TimeCtrl(t);
 	}
 
 	@Override
-	public void update(int t) {
-		ctrl.update(t);
-	}
-
-	@Override
-	protected boolean isDead() {
-		return ctrl.isDead();
+	public Control.TimeCtrl getCtrl() {
+		return ctrl;
 	}
 
 }

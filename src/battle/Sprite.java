@@ -6,15 +6,15 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.TreeMap;
 
-import battle.entity.Dot;
 import jogl.util.FakeGraphics;
 import jogl.util.FakeGraphics.Coord;
 import jogl.util.GLImage;
+import util.Data;
 import util.P;
 
 public class Sprite implements Comparable<Sprite> {
 
-	public static class ESParam {
+	public static class DESParam {
 
 		public final Sprite s;
 
@@ -22,23 +22,23 @@ public class Sprite implements Comparable<Sprite> {
 
 		public final double r;
 
-		public ESParam(int id, int t, double m) {
+		public DESParam(int id, int t, double m) {
 			this(get(id), t, m);
 		}
 
-		public ESParam(Sprite spr, int t, double m) {
+		public DESParam(Sprite spr, int t, double m) {
 			s = spr;
 			mode = t;
 			r = m * MAGNIFY;
 		}
 
-		public ESprite getEntity(Dot d) {
-			return new ESprite(d, s.size * r, s.size * r, s, mode);
+		public DotESprite getEntity(DotESprite.Dire d) {
+			return new DotESprite(d, s.size * r, s.size * r, s, mode);
 		}
 
 	}
 
-	public static class ESprite {
+	public static class DotESprite {
 
 		public static interface Dire {
 
@@ -56,7 +56,7 @@ public class Sprite implements Comparable<Sprite> {
 
 		private Dire dire;
 
-		public ESprite(Dire d, double sw, double sh, Sprite img, int m) {
+		public DotESprite(Dire d, double sw, double sh, Sprite img, int m) {
 			s = img;
 			dire = d;
 			w = sw;
@@ -76,44 +76,64 @@ public class Sprite implements Comparable<Sprite> {
 
 	public static class Pool {
 
-		private static class SubPool {
+		private static class DotPool extends SubPool {
 
-			private final Sprite s;
+			private DotPool(Sprite sp) {
+				super(sp);
+			}
 
-			private Queue<Coord> reg = new ArrayDeque<>();
-			private Queue<Coord> lit = new ArrayDeque<>();
+			@Override
+			void debug(FakeGraphics fg, int mode) {
+				Queue<Coord> qs = mode == 0 ? reg : lit;
+				fg.drawCircles(s, qs.size(), qs.toArray(new Coord[0]));
+			}
 
-			private SubPool(Sprite sp) {
+			@Override
+			void flush(FakeGraphics fg, int mode) {
+				Queue<Coord> qs = mode == 0 ? reg : lit;
+				fg.setComposite(FakeGraphics.BLEND, 256, mode);
+				fg.drawImages(s, qs.size(), qs.toArray(new Coord[0]));
+			}
+
+		}
+
+		private static abstract class SubPool {
+
+			final Sprite s;
+
+			Queue<Coord> reg = new ArrayDeque<>();
+			Queue<Coord> lit = new ArrayDeque<>();
+
+			SubPool(Sprite sp) {
 				s = sp;
 			}
 
-			private void flush(FakeGraphics fg, int mode) {
-				Queue<Coord> qs = mode == 0 ? reg : lit;
-				if (mode == 0)
-					fg.setComposite(FakeGraphics.DEF);
-				else
-					fg.setComposite(FakeGraphics.BLEND, 256, 1);
-				fg.drawImages(s, qs.size(), qs.toArray(new Coord[0]));
-				if (DEBUG)
-					fg.drawRects(s, qs.size(), qs.toArray(new Coord[0]));
-			}
+			abstract void debug(FakeGraphics fg, int mode);
+
+			abstract void flush(FakeGraphics fg, int mode);
 
 		}
 
 		private Map<Sprite, SubPool> map = new TreeMap<>();
 
 		public void flush(FakeGraphics fg) {
-			map.forEach((s, p) -> {
-				p.flush(fg, 0);
-				p.flush(fg, 1);
-			});
+			if (Data.DRAWSPRITE)
+				map.forEach((s, p) -> {
+					p.flush(fg, 0);
+					p.flush(fg, 1);
+				});
+			if (Data.DEBUG)
+				map.forEach((s, p) -> {
+					p.debug(fg, 0);
+					p.debug(fg, 1);
+				});
 			map.clear();
 		}
 
 		private void draw(Sprite s, P pos, double w, double h, double a, int mode) {
 			SubPool p;
 			if (!map.containsKey(s))
-				map.put(s, p = new SubPool(s));
+				map.put(s, p = new DotPool(s));
 			else
 				p = map.get(s);
 			double r = Engine.BOUND.y;
@@ -123,8 +143,6 @@ public class Sprite implements Comparable<Sprite> {
 		}
 
 	}
-
-	public static boolean DEBUG = false;
 
 	public static final int SRC_GREY = 0;
 
@@ -186,26 +204,27 @@ public class Sprite implements Comparable<Sprite> {
 	public static final int SLB_BALL = 0;
 
 	public static final int SLB_ROSE = 1;
+	public static final Sprite[][] NON = new Sprite[1][1];
 	public static final Sprite[][] REG = new Sprite[16][16];
-
 	public static final Sprite[][] OCT = new Sprite[8][8];
 	public static final Sprite[][] LRG = new Sprite[2][4];
 	public static final Sprite[][] OTH = new Sprite[4][];
 
-	public static final Sprite[][][] TOT = { null, REG, OCT, OTH };
+	public static final Sprite[][][] TOT = { NON, REG, OCT, LRG, OTH };
 
-	public static final double MAGNIFY = 4;
+	public static final double MAGNIFY = 3;
 
-	private static final double[][] SIZE = { { 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 0, 2.4, 2.4, 0, 2.4 },
-			{ 0, 7, 8.5, 7, 6, 7, 0, 10 }, { 14, 14 } };
+	private static final double[][] SIZE = { { 2 },
+			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 0, 2.4, 2.4, 2.4, 2.4 }, { 0, 7, 8.5, 7, 6, 7, 0, 10 },
+			{ 14, 14 } };
 
 	public static Sprite get(int id) {
 		return TOT[id / 10000][id / 100 % 100][id % 100];
 	}
 
 	public static void read() {
-
-		GLImage gli = GLImage.build(new File("./assets/bullet_000.png"));
+		File f = new File(Sprite.class.getResource("/assets/bullet_000.png").getFile());
+		GLImage gli = GLImage.build(f);
 		for (int i = 0; i < 12; i++)
 			for (int j = 0; j < 16; j++)
 				REG[i][j] = new Sprite(gli.getSubimage(1 + j * 16, 1 + i * 16, 16, 16), 10000 + i * 100 + j);
@@ -233,6 +252,8 @@ public class Sprite implements Comparable<Sprite> {
 			LRG[SLB_ROSE][i] = new Sprite(gli.getSubimage(258 + i * 64, 290, 64, 64), 30100 + i);
 		}
 
+		NON[0][0] = new Sprite(gli.getSubimage(258, 17, 64, 64), 0);
+
 	}
 
 	public final GLImage img;
@@ -246,7 +267,7 @@ public class Sprite implements Comparable<Sprite> {
 		id = lv;
 		piv = new P(0.5, 0.5);
 		rot = id / 100 == 114 ? 0 : Math.PI / 2;
-		size = SIZE[lv / 10000 - 1][lv / 100 % 100];
+		size = SIZE[lv / 10000][lv / 100 % 100];
 		rad = size * 2 / gl.getHeight();
 	}
 
@@ -256,7 +277,7 @@ public class Sprite implements Comparable<Sprite> {
 	}
 
 	private int getLayer() {
-		return id;// FIXME
+		return -id;// FIXME
 	}
 
 }

@@ -53,6 +53,19 @@ public strictfp class P {
 
 	}
 
+	public static double goOut(P p, P v, double r) {
+		double a = v.x * v.x + v.y * v.y;
+		double b = 2 * p.dotP(v);
+		double c = p.x * p.x + p.y * p.y - r * r;
+		double d2 = b * b - 4 * a * c;
+		if (d2 < 0)
+			return Double.NaN;
+		double d = Math.sqrt(d2);
+		double t0 = (-b + d) / (2 * a);
+		double t1 = (-b - d) / (2 * a);
+		return t0 < t1 ? t1 : t0;
+	}
+
 	public static P polar(double r, double t) {
 		return new P(r * Math.cos(t), r * Math.sin(t));
 	}

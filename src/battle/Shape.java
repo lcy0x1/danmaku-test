@@ -16,8 +16,10 @@ public interface Shape {
 
 		@Override
 		public double dis(Shape s) {
-			if (s instanceof Circle)
-				return pos.dis(((Circle) s).pos) - r - ((Circle) s).r;
+			if (s instanceof Circle) {
+				Circle c = (Circle) s;
+				return pos.dis(c.pos) - r - c.r;
+			}
 			return s.dis(this);
 		}
 

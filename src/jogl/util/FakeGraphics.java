@@ -17,6 +17,10 @@ public interface FakeGraphics {
 			a = a2;
 		}
 
+		public Coord copy() {
+			return new Coord(x, y, w, h, a);
+		}
+
 		public void size(double r) {
 			w *= r;
 			h *= r;
@@ -42,6 +46,8 @@ public interface FakeGraphics {
 
 	public void colRect(int x, int y, int w, int h, int r, int g, int b, int... a);
 
+	public void drawCircles(Sprite s, int size, Coord[] array);
+
 	public void drawImage(GLImage bimg, double x, double y);
 
 	public void drawImage(GLImage bimg, double x, double y, double d, double e);
@@ -53,8 +59,6 @@ public interface FakeGraphics {
 	public void drawOval(int i, int j, int k, int l);
 
 	public void drawRect(int x, int y, int x2, int y2);
-
-	public void drawRects(Sprite s, int size, Coord[] array);
 
 	public void fillOval(int i, int j, int k, int l);
 
@@ -88,6 +92,11 @@ interface GeoAuto extends FakeGraphics {
 	}
 
 	@Override
+	public default void drawCircles(Sprite s, int size, Coord[] array) {
+		getGeo().drawCircles(s, size, array);
+	}
+
+	@Override
 	public default void drawLine(int i, int j, int x, int y) {
 		getGeo().drawLine(i, j, x, y);
 	}
@@ -100,11 +109,6 @@ interface GeoAuto extends FakeGraphics {
 	@Override
 	public default void drawRect(int x, int y, int x2, int y2) {
 		getGeo().drawRect(x, y, x2, y2);
-	}
-
-	@Override
-	public default void drawRects(Sprite s, int size, Coord[] array) {
-		getGeo().drawRects(s, size, array);
 	}
 
 	@Override

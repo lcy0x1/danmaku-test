@@ -6,7 +6,7 @@ import page.MainFrame;
 
 public strictfp class Timer extends Thread {
 
-	public static int p = 33;
+	public static int p = 20;
 	public static int inter = 0;
 
 	protected static int state;
@@ -31,6 +31,8 @@ public strictfp class Timer extends Thread {
 				}
 				thr.join();
 				delay = (int) (System.currentTimeMillis() - m);
+				if (delay > 20)
+					System.out.println(delay);
 				inter = (inter * 9 + 100 * delay / p) / 10;
 				int sle = delay >= p ? 1 : p - delay;
 				sleep(sle);

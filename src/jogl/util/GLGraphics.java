@@ -16,6 +16,7 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2ES3;
 
 import battle.Sprite;
+import util.Data;
 import util.P;
 
 public class GLGraphics implements GeoAuto {
@@ -50,6 +51,27 @@ public class GLGraphics implements GeoAuto {
 			g.glEnd();
 		}
 
+		protected void drawCircles(Sprite s, int n, Coord[] cs) {
+			checkMode();
+			setColor();
+			g.glBegin(GL.GL_TRIANGLES);
+			GLT glt = gra.getTransform();
+			for (int i = 0; i < n; i++) {
+				Coord c = cs[i].copy();
+				c.times(gra.sh);
+				gra.translate(c.x, c.y);
+				for (int j = 0; j < CIR; j++) {
+					double t0 = j * Math.PI * 2 / CIR;
+					double t1 = t0 + Math.PI * 2 / CIR;
+					addP(0, 0);
+					addP(c.w / 2 * Math.cos(t0), c.h / 2 * Math.sin(t0));
+					addP(c.w / 2 * Math.cos(t1), c.h / 2 * Math.sin(t1));
+				}
+				gra.setTransform(glt);
+			}
+			g.glEnd();
+		}
+
 		protected void drawLine(int i, int j, int x, int y) {
 			checkMode();
 			setColor();
@@ -75,27 +97,6 @@ public class GLGraphics implements GeoAuto {
 			addP(x + w, y);
 			addP(x + w, y + h);
 			addP(x, y + h);
-			g.glEnd();
-		}
-
-		protected void drawRects(Sprite s, int n, Coord[] cs) {
-			checkMode();
-			setColor();
-			g.glBegin(GL.GL_TRIANGLES);
-			GLT glt = gra.getTransform();
-			for (int i = 0; i < n; i++) {
-				Coord c = cs[i];
-				c.size(s.rad);
-				gra.translate(c.x, c.y);
-				for (int j = 0; j < CIR; j++) {
-					double t0 = j * Math.PI * 2 / CIR;
-					double t1 = t0 + Math.PI * 2 / CIR;
-					addP(0, 0);
-					addP(c.w / 2 * Math.cos(t0), c.h / 2 * Math.sin(t0));
-					addP(c.w / 2 * Math.cos(t1), c.h / 2 * Math.sin(t1));
-				}
-				gra.setTransform(glt);
-			}
 			g.glEnd();
 		}
 
@@ -215,7 +216,8 @@ public class GLGraphics implements GeoAuto {
 		sw = wid;
 		sh = hei;
 		count++;
-		g.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+		if (Data.CLEARBG)
+			g.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		g.glLoadIdentity();
 		geo.setColor(RED);
 	}
@@ -261,7 +263,7 @@ public class GLGraphics implements GeoAuto {
 		float[] r = s.img.getRect();
 		GLT glt = getTransform();
 		for (int i = 0; i < n; i++) {
-			Coord c = cs[i];
+			Coord c = cs[i].copy();
 			c.times(sh);
 			c.size(1 / s.rad);
 			translate(c.x, c.y);

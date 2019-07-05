@@ -6,20 +6,41 @@ public abstract class Entity implements Updatable {
 
 	protected final int base, atk;
 
+	private Entity[] trails;
+
 	public Entity(int i0, int i1) {
 		base = i0;
 		atk = i1;
 	}
 
+	public abstract Control.EntCtrl getCtrl();
+
 	public abstract Shape getShape();
 
+	public void trail(Entity... es) {
+		trails = es;
+	}
+
+	/** main entrance of timer. this implementation updates control only */
+	@Override
+	public void update(int t) {
+		if (getCtrl() != null)
+			getCtrl().update(t);
+	}
+
 	/** this entity attacks the entity e */
-	protected abstract void collide(Entity e);
+	protected abstract void attack(Entity e);
 
 	protected abstract void draw();
 
-	protected abstract boolean isDead();
+	protected boolean isDead() {
+		return getCtrl() != null && getCtrl().finished();
+	}
 
-	protected abstract void post();
+	protected void post() {
+		if (getCtrl() != null && getCtrl().finished() && trails != null)
+			for (Entity e : trails)
+				Engine.RUNNING.add(e);
+	}
 
 }

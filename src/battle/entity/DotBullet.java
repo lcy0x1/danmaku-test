@@ -12,6 +12,11 @@ public class DotBullet extends Bullet {
 		ctrl.move = d;
 	}
 
+	public DotBullet(Dot d, int t) {
+		super(t);
+		dot = d;
+	}
+
 	@Override
 	public Shape getShape() {
 		return dot.shape;
@@ -24,21 +29,24 @@ public class DotBullet extends Bullet {
 	}
 
 	@Override
-	protected void collide(Entity e) {
+	protected void attack(Entity e) {
 		if (getShape() == null || e.getShape() == null)
 			return;
 		if (getShape().dis(e.getShape()) < 0) {
-			// TODO
+			if (e instanceof Player)
+				((Player) e).attacked(this);
 		}
 	}
 
 	@Override
 	protected void draw() {
-		dot.sprite.draw();
+		if (dot.sprite != null)
+			dot.sprite.draw();
 	}
 
 	@Override
 	protected void post() {
+		super.post();
 		dot.post();
 	}
 

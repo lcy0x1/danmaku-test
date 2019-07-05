@@ -1,12 +1,12 @@
 package battle.entity;
 
+import battle.Control;
 import battle.Engine;
 import battle.Shape;
 import battle.Sprite;
-import battle.LifeControl;
 import util.P;
 
-public class Dot implements Sprite.ESprite.Dire, LifeControl.MoveControl {
+public class Dot implements Sprite.DotESprite.Dire, Control.MoveCtrl {
 
 	public static class CurveMover extends TimeMover {
 
@@ -84,39 +84,39 @@ public class Dot implements Sprite.ESprite.Dire, LifeControl.MoveControl {
 
 		public final P a, v;
 
-		public int it;
+		public int t0, t1;
 
-		public LineMover(double ap, int tt, P vp) {
+		public LineMover(double ap, int st, int et, P vp) {
 			v = vp;
-			it = tt;
+			t0 = st;
+			t1 = et;
 			a = P.polar(ap, vp.atan2());
 		}
 
 		public LineMover(P vp) {
 			v = vp;
 			a = null;
-			it = 0;
+			t1 = 0;
 		}
 
 		public LineMover(P ap, int tt, P vp) {
 			v = vp;
-			it = tt;
+			t1 = tt;
 			a = ap;
 		}
 
 		@Override
 		public P disp(int ct) {
-			P ad = v.copy().times(ct);
-			if (ct > it)
-				ct = it;
-			if (a != null)
-				ad.plus(a, ct * ct / 2);
-			return ad;
+			if (ct <= t0 || a == null)
+				return v.copy().times(ct);
+			if (ct > t0 && ct <= t1 && a != null)
+				return v.copy().times(ct).plus(a, (ct - t0) * (ct - t0) / 2);
+			return v.copy().times(ct).plus(a, (t1 - t0) * (ct - t1 + (t1 - t0) / 2));
 		}
 
 		@Override
 		public int getType() {
-			if (t > it)
+			if (t > t1)
 				return TYPE_TIME | TYPE_LINE;
 			return TYPE_TIME;
 		}
@@ -224,48 +224,71 @@ public class Dot implements Sprite.ESprite.Dire, LifeControl.MoveControl {
 	}
 
 	public final P pos, tmp;
-	public final Sprite.ESprite sprite;
+	public final Sprite.DotESprite sprite;
 	public final Shape.PosShape shape;
 
 	public double dire;
 	public Mover move = null;
 
 	/** curve with varying axial and constant angular speed */
-	public Dot(P o, double ir, double ia, double v, double w, double aa, int t, Sprite.ESParam img) {
+	public Dot(P o, double ir, double ia, double v, double w, double aa, int t, Sprite.DESParam img) {
 		this(P.polar(ir, ia).plus(o), img);
 		move = new CurveMover(ir, ia, v, w, aa, t);
 	}
 
 	/** curve with constant axial and angular speed */
-	public Dot(P o, double ir, double ia, double v, double w, Sprite.ESParam img) {
+	public Dot(P o, double ir, double ia, double v, double w, Sprite.DESParam img) {
 		this(P.polar(ir, ia).plus(o), img);
 		move = new CurveMover(ir, ia, v, w);
 	}
 
 	/** linear varying speed */
-	public Dot(P p, P v, int a, int t, Sprite.ESParam img) {
+	public Dot(P p, P v, double a, int t0, int t1, Sprite.DESParam img) {
 		this(p, img);
-		move = new LineMover(a, t, v);
+		move = new LineMover(a, t0, t1, v);
+	}
+
+	/** linear varying speed */
+	public Dot(P p, P v, double a, int t, Sprite.DESParam img) {
+		this(p, img);
+		move = new LineMover(a, 0, t, v);
 	}
 
 	/** semi-linear */
-	public Dot(P p, P v, P a, int t, Sprite.ESParam img) {
+	public Dot(P p, P v, P a, int t, Sprite.DESParam img) {
 		this(p, img);
 		move = new LineMover(a, t, v);
 	}
 
 	/** linear constant speed */
-	public Dot(P p, P v, Sprite.ESParam img) {
+	public Dot(P p, P v, Sprite.DESParam img) {
 		this(p, img);
 		move = new LineMover(v);
 	}
 
 	/** static */
-	public Dot(P p, Sprite.ESParam img) {
+	public Dot(P p, Sprite.DESParam img) {
 		pos = p;
 		tmp = p.copy();
-		shape = new Shape.Circle(pos, img.r);
-		sprite = img.getEntity(this);
+		if (img == null) {
+			shape = null;
+			sprite = null;
+		} else {
+			shape = new Shape.Circle(pos, img.r);
+			sprite = img.getEntity(this);
+		}
+	}
+
+	public Dot(Sprite.DESParam img, TimeMover tm) {
+		this(tm.disp(0), img);
+		move = tm;
+	}
+
+	@Override
+	public boolean finished() {
+		if (move == null)
+			return false;
+		return move.out(pos, sprite.radius());
 	}
 
 	@Override
@@ -278,20 +301,14 @@ public class Dot implements Sprite.ESprite.Dire, LifeControl.MoveControl {
 		return pos;
 	}
 
-	@Override
-	public boolean out() {
-		if (move == null)
-			return false;
-		return move.out(pos, sprite.radius());
-	}
-
-	public void post() {
+	protected void post() {
 		if (pos.dis(tmp) > 0)
 			dire = pos.atan2(tmp);
 		pos.setTo(tmp);
 	}
 
-	public void update(int t) {
+	protected void update(int t) {
+		tmp.setTo(pos);
 		if (move != null)
 			move.update(this, t);
 	}

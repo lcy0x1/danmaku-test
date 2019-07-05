@@ -86,7 +86,6 @@ public class MainFrame extends JFrame {
 
 	public void initialize() {
 		F = this;
-		changePanel(new MainPage());
 		Fresized();
 	}
 

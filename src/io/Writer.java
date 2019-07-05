@@ -87,7 +87,8 @@ public class Writer extends DataIO {
 		}
 		try {
 			if (ph.exists()) {
-				if (!Opts.conf("<html>" + "Another BCU is running in this folder or last BCU doesn't close properly. "
+				if (!Opts.conf("<html>" + "Another thread is running in this folder, "
+						+ "<br> or last time this program doesn't close properly. "
 						+ "<br> Are you sure to run? It might damage your save.</html>")) {
 					System.exit(0);
 				}

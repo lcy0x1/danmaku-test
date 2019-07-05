@@ -3,6 +3,7 @@ package battle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 
 import battle.entity.Player;
@@ -13,16 +14,30 @@ public class Engine {
 
 	public static class TimeDispach {
 
-		public int time;
+		public int time, clock;
 
-		private int t;
+		private int t, l, templ;
+		private double slow;
+
+		public void slow(double mult, int len) {
+			slow = mult;
+			templ = len;
+		}
 
 		private int dispach(Entity e) {
+			if (l > 0)
+				return (int) (t * slow);
 			return t;
 		}
 
 		private void end() {
-			time += t;
+			time += dispach(null);
+			clock += t;
+			l -= t;
+			if (templ > 0) {
+				l = templ;
+				templ = 0;
+			}
 			t = 0;
 		}
 
@@ -42,17 +57,27 @@ public class Engine {
 
 	private final Map<Integer, List<Entity>> entities = new TreeMap<>();
 	private final List<Entity> temp = new ArrayList<>();
+	private final List<Control.UpdCtrl> updc = new ArrayList<>();
+	private final List<Control.UpdCtrl> utmp = new ArrayList<>();
 
-	public StageControl stage;
+	public Control.UpdCtrl stage;
+
+	public final Random r = new Random();
 
 	public Engine() {
 		pl = new Player();
+		add(pl);
 		time = new TimeDispach();
 	}
 
-	public Engine(StageControl sc) {
+	public Engine(Control.UpdCtrl sc) {
 		this();
 		stage = sc;
+		add(stage);
+	}
+
+	public void add(Control.UpdCtrl e) {
+		utmp.add(e);
 	}
 
 	public void add(Entity e) {
@@ -74,18 +99,9 @@ public class Engine {
 
 	public void update(int t) {
 		RUNNING = this;
-		temp.forEach(e -> {
-			int key = e.atk << 16 | e.base;
-			List<Entity> l;
-			if (entities.containsKey(key))
-				l = entities.get(key);
-			else
-				entities.put(key, l = new ArrayList<Entity>());
-			l.add(e);
-		});
-		temp.clear();
+		clearTmp();
 		time.start(t);
-		stage.update(t);
+		updc.forEach(e -> e.update(time.dispach(null)));
 		entities.forEach((i, l) -> l.forEach(e -> e.update(time.dispach(e))));
 		entities.forEach((i, l) -> {
 			int atk = i >> 16 & 65535;
@@ -97,13 +113,29 @@ public class Engine {
 					return;
 				for (Entity e0 : l)
 					for (Entity e1 : q)
-						e0.collide(e1);
+						e0.attack(e1);
 			});
 		});
 		entities.forEach((i, l) -> l.forEach(e -> e.post()));
 		entities.forEach((i, l) -> l.removeIf(e -> e.isDead()));
+		updc.removeIf(e -> e.finished());
 		time.end();
 		RUNNING = null;
+	}
+
+	private void clearTmp() {
+		temp.forEach(e -> {
+			int key = e.atk << 16 | e.base;
+			List<Entity> l;
+			if (entities.containsKey(key))
+				l = entities.get(key);
+			else
+				entities.put(key, l = new ArrayList<Entity>());
+			l.add(e);
+		});
+		temp.clear();
+		utmp.forEach(e -> updc.add(e));
+		utmp.clear();
 	}
 
 }

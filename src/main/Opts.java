@@ -22,7 +22,7 @@ public class Opts {
 		if (id == MEMORY)
 			pop("not enough memory. Current memory: " + is[0] + "MB.", "not enough memory");
 		if (id == SECTY)
-			pop("Failed to access files. Please move BCU to another place", "file permission error");
+			pop("Failed to access files. Please move this program to another place", "file permission error");
 		if (id == REQITN)
 			pop("failed to connect to internet while download is necessary", "download error");
 	}

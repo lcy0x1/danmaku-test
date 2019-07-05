@@ -26,7 +26,7 @@ public class BattlePage extends Page {
 
 	private boolean pause = true;
 
-	private P pre;
+	private P pre, disp = new P(0, 0);
 
 	private boolean up, down, left, right, shift;
 
@@ -69,6 +69,11 @@ public class BattlePage extends Page {
 	}
 
 	@Override
+	protected void mouseDragged(MouseEvent me) {
+		mouseMoved(me);
+	}
+
+	@Override
 	protected void mouseMoved(MouseEvent me) {
 		P pos = new P(fpc.getLocationOnScreen()).sf(new P(me.getLocationOnScreen()));
 		pos.divide(new P(fpc.getSize()));
@@ -76,7 +81,7 @@ public class BattlePage extends Page {
 		if (pre == null)
 			pre = pos;
 		if (me.isShiftDown())
-			e.pl.ext.plus(pre, -1).plus(pos).limit(Engine.BOUND);
+			disp.plus(pre, -1).plus(pos);
 		pre = pos;
 	}
 
@@ -103,13 +108,14 @@ public class BattlePage extends Page {
 			if (right)
 				move.x++;
 			move.times(shift ? 2 : 5);
-			e.pl.ext.plus(move);
+			e.pl.ext.plus(move).plus(disp).limit(Engine.BOUND);
 			e.update(Timer.p);
 			jctn.setText("count:" + e.count());
 			int sec = e.time.clock / 1000;
 			jtim.setText("time:" + Data.str(sec / 60, 2) + ":" + Data.str(sec % 60, 2));
 			jdct.setText("death:" + e.pl.deadCount);
 		}
+		disp.setTo(0, 0);
 		fpc.paint();
 	}
 

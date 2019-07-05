@@ -23,7 +23,7 @@ public class MainTH {
 		Writer.logPrepare();
 		Writer.logSetup();
 		Reader.getData$0();
-		new MainFrame("danmaku").initialize();
+		new MainFrame("danmaku ver 4.0.1").initialize();
 		Reader.getData$1();
 		new Timer().start();
 		MainFrame.changePanel(new MainPage());

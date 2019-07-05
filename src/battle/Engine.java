@@ -1,6 +1,7 @@
 package battle;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -12,36 +13,55 @@ import util.P;
 
 public class Engine {
 
-	public static class TimeDispach {
+	public static class Time {
+
+		private static class Mask {
+
+			private final double mult;
+
+			private int len;
+
+			private final Collection<Entity> ce;
+
+			public Mask(double m, int l, Collection<Entity> c) {
+				mult = m;
+				len = l;
+				ce = c;
+			}
+
+		}
 
 		public int time, clock;
 
-		private int t, l, templ;
-		private double slow;
+		private int t;
 
-		public void slow(double mult, int len) {
-			slow = mult;
-			templ = len;
+		private final List<Mask> mask = new ArrayList<>();
+		private final List<Mask> temp = new ArrayList<>();
+
+		public void slow(double mult, int len, Collection<Entity> e) {
+			temp.add(new Mask(mult, len, e));
 		}
 
 		private int dispach(Entity e) {
-			if (l > 0)
-				return (int) (t * slow);
-			return t;
+			double ans = t;
+			for (Mask m : mask)
+				if (m.ce == null || !m.ce.contains(e))
+					ans *= m.mult;
+			return (int) ans;
 		}
 
 		private void end() {
 			time += dispach(null);
 			clock += t;
-			l -= t;
-			if (templ > 0) {
-				l = templ;
-				templ = 0;
-			}
+			for (Mask m : mask)
+				m.len -= t;
+			mask.removeIf(m -> m.len <= 0);
 			t = 0;
 		}
 
 		private void start(int dt) {
+			mask.addAll(temp);
+			temp.clear();
 			t = dt;
 		}
 
@@ -53,25 +73,19 @@ public class Engine {
 	public static Sprite.Pool RENDERING = null;
 
 	public final Player pl;
-	public final TimeDispach time;
+	public final Time time;
+	public final Control.UpdCtrl stage;
+	public final Random r = new Random();
 
 	private final Map<Integer, List<Entity>> entities = new TreeMap<>();
 	private final List<Entity> temp = new ArrayList<>();
 	private final List<Control.UpdCtrl> updc = new ArrayList<>();
 	private final List<Control.UpdCtrl> utmp = new ArrayList<>();
 
-	public Control.UpdCtrl stage;
-
-	public final Random r = new Random();
-
-	public Engine() {
+	public Engine(Control.UpdCtrl sc) {
 		pl = new Player();
 		add(pl);
-		time = new TimeDispach();
-	}
-
-	public Engine(Control.UpdCtrl sc) {
-		this();
+		time = new Time();
 		stage = sc;
 		add(stage);
 	}
@@ -116,9 +130,10 @@ public class Engine {
 						e0.attack(e1);
 			});
 		});
+		updc.forEach(e -> e.post());
 		entities.forEach((i, l) -> l.forEach(e -> e.post()));
-		entities.forEach((i, l) -> l.removeIf(e -> e.isDead()));
 		updc.removeIf(e -> e.finished());
+		entities.forEach((i, l) -> l.removeIf(e -> e.isDead()));
 		time.end();
 		RUNNING = null;
 	}

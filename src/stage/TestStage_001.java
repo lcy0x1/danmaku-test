@@ -43,7 +43,7 @@ public class TestStage_001 implements Control.UpdCtrl, Emiter.Ticker {
 
 	@Override
 	public boolean finished() {
-		return false;
+		return time > 50000;
 	}
 
 	@Override

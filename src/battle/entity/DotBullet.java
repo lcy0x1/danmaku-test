@@ -23,6 +23,12 @@ public class DotBullet extends Bullet {
 	}
 
 	@Override
+	public void post() {
+		super.post();
+		dot.post();
+	}
+
+	@Override
 	public void update(int t) {
 		super.update(t);
 		dot.update(t);
@@ -42,12 +48,6 @@ public class DotBullet extends Bullet {
 	protected void draw() {
 		if (dot.sprite != null)
 			dot.sprite.draw();
-	}
-
-	@Override
-	protected void post() {
-		super.post();
-		dot.post();
 	}
 
 }

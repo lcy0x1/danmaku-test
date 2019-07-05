@@ -224,10 +224,10 @@ public class Dot implements Sprite.DotESprite.Dire, Control.MoveCtrl {
 	}
 
 	public final P pos, tmp;
-	public final Sprite.DotESprite sprite;
-	public final Shape.PosShape shape;
 
-	public double dire;
+	public Sprite.DotESprite sprite;
+	public Shape.PosShape shape;
+	private double dire;
 	public Mover move = null;
 
 	/** curve with varying axial and constant angular speed */
@@ -301,16 +301,16 @@ public class Dot implements Sprite.DotESprite.Dire, Control.MoveCtrl {
 		return pos;
 	}
 
+	public void update(int t) {
+		tmp.setTo(pos);
+		if (move != null)
+			move.update(this, t);
+	}
+
 	protected void post() {
 		if (pos.dis(tmp) > 0)
 			dire = pos.atan2(tmp);
 		pos.setTo(tmp);
-	}
-
-	protected void update(int t) {
-		tmp.setTo(pos);
-		if (move != null)
-			move.update(this, t);
 	}
 
 }

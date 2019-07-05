@@ -7,14 +7,14 @@ import battle.Shape;
 import battle.Sprite;
 import util.P;
 
-public class Player extends Entity implements Sprite.DotESprite.Dire {
+public class Player extends Entity implements Sprite.DotESprite.Dire, Shape {
 
 	private static final int DEADTIME = 3000;
 
 	public final P ext, pos;
 	public int deadCount;
 
-	private final Shape shape;
+	private final Shape.Circle shape;
 	private final Sprite.DotESprite img;
 
 	private int time, deadTime;
@@ -23,7 +23,7 @@ public class Player extends Entity implements Sprite.DotESprite.Dire {
 		super(C_PLAYER, 0);
 		pos = Engine.START.copy();
 		ext = pos.copy();
-		shape = new Shape.Circle(pos, 2);
+		shape = new Shape.Circle(pos.copy(), 2);
 		img = new Sprite.DESParam(0, 0, 1).getEntity(this);
 	}
 
@@ -33,6 +33,18 @@ public class Player extends Entity implements Sprite.DotESprite.Dire {
 		ext.setTo(Engine.START);
 		deadTime = DEADTIME;
 		deadCount++;
+	}
+
+	@Override
+	public double dis(Shape s) {
+		double dis = pos.dis(ext);
+		int n = (int) (1 + dis / shape.r / 2);
+		double ans = Double.MAX_VALUE;
+		for (int i = 0; i <= n; i++) {
+			shape.pos.setTo(pos.middle(ext, 1.0 / n * i));
+			ans = Math.min(ans, s.dis(shape));
+		}
+		return ans;
 	}
 
 	@Override
@@ -52,7 +64,17 @@ public class Player extends Entity implements Sprite.DotESprite.Dire {
 
 	@Override
 	public Shape getShape() {
-		return shape;
+		return this;
+	}
+
+	@Override
+	public boolean isDead() {
+		return false;
+	}
+
+	@Override
+	public void post() {
+		pos.setTo(ext);
 	}
 
 	@Override
@@ -70,16 +92,6 @@ public class Player extends Entity implements Sprite.DotESprite.Dire {
 	protected void draw() {
 		if (deadTime <= 0 || deadTime / 100 % 2 == 0)
 			img.draw();
-	}
-
-	@Override
-	protected boolean isDead() {
-		return false;
-	}
-
-	@Override
-	protected void post() {
-		pos.setTo(ext);
 	}
 
 }

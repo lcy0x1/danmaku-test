@@ -15,7 +15,7 @@ public class SelectPage extends Page {
 	private final JBTN back = new JBTN("back");
 	private final JBTN strt = new JBTN("start");
 
-	private final JList<String> list = new JList<String>(new String[] { "000", "001", "002" });
+	private final JList<String> list = new JList<String>(new String[] { "000", "001", "002", "003", "004" });
 	private final JScrollPane jspl = new JScrollPane(list);
 
 	private String sele;

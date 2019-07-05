@@ -17,6 +17,17 @@ public abstract class Entity implements Updatable {
 
 	public abstract Shape getShape();
 
+	public boolean isDead() {
+		return getCtrl() != null && getCtrl().finished();
+	}
+
+	@Override
+	public void post() {
+		if (getCtrl() != null && getCtrl().finished() && trails != null)
+			for (Entity e : trails)
+				Engine.RUNNING.add(e);
+	}
+
 	public void trail(Entity... es) {
 		trails = es;
 	}
@@ -32,15 +43,5 @@ public abstract class Entity implements Updatable {
 	protected abstract void attack(Entity e);
 
 	protected abstract void draw();
-
-	protected boolean isDead() {
-		return getCtrl() != null && getCtrl().finished();
-	}
-
-	protected void post() {
-		if (getCtrl() != null && getCtrl().finished() && trails != null)
-			for (Entity e : trails)
-				Engine.RUNNING.add(e);
-	}
 
 }

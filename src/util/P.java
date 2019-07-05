@@ -13,7 +13,7 @@ public strictfp class P {
 		public P[] ps;
 		public double rad;
 
-		public Polygon(P[] parr, double r) {
+		public Polygon(double r, P... parr) {
 			ps = parr;
 			rad = r;
 		}

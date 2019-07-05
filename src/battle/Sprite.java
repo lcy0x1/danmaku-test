@@ -1,13 +1,16 @@
 package battle;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.Queue;
 import java.util.TreeMap;
 
+import org.apache.commons.io.IOUtils;
+
 import jogl.util.FakeGraphics;
 import jogl.util.FakeGraphics.Coord;
+import main.MainTH;
 import jogl.util.GLImage;
 import util.Data;
 import util.P;
@@ -29,11 +32,11 @@ public class Sprite implements Comparable<Sprite> {
 		public DESParam(Sprite spr, int t, double m) {
 			s = spr;
 			mode = t;
-			r = m * MAGNIFY;
+			r = s.size * m * MAGNIFY;
 		}
 
 		public DotESprite getEntity(DotESprite.Dire d) {
-			return new DotESprite(d, s.size * r, s.size * r, s, mode);
+			return new DotESprite(d, r * 2, r * 2, s, mode);
 		}
 
 	}
@@ -145,7 +148,6 @@ public class Sprite implements Comparable<Sprite> {
 	}
 
 	public static final int SRC_GREY = 0;
-
 	public static final int SRC_REDX = 1;
 	public static final int SRC_RED = 2;
 	public static final int SRC_PINKX = 3;
@@ -161,8 +163,8 @@ public class Sprite implements Comparable<Sprite> {
 	public static final int SRC_YELLOW = 13;
 	public static final int SRC_ORANGE = 14;
 	public static final int SRC_WHITE = 15;
-	public static final int SRB_SLASER = 0;
 
+	public static final int SRB_SLASER = 0;
 	public static final int SRB_SCALE = 1;
 	public static final int SRB_CIRCLE = 2;
 	public static final int SRB_BALL = 3;
@@ -178,8 +180,8 @@ public class Sprite implements Comparable<Sprite> {
 	public static final int SRB_S_BALL = 13;
 	public static final int SRB_LONG = 14;
 	public static final int SRB_DROP = 15;
-	public static final int SOC_GREY = 0;
 
+	public static final int SOC_GREY = 0;
 	public static final int SOC_RED = 1;
 	public static final int SOC_PINK = 2;
 	public static final int SOC_BLUE = 3;
@@ -187,8 +189,8 @@ public class Sprite implements Comparable<Sprite> {
 	public static final int SOC_GREEN = 5;
 	public static final int SOC_YELLOW = 6;
 	public static final int SOC_WHITE = 7;
-	public static final int SOB_LIGHT = 0;
 
+	public static final int SOB_LIGHT = 0;
 	public static final int SOB_STAR = 1;
 	public static final int SOB_BALL = 2;
 	public static final int SOB_BUTTERFLY = 3;
@@ -196,14 +198,15 @@ public class Sprite implements Comparable<Sprite> {
 	public static final int SOB_OVAL = 5;
 	public static final int SOB_LIGHTX = 6;
 	public static final int SOB_HEART = 7;
-	public static final int SLC_RED = 0;
 
+	public static final int SLC_RED = 0;
 	public static final int SLC_BLUE = 1;
 	public static final int SLC_GREEN = 2;
 	public static final int SLC_YELLOW = 3;
-	public static final int SLB_BALL = 0;
 
+	public static final int SLB_BALL = 0;
 	public static final int SLB_ROSE = 1;
+
 	public static final Sprite[][] NON = new Sprite[1][1];
 	public static final Sprite[][] REG = new Sprite[16][16];
 	public static final Sprite[][] OCT = new Sprite[8][8];
@@ -212,7 +215,7 @@ public class Sprite implements Comparable<Sprite> {
 
 	public static final Sprite[][][] TOT = { NON, REG, OCT, LRG, OTH };
 
-	public static final double MAGNIFY = 3;
+	public static final double MAGNIFY = 1.5;
 
 	private static final double[][] SIZE = { { 2 },
 			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 0, 2.4, 2.4, 2.4, 2.4 }, { 0, 7, 8.5, 7, 6, 7, 0, 10 },
@@ -223,8 +226,14 @@ public class Sprite implements Comparable<Sprite> {
 	}
 
 	public static void read() {
-		File f = new File(Sprite.class.getResource("/assets/bullet_000.png").getFile());
-		GLImage gli = GLImage.build(f);
+		String path = (MainTH.WRITE ? "/src/" : "/") + "assets/bullet_000.png";
+		GLImage gli;
+		try {
+			gli = GLImage.build(IOUtils.resourceToByteArray(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
 		for (int i = 0; i < 12; i++)
 			for (int j = 0; j < 16; j++)
 				REG[i][j] = new Sprite(gli.getSubimage(1 + j * 16, 1 + i * 16, 16, 16), 10000 + i * 100 + j);
@@ -277,6 +286,8 @@ public class Sprite implements Comparable<Sprite> {
 	}
 
 	private int getLayer() {
+		if (id / 100 == 301)
+			return -id + 20200;
 		return -id;// FIXME
 	}
 

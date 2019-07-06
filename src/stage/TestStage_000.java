@@ -32,7 +32,15 @@ public class TestStage_000 implements Control.UpdCtrl {
 
 	}
 
+	private static final int[] ns = { 9, 10, 11, 12 };
+
+	private final int n;
+
 	private int time = 0;
+
+	public TestStage_000(int diff) {
+		n = ns[diff];
+	}
 
 	@Override
 	public boolean finished() {
@@ -42,7 +50,6 @@ public class TestStage_000 implements Control.UpdCtrl {
 	@Override
 	public void update(int dt) {
 		if (time == 0) {
-			int n = 14;
 			double w = Math.PI / 81000;
 			Sprite.DESParam s0 = new Sprite.DESParam(20301, 1, 1);
 			Sprite.DESParam s1 = new Sprite.DESParam(20303, 1, 1);

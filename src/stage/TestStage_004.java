@@ -12,6 +12,9 @@ public class TestStage_004 implements Control.UpdCtrl {
 	private static final P o = Engine.BOUND;
 	private int time = 0;
 
+	public TestStage_004(int diff) {
+	}
+
 	@Override
 	public boolean finished() {
 		return time > 50000;

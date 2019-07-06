@@ -7,7 +7,6 @@ import util.P;
 
 public class Clearer extends Entity {
 
-	private final Control.TimeCtrl ctrl;
 	private final Shape.Circle shape;
 	private final double vr;
 	private final int hard;
@@ -17,15 +16,10 @@ public class Clearer extends Entity {
 	public Clearer(P pos, double r, double v, int t, int lv) {
 		super(0, C_BULLET | C_ENEMY);
 		shape = new Shape.Circle(pos, r);
-		ctrl = new Control.TimeCtrl(t);
+		addCtrl(new Control.TimeCtrl(t));
 		nr = r;
 		vr = v;
 		hard = lv;
-	}
-
-	@Override
-	public Control.EntCtrl getCtrl() {
-		return ctrl;
 	}
 
 	@Override
@@ -48,7 +42,7 @@ public class Clearer extends Entity {
 	@Override
 	protected void attack(Entity e) {
 		if (shape.dis(e.getShape()) < 0)
-			e.getCtrl().killed(hard);
+			e.getEntCtrl().killed(hard);
 	}
 
 	@Override

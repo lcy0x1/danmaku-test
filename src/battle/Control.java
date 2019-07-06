@@ -2,7 +2,7 @@ package battle;
 
 public interface Control {
 
-	public static abstract class EntCtrl implements UpdCtrl {
+	public static class EntCtrl implements Control {
 
 		private int hard;
 
@@ -28,40 +28,17 @@ public interface Control {
 
 	}
 
-	public static interface MoveCtrl extends Control {
-
-	}
-
-	public static class TimeCtrl extends EntCtrl {
-
-		public MoveCtrl move;
+	public static class TimeCtrl implements UpdCtrl {
 
 		private int rem;
 
-		public TimeCtrl() {
-			super(0);
-			rem = -1;
-		}
-
 		public TimeCtrl(int tot) {
-			super(0);
-			rem = tot;
-		}
-
-		public TimeCtrl(int tot, int lv) {
-			super(lv);
 			rem = tot;
 		}
 
 		@Override
 		public boolean finished() {
-			if (super.finished())
-				return true;
-			if (move != null && move.finished())
-				return true;
-			if (rem == 0)
-				return true;
-			return false;
+			return rem == 0;
 		}
 
 		@Override

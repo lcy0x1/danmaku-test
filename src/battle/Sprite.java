@@ -88,7 +88,7 @@ public class Sprite implements Comparable<Sprite> {
 			@Override
 			void debug(FakeGraphics fg, int mode) {
 				Queue<Coord> qs = mode == 0 ? reg : lit;
-				fg.drawCircles(s, qs.size(), qs.toArray(new Coord[0]));
+				fg.drawCircles(qs.toArray(new Coord[0]));
 			}
 
 			@Override

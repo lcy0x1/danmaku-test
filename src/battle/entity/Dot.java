@@ -6,7 +6,7 @@ import battle.Shape;
 import battle.Sprite;
 import util.P;
 
-public class Dot implements Sprite.DotESprite.Dire, Control.MoveCtrl {
+public class Dot implements Sprite.DotESprite.Dire, Control.UpdCtrl {
 
 	public static class CurveMover extends TimeMover {
 
@@ -228,6 +228,7 @@ public class Dot implements Sprite.DotESprite.Dire, Control.MoveCtrl {
 	public Sprite.DotESprite sprite;
 	public Shape.PosShape shape;
 	private double dire;
+	private boolean deout = false;
 	public Mover move = null;
 
 	/** curve with varying axial and constant angular speed */
@@ -279,13 +280,12 @@ public class Dot implements Sprite.DotESprite.Dire, Control.MoveCtrl {
 	}
 
 	public Dot(Sprite.DESParam img, TimeMover tm) {
-		this(tm.disp(0), img);
-		move = tm;
+		this(tm.disp(0), img, tm);
 	}
 
 	@Override
 	public boolean finished() {
-		if (move == null)
+		if (move == null || deout)
 			return false;
 		return move.out(pos, sprite.radius());
 	}
@@ -300,21 +300,29 @@ public class Dot implements Sprite.DotESprite.Dire, Control.MoveCtrl {
 		return pos;
 	}
 
+	@Override
+	public void post() {
+		if (pos.dis(tmp) > 0)
+			dire = pos.atan2(tmp);
+		pos.setTo(tmp);
+	}
+
+	/** indicate whether this dot also serves as a control */
+	public Dot setCtrl(boolean b) {
+		deout = !b;
+		return this;
+	}
+
 	public Dot setMove(Mover m) {
 		move = m;
 		return this;
 	}
 
+	@Override
 	public void update(int t) {
 		tmp.setTo(pos);
 		if (move != null)
 			move.update(this, t);
-	}
-
-	protected void post() {
-		if (pos.dis(tmp) > 0)
-			dire = pos.atan2(tmp);
-		pos.setTo(tmp);
 	}
 
 }

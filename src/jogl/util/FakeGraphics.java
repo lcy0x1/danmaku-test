@@ -2,6 +2,7 @@ package jogl.util;
 
 import battle.Sprite;
 import jogl.util.GLGraphics.GeomG;
+import util.P;
 
 public interface FakeGraphics {
 
@@ -35,6 +36,36 @@ public interface FakeGraphics {
 
 	}
 
+	public static class Curve {
+
+		protected P[] ps;
+		protected double end, r;
+
+		public Curve(double e, double ra, P[] p) {
+			end = e;
+			r = ra;
+			ps = p;
+		}
+
+		public Curve copy() {
+			P[] np = new P[ps.length];
+			for (int i = 0; i < ps.length; i++)
+				np[i] = ps[i].copy();
+			return new Curve(end, r, np);
+		}
+
+		public void size(double m) {
+			r *= m;
+		}
+
+		public void times(double m) {
+			for (P p : ps)
+				p.times(m);
+			r *= m;
+		}
+
+	}
+
 	public static class GLT {
 
 		protected float[] data = new float[6];
@@ -46,7 +77,7 @@ public interface FakeGraphics {
 
 	public void colRect(int x, int y, int w, int h, int r, int g, int b, int... a);
 
-	public void drawCircles(Sprite s, int size, Coord[] array);
+	public void drawCircles(Coord[] array);
 
 	public void drawImage(GLImage bimg, double x, double y);
 
@@ -92,8 +123,8 @@ interface GeoAuto extends FakeGraphics {
 	}
 
 	@Override
-	public default void drawCircles(Sprite s, int size, Coord[] array) {
-		getGeo().drawCircles(s, size, array);
+	public default void drawCircles(Coord[] array) {
+		getGeo().drawCircles(array);
 	}
 
 	@Override

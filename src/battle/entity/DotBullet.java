@@ -8,30 +8,17 @@ public class DotBullet extends Bullet {
 	public Dot dot;
 
 	public DotBullet(Dot d) {
-		dot = d;
-		ctrl.move = d;
+		addCtrl(dot = d);
 	}
 
 	public DotBullet(Dot d, int t) {
 		super(t);
-		dot = d;
+		addCtrl(dot = d.setCtrl(false));
 	}
 
 	@Override
 	public Shape getShape() {
 		return dot.shape;
-	}
-
-	@Override
-	public void post() {
-		super.post();
-		dot.post();
-	}
-
-	@Override
-	public void update(int t) {
-		super.update(t);
-		dot.update(t);
 	}
 
 	@Override

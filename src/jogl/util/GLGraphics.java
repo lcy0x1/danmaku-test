@@ -36,6 +36,55 @@ public class GLGraphics implements GeoAuto {
 			g = gl2;
 		}
 
+		public void drawCurve(Curve c) {
+			checkMode();
+			setColor();
+
+			Curve cp = c.copy();
+			cp.times(gra.sh);
+			P[] ps = cp.ps;
+			double end = cp.end, ra = cp.r;
+			int n = ps.length;
+
+			double l = 0;
+			for (int i = 1; i < ps.length; i++)
+				l += ps[i - 1].dis(ps[i]);
+			double lp = (1 - end * 2) / l;
+
+			double d0 = ps[1].atan2(ps[0]);
+			double d1 = ps[n - 2].atan2(ps[n - 1]);
+			P[] p0 = new P[2], p1 = new P[2];
+			P pc = P.polar(end / lp, d0).plus(ps[0]);
+			P ec = P.polar(end / lp, d1).plus(ps[n - 1]);
+			p0[0] = P.polar(ra, d0 + Math.PI / 2).plus(pc);
+			p0[1] = P.polar(ra, d0 - Math.PI / 2).plus(pc);
+			p1[0] = P.polar(ra, d1 - Math.PI / 2).plus(ec);
+			p1[1] = P.polar(ra, d1 + Math.PI / 2).plus(ec);
+
+			P[][] s0 = new P[2][ps.length - 1];
+			for (int i = 0; i < n - 1; i++) {
+				d0 = ps[i + 1].atan2(ps[i]);
+				P pm = ps[i + 1].middle(ps[i], 0.5);
+				s0[0][i] = P.polar(ra, d0 + Math.PI / 2).plus(pm);
+				s0[1][i] = P.polar(ra, d0 - Math.PI / 2).plus(pm);
+			}
+
+			for (int k = 0; k < 1; k++) {
+				g.glBegin(GL.GL_TRIANGLE_STRIP);
+				addP(pc);
+				addP(p0[k]);
+				for (int i = 0; i < n - 1; i++) {
+					addP(ps[i]);
+					addP(s0[k][i]);
+				}
+				addP(ps[n - 1]);
+				addP(p1[k]);
+				addP(ec);
+				g.glEnd();
+			}
+
+		}
+
 		protected void colRect(int x, int y, int w, int h, int r, int gr, int b, int... a) {
 			checkMode();
 			if (a.length == 0)
@@ -51,12 +100,12 @@ public class GLGraphics implements GeoAuto {
 			g.glEnd();
 		}
 
-		protected void drawCircles(Sprite s, int n, Coord[] cs) {
+		protected void drawCircles(Coord[] cs) {
 			checkMode();
 			setColor();
 			g.glBegin(GL.GL_TRIANGLES);
 			GLT glt = gra.getTransform();
-			for (int i = 0; i < n; i++) {
+			for (int i = 0; i < cs.length; i++) {
 				Coord c = cs[i].copy();
 				c.times(gra.sh);
 				gra.translate(c.x, c.y);
@@ -164,6 +213,10 @@ public class GLGraphics implements GeoAuto {
 			gra.addP(x, y);
 		}
 
+		private void addP(P p) {
+			gra.addP(p.x, p.y);
+		}
+
 		private void checkMode() {
 			gra.checkMode(PURE);
 		}
@@ -225,6 +278,67 @@ public class GLGraphics implements GeoAuto {
 	public void dispose() {
 		checkMode(PURE);
 		count--;
+	}
+
+	public void drawCurvce(Sprite s, Curve c) {
+		checkMode(IMG);
+		if (s.img == null)
+			return;
+		compImpl();
+		bind(tm.load(this, s.img));
+		float[] r = s.img.getRect();
+
+		Curve cp = c.copy();
+		cp.times(sh);
+		cp.size(1 / s.rad);
+		P[] ps = cp.ps;
+		double end = cp.end, ra = cp.r;
+		int n = ps.length;
+
+		double l = 0;
+		for (int i = 1; i < ps.length; i++)
+			l += ps[i - 1].dis(ps[i]);
+		double lp = (1 - end * 2) / l;
+
+		double d0 = ps[1].atan2(ps[0]);
+		double d1 = ps[n - 2].atan2(ps[n - 1]);
+		P[] p0 = new P[2], p1 = new P[2];
+		P pc = P.polar(end / lp, d0).plus(ps[0]);
+		P ec = P.polar(end / lp, d1).plus(ps[n - 1]);
+		p0[0] = P.polar(ra, d0 + Math.PI / 2).plus(pc);
+		p0[1] = P.polar(ra, d0 - Math.PI / 2).plus(pc);
+		p1[0] = P.polar(ra, d1 - Math.PI / 2).plus(ec);
+		p1[1] = P.polar(ra, d1 + Math.PI / 2).plus(ec);
+
+		double cl0 = end, cl1 = end;
+		P[][] s0 = new P[2][ps.length - 1];
+		for (int i = 0; i < n - 1; i++) {
+			cl1 += lp * ps[i + 1].dis(ps[i]);
+			d0 = ps[i + 1].atan2(ps[i]);
+			P pm = ps[i + 1].middle(ps[i], 0.5);
+			s0[0][i] = P.polar(ra, d0 + Math.PI / 2).plus(pm);
+			s0[1][i] = P.polar(ra, d0 - Math.PI / 2).plus(pm);
+			cl0 = cl1;
+		}
+
+		for (int k = 0; k < 1; k++) {
+			g.glBegin(GL.GL_TRIANGLE_STRIP);
+			cl0 = cl1 = end;
+			texc(r, 0, 0.5, pc);
+			texc(r, 0, k, p0[k]);
+			for (int i = 0; i < n - 1; i++) {
+				cl1 += lp * ps[i + 1].dis(ps[i]);
+				double clm = (cl0 + cl1) / 2;
+				texc(r, cl0, 0.5, ps[i]);
+				texc(r, clm, k, s0[k][i]);
+				cl0 = cl1;
+			}
+			texc(r, cl0, 0.5, ps[n - 1]);
+			texc(r, 1, k, p1[k]);
+			texc(r, 1, 0.5, ec);
+			g.glEnd();
+		}
+
 	}
 
 	@Override
@@ -407,6 +521,11 @@ public class GLGraphics implements GeoAuto {
 				g.glUniform1i(tm.mode, 3);// sA=-sA*p
 			}
 		}
+	}
+
+	private void texc(float[] r, double tx, double ty, P p) {
+		g.glTexCoord2f((float) (r[0] + tx * r[2]), (float) (r[1] + ty * r[3]));
+		addP(p.x, p.y);
 	}
 
 }

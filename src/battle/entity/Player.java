@@ -1,11 +1,11 @@
 package battle.entity;
 
 import battle.Control;
-import battle.Control.EntCtrl;
 import battle.Engine;
 import battle.Entity;
 import battle.Shape;
 import battle.Sprite;
+import util.Data;
 import util.P;
 
 public class Player extends Entity implements Sprite.DotESprite.Dire, Shape {
@@ -33,7 +33,8 @@ public class Player extends Entity implements Sprite.DotESprite.Dire, Shape {
 			return;
 		deadTime = DEADTIME;
 		deadCount++;
-		Engine.RUNNING.add(new Clearer(pos.copy(), 0, 1, 1000, Control.K_BULLET));
+		if (Data.CLEARBL)
+			Engine.RUNNING.add(new Clearer(pos.copy(), 0, 1, 1000, Control.K_BULLET));
 	}
 
 	@Override
@@ -49,11 +50,6 @@ public class Player extends Entity implements Sprite.DotESprite.Dire, Shape {
 	}
 
 	@Override
-	public EntCtrl getCtrl() {
-		return null;
-	}
-
-	@Override
 	public double getDire() {
 		return time * Math.PI / 6000;
 	}
@@ -66,11 +62,6 @@ public class Player extends Entity implements Sprite.DotESprite.Dire, Shape {
 	@Override
 	public Shape getShape() {
 		return this;
-	}
-
-	@Override
-	public boolean isDead() {
-		return false;
 	}
 
 	@Override

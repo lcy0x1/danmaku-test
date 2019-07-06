@@ -36,7 +36,7 @@ public class Sprite implements Comparable<Sprite> {
 			r = s.size * m * MAGNIFY;
 		}
 
-		public CurveESprite getEntity(CurveESprite.Dire d) {
+		public CurveESprite getEntity(Shape.LineSegs d) {
 			return new CurveESprite(d, r * 2, s, mode);
 		}
 
@@ -44,21 +44,15 @@ public class Sprite implements Comparable<Sprite> {
 
 	public static class CurveESprite {
 
-		public static interface Dire {
-
-			public P[] getPos();
-
-		}
-
 		public final Sprite s;
 
 		private double r;
 
 		private int mode;
 
-		private Dire dire;
+		private Shape.LineSegs dire;
 
-		public CurveESprite(Dire d, double ra, Sprite img, int m) {
+		public CurveESprite(Shape.LineSegs d, double ra, Sprite img, int m) {
 			s = img;
 			dire = d;
 			r = ra;
@@ -67,9 +61,13 @@ public class Sprite implements Comparable<Sprite> {
 
 		public void draw() {
 			double h = Engine.BOUND.y;
-			Curve c = new Curve(END, r, dire.getPos());
-			c.times(1 / h);
-			Engine.RENDERING.getPool(s).addCurve(c, mode);
+			for (P[] ps : dire.getPos()) {
+				if (ps.length == 1)
+					continue;
+				Curve c = new Curve(END, r, ps);
+				c.times(1 / h);
+				Engine.RENDERING.getPool(s).addCurve(c, mode);
+			}
 		}
 
 	}

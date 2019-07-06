@@ -3,8 +3,8 @@ package battle.special;
 import battle.Control;
 import battle.Shape;
 import battle.Sprite;
-import battle.entity.Dot;
-import battle.entity.DotBullet;
+import battle.bullet.Dot;
+import battle.bullet.DotBullet;
 
 public class Koishi implements Control.UpdCtrl {
 

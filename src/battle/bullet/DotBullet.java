@@ -1,7 +1,7 @@
-package battle.entity;
+package battle.bullet;
 
-import battle.Entity;
 import battle.Shape;
+import battle.entity.Bullet;
 
 public class DotBullet extends Bullet {
 
@@ -19,16 +19,6 @@ public class DotBullet extends Bullet {
 	@Override
 	public Shape getShape() {
 		return dot.shape;
-	}
-
-	@Override
-	protected void attack(Entity e) {
-		if (getShape() == null || e.getShape() == null)
-			return;
-		if (getShape().dis(e.getShape()) < 0) {
-			if (e instanceof Player)
-				((Player) e).attacked(this);
-		}
 	}
 
 	@Override

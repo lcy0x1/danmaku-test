@@ -2,8 +2,8 @@ package stage;
 
 import battle.Engine;
 import battle.Sprite;
-import battle.entity.Dot;
-import battle.entity.DotBullet;
+import battle.bullet.Dot;
+import battle.bullet.DotBullet;
 
 public class TestStage_004 extends SpellCard {
 

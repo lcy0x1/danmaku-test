@@ -47,6 +47,31 @@ public interface Shape {
 
 	}
 
+	public static abstract class LineSegs implements Shape {
+
+		public abstract P[][] getPos();
+
+		public double r;
+
+		public LineSegs(double ra) {
+			r = ra;
+		}
+
+		@Override
+		public double dis(Shape s) {
+			Circle c = (Circle) s;
+			double dis = Double.MAX_VALUE;
+			for (P[] ps : getPos()) {
+				if (ps.length == 1)
+					continue;
+				P.Line l = new P.Line(ps);
+				dis = Math.min(dis, l.dis(c.pos));
+			}
+			return dis - r - c.r;
+		}
+
+	}
+
 	public abstract class PosShape implements Shape {
 
 		public final P pos;

@@ -14,4 +14,14 @@ public abstract class Bullet extends Entity {
 		addCtrl(new Control.TimeCtrl(t));
 	}
 
+	@Override
+	protected void attack(Entity e) {
+		if (getShape() == null || e.getShape() == null)
+			return;
+		if (getShape().dis(e.getShape()) < 0) {
+			if (e instanceof Player)
+				((Player) e).attacked(this);
+		}
+	}
+
 }

@@ -1,4 +1,4 @@
-package battle.entity;
+package battle.bullet;
 
 import battle.Control;
 import battle.Engine;

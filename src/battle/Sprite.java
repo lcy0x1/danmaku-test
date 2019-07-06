@@ -1,21 +1,78 @@
 package battle;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.TreeMap;
 
 import org.apache.commons.io.IOUtils;
 
 import jogl.util.FakeGraphics;
 import jogl.util.FakeGraphics.Coord;
+import jogl.util.FakeGraphics.Curve;
 import main.MainTH;
 import jogl.util.GLImage;
 import util.Data;
 import util.P;
 
 public class Sprite implements Comparable<Sprite> {
+
+	public static class CESParam {
+
+		public final Sprite s;
+
+		public final int mode;
+
+		public final double r;
+
+		public CESParam(int id, int t, double m) {
+			this(get(id), t, m);
+		}
+
+		public CESParam(Sprite spr, int t, double m) {
+			s = spr;
+			mode = t;
+			r = s.size * m * MAGNIFY;
+		}
+
+		public CurveESprite getEntity(CurveESprite.Dire d) {
+			return new CurveESprite(d, r * 2, s, mode);
+		}
+
+	}
+
+	public static class CurveESprite {
+
+		public static interface Dire {
+
+			public P[] getPos();
+
+		}
+
+		public final Sprite s;
+
+		private double r;
+
+		private int mode;
+
+		private Dire dire;
+
+		public CurveESprite(Dire d, double ra, Sprite img, int m) {
+			s = img;
+			dire = d;
+			r = ra;
+			mode = m;
+		}
+
+		public void draw() {
+			double h = Engine.BOUND.y;
+			Curve c = new Curve(END, r, dire.getPos());
+			c.times(1 / h);
+			Engine.RENDERING.getPool(s).addCurve(c, mode);
+		}
+
+	}
 
 	public static class DESParam {
 
@@ -68,7 +125,11 @@ public class Sprite implements Comparable<Sprite> {
 		}
 
 		public void draw() {
-			Engine.RENDERING.draw(s, dire.getPos(), w, h, dire.getDire(), mode);
+			double r = Engine.BOUND.y;
+			P pos = dire.getPos();
+			Coord c = new Coord(pos.x, pos.y, w, h, dire.getDire() + s.rot);
+			c.times(1 / r);
+			Engine.RENDERING.getPool(s).addDot(c, mode);
 		}
 
 		public double radius() {
@@ -79,41 +140,63 @@ public class Sprite implements Comparable<Sprite> {
 
 	public static class Pool {
 
-		private static class DotPool extends SubPool {
+		private static class SubPool {
 
-			private DotPool(Sprite sp) {
-				super(sp);
-			}
+			private final Sprite s;
+			private final List<Coord> reg = new ArrayList<>();
+			private final List<Coord> lit = new ArrayList<>();
+			private final List<Curve> rgc = new ArrayList<>();
+			private final List<Curve> ltc = new ArrayList<>();
 
-			@Override
-			void debug(FakeGraphics fg, int mode) {
-				Queue<Coord> qs = mode == 0 ? reg : lit;
-				fg.drawCircles(qs.toArray(new Coord[0]));
-			}
-
-			@Override
-			void flush(FakeGraphics fg, int mode) {
-				Queue<Coord> qs = mode == 0 ? reg : lit;
-				fg.setComposite(FakeGraphics.BLEND, 256, mode);
-				fg.drawImages(s, qs.size(), qs.toArray(new Coord[0]));
-			}
-
-		}
-
-		private static abstract class SubPool {
-
-			final Sprite s;
-
-			Queue<Coord> reg = new ArrayDeque<>();
-			Queue<Coord> lit = new ArrayDeque<>();
-
-			SubPool(Sprite sp) {
+			private SubPool(Sprite sp) {
 				s = sp;
 			}
 
-			abstract void debug(FakeGraphics fg, int mode);
+			private void addCurve(Curve c, int mode) {
+				(mode == 0 ? rgc : ltc).add(c);
+			}
 
-			abstract void flush(FakeGraphics fg, int mode);
+			private void addDot(Coord c, int mode) {
+				(mode == 0 ? reg : lit).add(c);
+			}
+
+			private void debug(FakeGraphics fg) {
+				int n = 0;
+				for (Curve c : rgc)
+					n += c.ps.length;
+				for (Curve c : ltc)
+					n += c.ps.length;
+				Coord[] cs = new Coord[n + reg.size() + lit.size()];
+				int i = 0;
+				for (Curve c : rgc)
+					for (P p : c.ps)
+						cs[i++] = new Coord(p.x, p.y, c.r, c.r, 0);
+				for (Curve c : ltc)
+					for (P p : c.ps)
+						cs[i++] = new Coord(p.x, p.y, c.r, c.r, 0);
+				for (Curve c : ltc)
+					n += c.ps.length;
+				for (Coord c : reg)
+					cs[i++] = c;
+				for (Coord c : lit)
+					cs[i++] = c;
+				fg.drawCircles(cs);
+			}
+
+			private void flush(FakeGraphics fg) {
+				fg.setComposite(FakeGraphics.BLEND, 256, 0);
+				for (Curve c : rgc)
+					fg.drawCurve(s, c);
+				if (reg.size() > 0)
+					fg.drawImages(s, reg.size(), reg.toArray(new Coord[0]));
+
+				fg.setComposite(FakeGraphics.BLEND, 256, 1);
+				for (Curve c : ltc)
+					fg.drawCurve(s, c);
+				if (lit.size() > 0)
+					fg.drawImages(s, lit.size(), lit.toArray(new Coord[0]));
+
+			}
 
 		}
 
@@ -121,28 +204,19 @@ public class Sprite implements Comparable<Sprite> {
 
 		public void flush(FakeGraphics fg) {
 			if (Data.DRAWSPRITE)
-				map.forEach((s, p) -> {
-					p.flush(fg, 0);
-					p.flush(fg, 1);
-				});
+				map.forEach((s, p) -> p.flush(fg));
 			if (Data.DEBUG)
-				map.forEach((s, p) -> {
-					p.debug(fg, 0);
-					p.debug(fg, 1);
-				});
+				map.forEach((s, p) -> p.debug(fg));
 			map.clear();
 		}
 
-		private void draw(Sprite s, P pos, double w, double h, double a, int mode) {
+		private SubPool getPool(Sprite s) {
 			SubPool p;
 			if (!map.containsKey(s))
-				map.put(s, p = new DotPool(s));
+				map.put(s, p = new SubPool(s));
 			else
 				p = map.get(s);
-			double r = Engine.BOUND.y;
-			Coord c = new Coord(pos.x, pos.y, w, h, a + s.rot);
-			c.times(1 / r);
-			(mode == 0 ? p.reg : p.lit).add(c);
+			return p;
 		}
 
 	}
@@ -217,8 +291,10 @@ public class Sprite implements Comparable<Sprite> {
 
 	public static final double MAGNIFY = 1.5;
 
+	private static final double END = 7.0 / 128;
+
 	private static final double[][] SIZE = { { 2 },
-			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 0, 2.4, 2.4, 2.4, 2.4 }, { 0, 7, 8.5, 7, 6, 7, 0, 10 },
+			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 2, 2.4, 2.4, 2.4, 2.4 }, { 0, 7, 8.5, 7, 6, 7, 0, 10 },
 			{ 14, 14 } };
 
 	public static Sprite get(int id) {

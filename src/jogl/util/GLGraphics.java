@@ -280,7 +280,8 @@ public class GLGraphics implements GeoAuto {
 		count--;
 	}
 
-	public void drawCurvce(Sprite s, Curve c) {
+	@Override
+	public void drawCurve(Sprite s, Curve c) {
 		checkMode(IMG);
 		if (s.img == null)
 			return;

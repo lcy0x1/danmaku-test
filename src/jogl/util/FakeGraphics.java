@@ -38,8 +38,8 @@ public interface FakeGraphics {
 
 	public static class Curve {
 
-		protected P[] ps;
-		protected double end, r;
+		public P[] ps;
+		public double end, r;
 
 		public Curve(double e, double ra, P[] p) {
 			end = e;
@@ -78,6 +78,8 @@ public interface FakeGraphics {
 	public void colRect(int x, int y, int w, int h, int r, int g, int b, int... a);
 
 	public void drawCircles(Coord[] array);
+
+	public void drawCurve(Sprite s, Curve c);
 
 	public void drawImage(GLImage bimg, double x, double y);
 

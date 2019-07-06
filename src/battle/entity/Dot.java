@@ -232,38 +232,32 @@ public class Dot implements Sprite.DotESprite.Dire, Control.MoveCtrl {
 
 	/** curve with varying axial and constant angular speed */
 	public Dot(P o, double ir, double ia, double v, double w, double aa, int t, Sprite.DESParam img) {
-		this(P.polar(ir, ia).plus(o), img);
-		move = new CurveMover(ir, ia, v, w, aa, t);
+		this(P.polar(ir, ia).plus(o), img, new CurveMover(ir, ia, v, w, aa, t));
 	}
 
 	/** curve with constant axial and angular speed */
 	public Dot(P o, double ir, double ia, double v, double w, Sprite.DESParam img) {
-		this(P.polar(ir, ia).plus(o), img);
-		move = new CurveMover(ir, ia, v, w);
+		this(P.polar(ir, ia).plus(o), img, new CurveMover(ir, ia, v, w));
 	}
 
 	/** linear varying speed */
 	public Dot(P p, P v, double a, int t0, int t1, Sprite.DESParam img) {
-		this(p, img);
-		move = new LineMover(a, t0, t1, v);
+		this(p, img, new LineMover(a, t0, t1, v));
 	}
 
 	/** linear varying speed */
 	public Dot(P p, P v, double a, int t, Sprite.DESParam img) {
-		this(p, img);
-		move = new LineMover(a, 0, t, v);
+		this(p, img, new LineMover(a, 0, t, v));
 	}
 
 	/** semi-linear */
 	public Dot(P p, P v, P a, int t, Sprite.DESParam img) {
-		this(p, img);
-		move = new LineMover(a, t, v);
+		this(p, img, new LineMover(a, t, v));
 	}
 
 	/** linear constant speed */
 	public Dot(P p, P v, Sprite.DESParam img) {
-		this(p, img);
-		move = new LineMover(v);
+		this(p, img, new LineMover(v));
 	}
 
 	/** static */
@@ -277,6 +271,11 @@ public class Dot implements Sprite.DotESprite.Dire, Control.MoveCtrl {
 			shape = new Shape.Circle(pos, img.r);
 			sprite = img.getEntity(this);
 		}
+	}
+
+	public Dot(P p, Sprite.DESParam img, Mover m) {
+		this(p, img);
+		setMove(m);
 	}
 
 	public Dot(Sprite.DESParam img, TimeMover tm) {
@@ -299,6 +298,11 @@ public class Dot implements Sprite.DotESprite.Dire, Control.MoveCtrl {
 	@Override
 	public P getPos() {
 		return pos;
+	}
+
+	public Dot setMove(Mover m) {
+		move = m;
+		return this;
 	}
 
 	public void update(int t) {

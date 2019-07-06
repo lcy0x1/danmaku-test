@@ -2,16 +2,14 @@ package stage;
 
 import battle.Engine;
 import battle.Sprite;
-import battle.Control;
 import battle.entity.Dot;
 import battle.entity.DotBullet;
 import battle.entity.Emiter;
 import battle.special.Koishi;
 import util.P;
 
-public class TestStage_003 implements Control.UpdCtrl, Emiter.Ticker {
+public class TestStage_003 extends SpellCard implements Emiter.Ticker {
 
-	private static final P o = Engine.BOUND;
 	private static final int f = 80, f1 = 120, m = 3;
 	private static final double v0 = 0.1;
 
@@ -32,9 +30,8 @@ public class TestStage_003 implements Control.UpdCtrl, Emiter.Ticker {
 	private final int m2, dt, n;
 	private final double w1;
 
-	private int time = 0;
-
 	public TestStage_003(int diff) {
+		super(50000);
 		n = ns[diff];
 		m2 = m2s[diff];
 		dt = dts[diff];
@@ -42,18 +39,12 @@ public class TestStage_003 implements Control.UpdCtrl, Emiter.Ticker {
 	}
 
 	@Override
-	public boolean finished() {
-		return time > 50000;
-	}
-
-	@Override
 	public void tick(Emiter e, int it, int ex) {
 		double a1 = it * f * w1;
-		P p = new P(o.x / 2, o.y / 2);
 		for (int i = 0; i < n; i++) {
-			double a0 = Math.PI * 2 / n * i + a1 + Math.PI * 2 / n / m * (it % m);
+			double a0 = Math.PI * 2 / n * i + a1 + p2 / n / m * (it % m);
 			int xt = (it % m) * dt * (f1 * 2 + f) + it / m * f1;
-			Dot d = new Dot(p.copy(), P.polar(v0, a0), sps[it % m]);
+			Dot d = new Dot(pc.copy(), P.polar(v0, a0), sps[it % m]);
 			DotBullet db = new DotBullet(d);
 			Koishi k = new Koishi(db, sxs[it % m], (m2 + 1) * f1, xt, m2 * f1);
 			Engine.RUNNING.add(db);
@@ -65,8 +56,7 @@ public class TestStage_003 implements Control.UpdCtrl, Emiter.Ticker {
 	public void update(int dt) {
 		if (time == 0)
 			Engine.RUNNING.add(new Emiter(0, f, this, this));
-		time += dt;
-
+		super.update(dt);
 	}
 
 }

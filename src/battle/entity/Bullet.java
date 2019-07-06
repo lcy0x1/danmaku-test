@@ -22,4 +22,9 @@ public abstract class Bullet extends Entity {
 		return ctrl;
 	}
 
+	public Bullet setLv(int lv) {
+		ctrl.setLv(lv);
+		return this;
+	}
+
 }

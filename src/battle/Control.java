@@ -2,9 +2,29 @@ package battle;
 
 public interface Control {
 
-	public static interface EntCtrl extends UpdCtrl {
+	public static abstract class EntCtrl implements UpdCtrl {
 
-		public void killed(Entity e);
+		private int hard;
+
+		private boolean killed = false;
+
+		public EntCtrl(int lv) {
+			hard = lv;
+		}
+
+		@Override
+		public boolean finished() {
+			return killed;
+		}
+
+		public void killed(int t) {
+			if (t >= hard)
+				killed = true;
+		}
+
+		public void setLv(int lv) {
+			hard = lv;
+		}
 
 	}
 
@@ -12,36 +32,36 @@ public interface Control {
 
 	}
 
-	public static class TimeCtrl implements EntCtrl, UpdCtrl {
+	public static class TimeCtrl extends EntCtrl {
 
 		public MoveCtrl move;
 
 		private int rem;
 
-		private boolean killed = false;
-
 		public TimeCtrl() {
+			super(0);
 			rem = -1;
 		}
 
 		public TimeCtrl(int tot) {
+			super(0);
+			rem = tot;
+		}
+
+		public TimeCtrl(int tot, int lv) {
+			super(lv);
 			rem = tot;
 		}
 
 		@Override
 		public boolean finished() {
+			if (super.finished())
+				return true;
 			if (move != null && move.finished())
 				return true;
 			if (rem == 0)
 				return true;
-			if (killed)
-				return true;
-			return false;// TODO
-		}
-
-		@Override
-		public void killed(Entity e) {
-
+			return false;
 		}
 
 		@Override
@@ -58,6 +78,8 @@ public interface Control {
 	public static interface UpdCtrl extends Control, Updatable {
 
 	}
+
+	public static final int K_BULLET = 1, K_FUNCTIONAL = 2, K_FINISH = 3;
 
 	public boolean finished();
 

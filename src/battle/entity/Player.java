@@ -1,5 +1,6 @@
 package battle.entity;
 
+import battle.Control;
 import battle.Control.EntCtrl;
 import battle.Engine;
 import battle.Entity;
@@ -28,11 +29,11 @@ public class Player extends Entity implements Sprite.DotESprite.Dire, Shape {
 	}
 
 	public void attacked(Entity e) {
-		if (deadTime > 0)
+		if (deadTime > 0 || Engine.RUNNING.stage.finished())
 			return;
-		ext.setTo(Engine.START);
 		deadTime = DEADTIME;
 		deadCount++;
+		Engine.RUNNING.add(new Clearer(pos.copy(), 0, 1, 1000, Control.K_BULLET));
 	}
 
 	@Override

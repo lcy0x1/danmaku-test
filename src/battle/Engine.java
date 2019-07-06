@@ -90,12 +90,11 @@ public class Engine {
 		add(stage);
 	}
 
-	public void add(Control.UpdCtrl e) {
-		utmp.add(e);
-	}
-
-	public void add(Entity e) {
-		temp.add(e);
+	public void add(Updatable e) {
+		if (e instanceof Entity)
+			temp.add((Entity) e);
+		else if (e instanceof Control.UpdCtrl)
+			utmp.add((Control.UpdCtrl) e);
 	}
 
 	public int count() {

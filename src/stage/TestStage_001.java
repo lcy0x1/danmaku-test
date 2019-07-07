@@ -3,13 +3,14 @@ package stage;
 import battle.Engine;
 import battle.Sprite;
 import battle.bullet.Dot;
+import battle.bullet.Mover;
 import battle.bullet.DotBullet;
 import battle.entity.Emiter;
 import util.P;
 
 public class TestStage_001 extends SpellCard implements Emiter.Ticker {
 
-	private static class Orbit extends Dot.TimeMover {
+	private static class Orbit extends Mover.TimeMover {
 
 		private final int i, n;
 

@@ -12,14 +12,6 @@ import util.P;
 
 public abstract class AbCurve extends Shape.LineSegs implements Control.UpdCtrl {
 
-	public static interface Func {
-
-		public boolean exist(int time, int i);
-
-		public P func(int time, int i);
-
-	}
-
 	public static class FuncCurve extends AbCurve {
 
 		private final Func func;

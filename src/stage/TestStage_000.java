@@ -3,12 +3,13 @@ package stage;
 import battle.Engine;
 import battle.Sprite;
 import battle.bullet.Dot;
+import battle.bullet.Mover;
 import battle.bullet.DotBullet;
 import util.P;
 
 public class TestStage_000 extends SpellCard {
 
-	private static class TrigMover extends Dot.TimeMover {
+	private static class TrigMover extends Mover.TimeMover {
 
 		private final double wx, wy, ix, iy;
 

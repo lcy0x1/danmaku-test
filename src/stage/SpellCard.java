@@ -2,6 +2,7 @@ package stage;
 
 import battle.Control;
 import battle.Engine;
+import battle.Entity;
 import battle.entity.Clearer;
 import util.P;
 
@@ -11,6 +12,15 @@ public class SpellCard implements Control.UpdCtrl {
 	public static final P pc = new P(o.x / 2, o.y / 2);
 
 	public static final double p2 = Math.PI * 2;
+
+	public static void add(Entity e, int ex) {
+		e.update(ex);
+		Engine.RUNNING.add(e);
+	}
+
+	public static double rand(double a) {
+		return Engine.RUNNING.r.nextDouble() * a;
+	}
 
 	public int time;
 

@@ -296,15 +296,16 @@ public class GLGraphics implements GeoAuto {
 		double end = cp.end, ra = cp.r;
 		int n = ps.length;
 
-		if (n == 1) {
-
+		if (n == 1)
 			return;
-		}
 
 		double l = 0;
 		for (int i = 1; i < ps.length; i++)
 			l += ps[i - 1].dis(ps[i]);
-		double lp = (1 - end * 2) / l;
+
+		double x = ra * cp.dr;
+		double lp = (1 - end * 2) / (l + x * 2);
+		end = (l * end + x) / (l + 2 * x);
 
 		double d0 = ps[1].atan2(ps[0]);
 		double d1 = ps[n - 2].atan2(ps[n - 1]);

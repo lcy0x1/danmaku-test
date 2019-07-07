@@ -1,6 +1,7 @@
 package battle.bullet;
 
 import battle.Shape;
+import battle.bullet.AbCurve.ListCurve;
 import battle.entity.Bullet;
 
 public class CurveLaser extends Bullet {
@@ -8,9 +9,13 @@ public class CurveLaser extends Bullet {
 	private final AbCurve curve;
 
 	public CurveLaser(AbCurve c) {
-		curve = c;
-		addCtrl(curve);
+		addCtrl(curve = c);
 
+	}
+
+	public CurveLaser(ListCurve c, int lt) {
+		super(lt);
+		addCtrl(curve = c);
 	}
 
 	@Override

@@ -24,15 +24,16 @@ public class Sprite implements Comparable<Sprite> {
 
 		private double r;
 
-		private int mode;
+		private int mode, rev;
 
 		private Shape.LineSegs dire;
 
-		public CurveESprite(Shape.LineSegs d, double ra, Sprite img, int m) {
+		public CurveESprite(Shape.LineSegs d, double ra, Sprite img, int m, int rv) {
 			s = img;
 			dire = d;
 			r = ra;
 			mode = m;
+			rev = rv;
 		}
 
 		public void draw() {
@@ -42,8 +43,8 @@ public class Sprite implements Comparable<Sprite> {
 					continue;
 				P[] np = new P[ps.length];
 				for (int i = 0; i < ps.length; i++)
-					np[ps.length - i - 1] = ps[i].copy();
-				Curve c = new Curve(END, r, np);
+					np[rev == 0 ? i : (ps.length - i - 1)] = ps[i].copy();
+				Curve c = new Curve(END, EDR, r, np);
 				c.times(1 / h);
 				Engine.RENDERING.getPool(s).addCurve(c, mode);
 			}
@@ -186,7 +187,7 @@ public class Sprite implements Comparable<Sprite> {
 			this(get(id), t, m);
 		}
 
-		public SParam(Sprite spr, int t, double m) {
+		private SParam(Sprite spr, int t, double m) {
 			s = spr;
 			mode = t;
 			r = s.size * m * MAGNIFY;
@@ -199,7 +200,7 @@ public class Sprite implements Comparable<Sprite> {
 		}
 
 		public CurveESprite getEntity(Shape.LineSegs d) {
-			return new CurveESprite(d, r * 2, s, mode);
+			return new CurveESprite(d, r * 2, s, mode & 1, mode >> 1 & 1);
 		}
 
 	}
@@ -274,7 +275,7 @@ public class Sprite implements Comparable<Sprite> {
 
 	public static final double MAGNIFY = 1.5;
 
-	private static final double END = 8.0 / 256;
+	private static final double END = 6.0 / 256, EDR = 4.0 / 16;
 
 	private static final double[][] SIZE = { { 2 },
 			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 2, 2.4, 2.4, 2.4, 2.4 }, { 0, 7, 8.5, 7, 6, 7, 0, 10 },

@@ -39,10 +39,11 @@ public interface FakeGraphics {
 	public static class Curve {
 
 		public P[] ps;
-		public double end, r;
+		public double end, dr, r;
 
-		public Curve(double e, double ra, P[] p) {
+		public Curve(double e, double d, double ra, P[] p) {
 			end = e;
+			dr = d;
 			r = ra;
 			ps = p;
 		}
@@ -51,7 +52,7 @@ public interface FakeGraphics {
 			P[] np = new P[ps.length];
 			for (int i = 0; i < ps.length; i++)
 				np[i] = ps[i].copy();
-			return new Curve(end, r, np);
+			return new Curve(end, dr, r, np);
 		}
 
 		public void size(double m) {

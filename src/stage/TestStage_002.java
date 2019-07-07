@@ -31,7 +31,7 @@ public class TestStage_002 extends SpellCard implements Emiter.Ticker {
 				for (int j = 2; j <= 4; j++) {
 					Sprite.SParam sp = n == 2 ? spr : sp0;
 					Dot d = new Dot(pos.copy(), P.polar(0.1 * j, a + (i - (n - 1) / 2) * da), sp);
-					Engine.RUNNING.add(new DotBullet(d));
+					add(new DotBullet(d),ex);
 				}
 		}
 
@@ -56,34 +56,34 @@ public class TestStage_002 extends SpellCard implements Emiter.Ticker {
 	public void tick(Emiter e, int it, int ex) {
 		if (e.id == 0) {
 			dire = it % 2 * 2 - 1;
-			Engine.RUNNING.add(new Emiter(1, f1, f1 * 8, this));
+			add(new Emiter(1, f1, f1 * 8, this),ex);
 			Engine.RUNNING.time.slow(sls[diff], (int) (f1 * 8 / sls[diff]), null);
 		} else if (e.id == 1)
-			adds(dire, (dire * it - 2) * Math.PI * 2 / 8, 3);
+			adds(dire, (dire * it - 2) * Math.PI * 2 / 8, 3,ex);
 		else if (e.id == 3)
-			Engine.RUNNING.add(new Emiter(4, f1, f1 * 8, this));
+			add(new Emiter(4, f1, f1 * 8, this),ex);
 		else if (e.id == 4)
-			adds(dire, (dire * it - 2) * Math.PI * 2 / 8, 2);
+			adds(dire, (dire * it - 2) * Math.PI * 2 / 8, 2,ex);
 	}
 
 	@Override
 	public void update(int dt) {
 		if (time == 6000)
-			Engine.RUNNING.add(new Emiter(0, f0, this, this));
+			add(new Emiter(0, f0, this, this));
 		if (time == 1000)
-			Engine.RUNNING.add(new Emiter(3, f0, this, this));
+			add(new Emiter(3, f0, this, this));
 		super.update(dt);
 	}
 
-	private void adds(int it, double a0, int x) {
+	private void adds(int it, double a0, int x,int ex) {
 		Sprite.SParam sp = new Sprite.SParam(x == 2 ? 30000 : 30001, 0, 1);
 		double a1 = a0 + p2 / 4 * dire;
 		P pv = P.polar(1, a1);
 		P p = P.polar(400, a0).plus(pc).plus(pv, -l0);
 		P pl = Engine.RUNNING.pl.pos.copy();
 		Dot d = new Dot(p, pv, sp);
-		Engine.RUNNING.add(new DotBullet(d, l0 * 3).setLv(K_FUNCTIONAL));
-		Engine.RUNNING.add(new Emiter(2, f2, l0 * 2, new SubEmit(p, pl, x, diff)));
+		add(new DotBullet(d, l0 * 3).setLv(K_FUNCTIONAL),ex);
+		add(new Emiter(2, f2, l0 * 2, new SubEmit(p, pl, x, diff)),ex);
 	}
 
 }

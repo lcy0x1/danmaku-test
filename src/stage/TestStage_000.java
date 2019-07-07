@@ -1,6 +1,5 @@
 package stage;
 
-import battle.Engine;
 import battle.Sprite;
 import battle.bullet.Dot;
 import battle.bullet.Mover;
@@ -58,15 +57,15 @@ public class TestStage_000 extends SpellCard {
 			for (int i = -n; i <= n; i++)
 				for (int j = -n; j <= n; j++) {
 					Dot d0 = new Dot(s0, new TrigMover(w * i, w * j, 0, p2 / 4));
-					Engine.RUNNING.add(new DotBullet(d0, d).setLv(K_FUNCTIONAL));
+					add(new DotBullet(d0, d).setLv(K_FUNCTIONAL));
 					Dot d1 = new Dot(s1, new TrigMover(w * i, w * j, 0, -p2 / 4));
-					Engine.RUNNING.add(new DotBullet(d1, d).setLv(K_FUNCTIONAL));
+					add(new DotBullet(d1, d).setLv(K_FUNCTIONAL));
 					if (!extra)
 						continue;
 					Dot d2 = new Dot(s2, new TrigMover(w * i, w * j, p2 / 4, 0));
-					Engine.RUNNING.add(new DotBullet(d2, d).setLv(K_FUNCTIONAL));
+					add(new DotBullet(d2, d).setLv(K_FUNCTIONAL));
 					Dot d3 = new Dot(s3, new TrigMover(w * i, w * j, -p2 / 4, 0));
-					Engine.RUNNING.add(new DotBullet(d3, d).setLv(K_FUNCTIONAL));
+					add(new DotBullet(d3, d).setLv(K_FUNCTIONAL));
 				}
 		}
 		super.update(dt);

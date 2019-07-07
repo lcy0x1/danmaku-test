@@ -1,6 +1,5 @@
 package stage;
 
-import battle.Engine;
 import battle.Sprite;
 import battle.bullet.AbCurve;
 import battle.bullet.CurveLaser;
@@ -53,11 +52,11 @@ public class TestStage_005 extends SpellCard implements Emiter.Ticker {
 		if (time == 0) {
 			for (int i = 0; i < n; i++) {
 				AbCurve c0 = new AbCurve.FuncCurve(new PathFunc(0, p2 / n * i, w), m, sp0);
-				Engine.RUNNING.add(new CurveLaser(c0).setLv(K_FUNCTIONAL));
+				add(new CurveLaser(c0).setLv(K_FUNCTIONAL));
 				AbCurve c1 = new AbCurve.FuncCurve(new PathFunc(p2 / 2, p2 / n * i, w), m, sp1);
-				Engine.RUNNING.add(new CurveLaser(c1).setLv(K_FUNCTIONAL));
+				add(new CurveLaser(c1).setLv(K_FUNCTIONAL));
 			}
-			Engine.RUNNING.add(new Emiter(0, f, this, this));
+			add(new Emiter(0, f, this, this));
 		}
 		super.update(dt);
 	}

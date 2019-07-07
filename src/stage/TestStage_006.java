@@ -1,6 +1,5 @@
 package stage;
 
-import battle.Engine;
 import battle.Sprite;
 import battle.bullet.AbCurve.ListCurve;
 import battle.bullet.CurveLaser;
@@ -32,7 +31,7 @@ public class TestStage_006 extends SpellCard implements Emiter.Ticker {
 			Dot d = new Dot(pc.copy(), sps[i], new FuncMover(vlf, 0, 0, a));
 			DotBullet b = new DotBullet(d, lt);
 			c.addP(b);
-			add(b, 0);
+			add(b,ex);
 		}
 
 	}
@@ -62,13 +61,17 @@ public class TestStage_006 extends SpellCard implements Emiter.Ticker {
 
 	@Override
 	public void tick(Emiter e, int it, int ex) {
+		if(e.id==0)
+			add(new Emiter(1, f, this, this),ex);
+		if(e.id==1) {
 		double a0 = rand(p2);
 		for (int i = 0; i < n; i++) {
 			double a = a0 + p2 / n * i;
 			ListCurve c = new ListCurve(sps[it % 2]);
 			Adder ad = new Adder(c, vlfs[it % 2], a, it % 2);
-			Engine.RUNNING.add(new Emiter(0, dt, dt * m, ad));
-			add(new CurveLaser(c, lt), 0);
+			add(new Emiter(0, dt, dt * m, ad),ex);
+			add(new CurveLaser(c, lt), ex);
+		}
 		}
 	}
 
@@ -91,14 +94,8 @@ public class TestStage_006 extends SpellCard implements Emiter.Ticker {
 					a = a - s * p2 * 3 / 8;
 				}
 			}
-			// add(new DotBullet(new Dot(pc.copy(),sptest,new
-			// FuncMover(vlfs[0],0,0,0)),lt),0);
-
+			add(new Emiter(0,dlt,dlt*nx,this));
 		}
-		for (int i = 0; i < nx; i++)
-			if (time == f - 1000 - dlt * (i + 1)) {
-				Engine.RUNNING.add(new Emiter(0, f, this, this));
-			}
 		super.update(dt);
 	}
 

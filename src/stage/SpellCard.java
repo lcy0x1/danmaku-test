@@ -2,7 +2,7 @@ package stage;
 
 import battle.Control;
 import battle.Engine;
-import battle.Entity;
+import battle.Updatable;
 import battle.entity.Clearer;
 import util.P;
 
@@ -13,8 +13,12 @@ public class SpellCard implements Control.UpdCtrl {
 
 	public static final double p2 = Math.PI * 2;
 
-	public static void add(Entity e, int ex) {
+	public static void add(Updatable e, int ex) {
 		e.update(ex);
+		Engine.RUNNING.add(e);
+	}
+	
+	public static void add(Updatable e) {
 		Engine.RUNNING.add(e);
 	}
 
@@ -38,9 +42,9 @@ public class SpellCard implements Control.UpdCtrl {
 	@Override
 	public void post() {
 		if (finished()) {
-			Engine.RUNNING.add(new Clearer(pc, 0, 1, 1000, K_BULLET));
-			Engine.RUNNING.add(new Clearer(pc, 0, 0.75, 1000, K_FUNCTIONAL));
-			Engine.RUNNING.add(new Clearer(pc, 0, 0.5, 1000, K_FINISH));
+			add(new Clearer(pc, 0, 1, 1000, K_BULLET));
+			add(new Clearer(pc, 0, 0.75, 1000, K_FUNCTIONAL));
+			add(new Clearer(pc, 0, 0.5, 1000, K_FINISH));
 		}
 	}
 

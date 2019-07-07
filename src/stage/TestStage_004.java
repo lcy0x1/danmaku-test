@@ -1,6 +1,5 @@
 package stage;
 
-import battle.Engine;
 import battle.Sprite;
 import battle.bullet.AbCurve;
 import battle.bullet.CurveLaser;
@@ -33,7 +32,7 @@ public class TestStage_004 extends SpellCard implements Emiter.Ticker {
 			P pv = P.polar(-v0, a0 + da);
 			DotBullet d = new DotBullet(new Dot(p, pv, sp1));
 			list[i].addP(d);
-			Engine.RUNNING.add(d);
+			add(d,ex);
 		}
 	}
 
@@ -42,9 +41,9 @@ public class TestStage_004 extends SpellCard implements Emiter.Ticker {
 		if (time == 0) {
 			for (int i = 0; i < n; i++) {
 				list[i] = new AbCurve.ListCurve(sp1);
-				Engine.RUNNING.add(new CurveLaser(list[i]).setLv(K_FINISH));
+				add(new CurveLaser(list[i]).setLv(K_FINISH));
 			}
-			Engine.RUNNING.add(new Emiter(0, f, this, this));
+			add(new Emiter(0, f, this, this));
 		}
 		super.update(dt);
 	}

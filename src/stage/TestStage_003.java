@@ -1,6 +1,5 @@
 package stage;
 
-import battle.Engine;
 import battle.Sprite;
 import battle.bullet.Dot;
 import battle.bullet.DotBullet;
@@ -47,15 +46,15 @@ public class TestStage_003 extends SpellCard implements Emiter.Ticker {
 			Dot d = new Dot(pc.copy(), P.polar(v0, a0), sps[it % m]);
 			DotBullet db = new DotBullet(d);
 			Koishi k = new Koishi(db, sxs[it % m], (m2 + 1) * f1, xt, m2 * f1);
-			Engine.RUNNING.add(db);
-			Engine.RUNNING.add(k);
+			add(db,ex);
+			add(k,ex);
 		}
 	}
 
 	@Override
 	public void update(int dt) {
 		if (time == 0)
-			Engine.RUNNING.add(new Emiter(0, f, this, this));
+			add(new Emiter(0, f, this, this));
 		super.update(dt);
 	}
 

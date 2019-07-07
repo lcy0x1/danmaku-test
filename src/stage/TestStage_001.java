@@ -1,6 +1,5 @@
 package stage;
 
-import battle.Engine;
 import battle.Sprite;
 import battle.bullet.Dot;
 import battle.bullet.Mover;
@@ -58,8 +57,7 @@ public class TestStage_001 extends SpellCard implements Emiter.Ticker {
 			P p1 = P.polar(l, a0).plus(p0);
 			P pv = P.polar(-v0, a0);
 			DotBullet b = new DotBullet(new Dot(p1, pv, d0));
-			b.update(ex);
-			Engine.RUNNING.add(b);
+			add(b,ex);
 		}
 	}
 
@@ -68,8 +66,8 @@ public class TestStage_001 extends SpellCard implements Emiter.Ticker {
 		if (time == 0) {
 			Sprite.SParam d = new Sprite.SParam(30000, 1, 1);
 			for (int i = 0; i < n; i++)
-				Engine.RUNNING.add(new DotBullet(new Dot(d, new Orbit(i, n))).setLv(K_FUNCTIONAL));
-			Engine.RUNNING.add(new Emiter(0, f, this, this));
+				add(new DotBullet(new Dot(d, new Orbit(i, n))).setLv(K_FUNCTIONAL));
+			add(new Emiter(0, f, this, this));
 		}
 		super.update(dt);
 	}

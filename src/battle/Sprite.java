@@ -278,7 +278,7 @@ public class Sprite implements Comparable<Sprite> {
 	private static final double END = 6.0 / 256, EDR = 4.0 / 16;
 
 	private static final double[][] SIZE = { { 2 },
-			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 2, 2.4, 2.4, 2.4, 2.4 }, { 0, 7, 8.5, 7, 6, 7, 0, 10 },
+			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 2.4, 2.4, 2.4, 2.4, 2.4 }, { 0, 7, 8.5, 7, 6, 7, 0, 10 },
 			{ 14, 14 } };
 
 	public static final double DEFRAD = 10;

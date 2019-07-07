@@ -13,12 +13,12 @@ public class SpellCard implements Control.UpdCtrl {
 
 	public static final double p2 = Math.PI * 2;
 
-	public static void add(Updatable e, int ex) {
-		e.update(ex);
+	public static void add(Updatable e) {
 		Engine.RUNNING.add(e);
 	}
-	
-	public static void add(Updatable e) {
+
+	public static void add(Updatable e, int ex) {
+		e.update(ex);
 		Engine.RUNNING.add(e);
 	}
 

@@ -57,7 +57,7 @@ public class TestStage_001 extends SpellCard implements Emiter.Ticker {
 			P p1 = P.polar(l, a0).plus(p0);
 			P pv = P.polar(-v0, a0);
 			DotBullet b = new DotBullet(new Dot(p1, pv, d0));
-			add(b,ex);
+			add(b, ex);
 		}
 	}
 

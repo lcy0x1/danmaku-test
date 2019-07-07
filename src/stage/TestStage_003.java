@@ -46,8 +46,8 @@ public class TestStage_003 extends SpellCard implements Emiter.Ticker {
 			Dot d = new Dot(pc.copy(), P.polar(v0, a0), sps[it % m]);
 			DotBullet db = new DotBullet(d);
 			Koishi k = new Koishi(db, sxs[it % m], (m2 + 1) * f1, xt, m2 * f1);
-			add(db,ex);
-			add(k,ex);
+			add(db, ex);
+			add(k, ex);
 		}
 	}
 

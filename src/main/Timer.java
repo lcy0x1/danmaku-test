@@ -32,7 +32,7 @@ public strictfp class Timer extends Thread {
 				thr.join();
 				delay = (int) (System.currentTimeMillis() - m);
 				if (delay > 20)
-					System.out.println(delay);
+					System.out.println("frame delay: " + delay + "f");
 				inter = (inter * 9 + 100 * delay / p) / 10;
 				int sle = delay >= p ? 1 : p - delay;
 				sleep(sle);

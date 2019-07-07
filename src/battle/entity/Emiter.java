@@ -47,7 +47,6 @@ public class Emiter implements Control.UpdCtrl {
 		int rem = f - (time + f - 1) % f - 1;
 		if (rem < dt) {
 			int it = (time + rem) / f;
-			System.out.println(it+","+rem);//TODO
 			tick.tick(this, it, rem);
 		}
 		time += dt;

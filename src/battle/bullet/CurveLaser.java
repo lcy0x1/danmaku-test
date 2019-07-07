@@ -9,6 +9,7 @@ public class CurveLaser extends Bullet {
 
 	public CurveLaser(AbCurve c) {
 		curve = c;
+		addCtrl(curve);
 
 	}
 

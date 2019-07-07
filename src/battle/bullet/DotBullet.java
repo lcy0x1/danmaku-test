@@ -13,7 +13,7 @@ public class DotBullet extends Bullet {
 
 	public DotBullet(Dot d, int t) {
 		super(t);
-		addCtrl(dot = d.setCtrl(false));
+		addUpdt(dot = d);
 	}
 
 	@Override

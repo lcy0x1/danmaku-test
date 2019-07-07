@@ -25,6 +25,34 @@ public interface Shape {
 
 	}
 
+	public static abstract class LineSegs implements Shape {
+
+		public double r;
+
+		public LineSegs(double ra) {
+			r = ra;
+		}
+
+		@Override
+		public double dis(Shape s) {
+			if (s instanceof Circle) {
+				Circle c = (Circle) s;
+				double dis = Double.MAX_VALUE;
+				for (P[] ps : getPos()) {
+					if (ps.length == 1)
+						continue;
+					P.Line l = new P.Line(ps);
+					dis = Math.min(dis, l.dis(c.pos));
+				}
+				return dis - r - c.r;
+			}
+			return s.dis(this);
+		}
+
+		public abstract P[][] getPos();
+
+	}
+
 	public static class Polygon extends PosShape {
 
 		public final P.Polygon poly;
@@ -43,31 +71,6 @@ public interface Shape {
 				return poly.dis(pos.sf(((Circle) s).pos).rotate(-a)) - ((Circle) s).r;
 			Printer.e("Shape", 42, "cannot handle shape collision");
 			return Double.NaN;
-		}
-
-	}
-
-	public static abstract class LineSegs implements Shape {
-
-		public abstract P[][] getPos();
-
-		public double r;
-
-		public LineSegs(double ra) {
-			r = ra;
-		}
-
-		@Override
-		public double dis(Shape s) {
-			Circle c = (Circle) s;
-			double dis = Double.MAX_VALUE;
-			for (P[] ps : getPos()) {
-				if (ps.length == 1)
-					continue;
-				P.Line l = new P.Line(ps);
-				dis = Math.min(dis, l.dis(c.pos));
-			}
-			return dis - r - c.r;
 		}
 
 	}

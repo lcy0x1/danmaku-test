@@ -5,7 +5,7 @@ public class Data {
 	public static boolean CLEARBG = true;
 	public static boolean DRAWSPRITE = true;
 	public static boolean DEBUG = false;
-	public static boolean CLEARBL = false;
+	public static boolean CLEARBL = true;
 
 	public static String str(int n, int l) {
 		String ans = "";

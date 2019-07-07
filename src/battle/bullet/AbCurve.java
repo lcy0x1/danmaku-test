@@ -1,5 +1,10 @@
 package battle.bullet;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+
 import battle.Control;
 import battle.Shape;
 import battle.Sprite;
@@ -7,23 +12,31 @@ import util.P;
 
 public abstract class AbCurve extends Shape.LineSegs implements Control.UpdCtrl {
 
-	public interface Func {
-
-		public P func(int time, int i);
+	public static interface Func {
 
 		public boolean exist(int time, int i);
 
+		public P func(int time, int i);
+
 	}
 
-	public class FuncCurve extends AbCurve {
+	public static class FuncCurve extends AbCurve {
 
 		private final Func func;
 
 		private int time = 0, dt = 0;
 
-		public FuncCurve(Func f, int num, Sprite.CESParam para) {
-			super(num, para);
+		private final int n;
+
+		public FuncCurve(Func f, int num, Sprite.SParam para) {
+			super(para);
+			n = num;
 			func = f;
+		}
+
+		@Override
+		public boolean finished() {
+			return count() == 0;
 		}
 
 		@Override
@@ -39,12 +52,16 @@ public abstract class AbCurve extends Shape.LineSegs implements Control.UpdCtrl 
 		}
 
 		@Override
-		public boolean finished() {
-			return count() == 0;
+		public void post() {
+			time += dt;
 		}
 
 		@Override
-		protected int count() {
+		public void update(int t) {
+			dt = t;
+		}
+
+		private int count() {
 			int ans = 0;
 			for (int i = 0; i < n; i++)
 				if (exist(i))
@@ -52,20 +69,18 @@ public abstract class AbCurve extends Shape.LineSegs implements Control.UpdCtrl 
 			return ans;
 		}
 
-		@Override
-		protected int[][] countSeg() {
-			int n = 0;
+		private int[][] countSeg() {
+			int x = 0;
 			boolean ctn = false;
 			for (int i = 0; i < n; i++)
 				if (exist(i)) {
 					if (!ctn) {
-						n++;
+						x++;
 						ctn = true;
 					}
 				} else
 					ctn = false;
-
-			int[][] ans = new int[n][2];
+			int[][] ans = new int[x][2];
 			int a = -1;
 			ctn = false;
 			for (int i = 0; i < n; i++)
@@ -81,41 +96,79 @@ public abstract class AbCurve extends Shape.LineSegs implements Control.UpdCtrl 
 			return ans;
 		}
 
-		@Override
-		protected boolean exist(int i) {
-			if (!super.exist(i))
-				return false;
+		private boolean exist(int i) {
 			return func.exist(time, i);
 		}
 
+	}
+
+	public static class ListCurve extends AbCurve implements Control.MassCtrl<DotBullet> {
+
+		private Queue<DotBullet> qd = new ArrayDeque<>();
+
+		public ListCurve(Sprite.SParam cesp) {
+			super(cesp);
+		}
+
+		public void addP(DotBullet d) {
+			d.clearCtrl(Dot.class);
+			d.addCtrl(new Control.ElemCtrl<DotBullet>(d, this));
+			qd.add(d);
+		}
+
 		@Override
-		public void update(int t) {
-			dt = t;
+		public boolean finished() {
+			return false;
+		}
+
+		@Override
+		public boolean finished(DotBullet b) {
+			return !qd.contains(b) || qd.peek() == b && b.dot.finished();
+		}
+
+		@Override
+		public P[][] getPos() {
+			List<P[]> list = new ArrayList<>();
+			List<P> cur = null;
+			for (DotBullet d : qd) {
+				if (!d.isDead()) {
+					if (cur == null)
+						cur = new ArrayList<>();
+					cur.add(d.dot.pos);
+				} else {
+					if (cur != null)
+						list.add(cur.toArray(new P[0]));
+					cur = null;
+				}
+			}
+			if (cur != null)
+				list.add(cur.toArray(new P[0]));
+			return list.toArray(new P[0][]);
 		}
 
 		@Override
 		public void post() {
-			time += dt;
+			// it should not effect the graphics too much
+			int i = 0, max = Math.max(1, qd.size() / 40);
+			while (qd.peek() != null && qd.peek().isDead()) {
+				qd.poll();
+				i++;
+				if (i >= max)
+					break;
+			}
+		}
+
+		@Override
+		public void update(int dt) {
 		}
 
 	}
 
 	public final Sprite.CurveESprite sprite;
 
-	protected final int n;
-
-	public AbCurve(int num, Sprite.CESParam cesp) {
+	public AbCurve(Sprite.SParam cesp) {
 		super(cesp.r);
-		n = num;
 		sprite = cesp.getEntity(this);
-	}
-
-	protected abstract int count();
-
-	protected abstract int[][] countSeg();
-
-	protected boolean exist(int t) {
-		return true;
 	}
 
 }

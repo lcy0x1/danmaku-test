@@ -9,6 +9,7 @@ public abstract class Entity implements Updatable {
 
 	protected final int base, atk;
 	private final List<Control> ctrls = new ArrayList<Control>();
+	private final List<Updatable> updts = new ArrayList<Updatable>();
 	private final Control.EntCtrl ent = new Control.EntCtrl(0);
 
 	private Entity[] trails;
@@ -21,6 +22,16 @@ public abstract class Entity implements Updatable {
 
 	public final void addCtrl(Control c) {
 		ctrls.add(c);
+		if (c instanceof Updatable)
+			updts.add((Updatable) c);
+	}
+
+	public final void addUpdt(Updatable d) {
+		updts.add(d);
+	}
+
+	public final void clearCtrl(Class<? extends Control> cls) {
+		ctrls.removeIf(c -> cls.isInstance(c));
 	}
 
 	public final Control.EntCtrl getEntCtrl() {
@@ -38,9 +49,8 @@ public abstract class Entity implements Updatable {
 
 	@Override
 	public void post() {
-		for (Control c : ctrls)
-			if (c instanceof Updatable)
-				((Updatable) c).post();
+		for (Updatable u : updts)
+			u.post();
 		if (isDead() && trails != null)
 			for (Entity e : trails)
 				Engine.RUNNING.add(e);
@@ -58,9 +68,8 @@ public abstract class Entity implements Updatable {
 	/** main entrance of timer. this implementation updates control only */
 	@Override
 	public void update(int t) {
-		for (Control c : ctrls)
-			if (c instanceof Updatable)
-				((Updatable) c).update(t);
+		for (Updatable u : updts)
+			u.update(t);
 	}
 
 	/** this entity attacks the entity e */

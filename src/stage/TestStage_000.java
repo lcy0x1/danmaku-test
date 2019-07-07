@@ -50,10 +50,10 @@ public class TestStage_000 extends SpellCard {
 	public void update(int dt) {
 		if (time == 0) {
 			double w = p2 / 2 / d;
-			Sprite.DESParam s0 = new Sprite.DESParam(20301, 1, 1);
-			Sprite.DESParam s1 = new Sprite.DESParam(20303, 1, 1);
-			Sprite.DESParam s2 = new Sprite.DESParam(20305, 1, 1);
-			Sprite.DESParam s3 = new Sprite.DESParam(20306, 1, 1);
+			Sprite.SParam s0 = new Sprite.SParam(20301, 1, 1);
+			Sprite.SParam s1 = new Sprite.SParam(20303, 1, 1);
+			Sprite.SParam s2 = new Sprite.SParam(20305, 1, 1);
+			Sprite.SParam s3 = new Sprite.SParam(20306, 1, 1);
 			for (int i = -n; i <= n; i++)
 				for (int j = -n; j <= n; j++) {
 					Dot d0 = new Dot(s0, new TrigMover(w * i, w * j, 0, p2 / 4));

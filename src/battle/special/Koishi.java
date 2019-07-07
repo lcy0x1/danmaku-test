@@ -17,7 +17,7 @@ public class Koishi implements Control.UpdCtrl {
 
 	private int time;
 
-	public Koishi(DotBullet db, Sprite.DESParam des, int F, int T, int S) {
+	public Koishi(DotBullet db, Sprite.SParam des, int F, int T, int S) {
 		b = db;
 		d = db.dot;
 		f = F;

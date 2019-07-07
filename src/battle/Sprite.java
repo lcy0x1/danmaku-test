@@ -18,30 +18,6 @@ import util.P;
 
 public class Sprite implements Comparable<Sprite> {
 
-	public static class CESParam {
-
-		public final Sprite s;
-
-		public final int mode;
-
-		public final double r;
-
-		public CESParam(int id, int t, double m) {
-			this(get(id), t, m);
-		}
-
-		public CESParam(Sprite spr, int t, double m) {
-			s = spr;
-			mode = t;
-			r = s.size * m * MAGNIFY;
-		}
-
-		public CurveESprite getEntity(Shape.LineSegs d) {
-			return new CurveESprite(d, r * 2, s, mode);
-		}
-
-	}
-
 	public static class CurveESprite {
 
 		public final Sprite s;
@@ -64,34 +40,13 @@ public class Sprite implements Comparable<Sprite> {
 			for (P[] ps : dire.getPos()) {
 				if (ps.length == 1)
 					continue;
-				Curve c = new Curve(END, r, ps);
+				P[] np = new P[ps.length];
+				for (int i = 0; i < ps.length; i++)
+					np[ps.length - i - 1] = ps[i].copy();
+				Curve c = new Curve(END, r, np);
 				c.times(1 / h);
 				Engine.RENDERING.getPool(s).addCurve(c, mode);
 			}
-		}
-
-	}
-
-	public static class DESParam {
-
-		public final Sprite s;
-
-		public final int mode;
-
-		public final double r;
-
-		public DESParam(int id, int t, double m) {
-			this(get(id), t, m);
-		}
-
-		public DESParam(Sprite spr, int t, double m) {
-			s = spr;
-			mode = t;
-			r = s.size * m * MAGNIFY;
-		}
-
-		public DotESprite getEntity(DotESprite.Dire d) {
-			return new DotESprite(d, r * 2, r * 2, s, mode);
 		}
 
 	}
@@ -219,6 +174,36 @@ public class Sprite implements Comparable<Sprite> {
 
 	}
 
+	public static class SParam {
+
+		public final Sprite s;
+
+		public final int mode;
+
+		public final double r;
+
+		public SParam(int id, int t, double m) {
+			this(get(id), t, m);
+		}
+
+		public SParam(Sprite spr, int t, double m) {
+			s = spr;
+			mode = t;
+			r = s.size * m * MAGNIFY;
+		}
+
+		public DotESprite getEntity(DotESprite.Dire d) {
+			if (s == null || s.id / 100 == 114)
+				return null;
+			return new DotESprite(d, r * 2, r * 2, s, mode);
+		}
+
+		public CurveESprite getEntity(Shape.LineSegs d) {
+			return new CurveESprite(d, r * 2, s, mode);
+		}
+
+	}
+
 	public static final int SRC_GREY = 0;
 	public static final int SRC_REDX = 1;
 	public static final int SRC_RED = 2;
@@ -289,11 +274,13 @@ public class Sprite implements Comparable<Sprite> {
 
 	public static final double MAGNIFY = 1.5;
 
-	private static final double END = 7.0 / 128;
+	private static final double END = 8.0 / 256;
 
 	private static final double[][] SIZE = { { 2 },
 			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 2, 2.4, 2.4, 2.4, 2.4 }, { 0, 7, 8.5, 7, 6, 7, 0, 10 },
 			{ 14, 14 } };
+
+	public static final double DEFRAD = 10;
 
 	public static Sprite get(int id) {
 		return TOT[id / 10000][id / 100 % 100][id % 100];

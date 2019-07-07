@@ -327,7 +327,7 @@ public class GLGraphics implements GeoAuto {
 			cl0 = cl1;
 		}
 
-		for (int k = 0; k < 1; k++) {
+		for (int k = 0; k < 2; k++) {
 			g.glBegin(GL.GL_TRIANGLE_STRIP);
 			cl0 = cl1 = end;
 			texc(r, 0, 0.5, pc);

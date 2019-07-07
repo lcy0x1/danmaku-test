@@ -228,41 +228,40 @@ public class Dot implements Sprite.DotESprite.Dire, Control.UpdCtrl {
 	public Sprite.DotESprite sprite;
 	public Shape.PosShape shape;
 	private double dire;
-	private boolean deout = false;
 	public Mover move = null;
 
 	/** curve with varying axial and constant angular speed */
-	public Dot(P o, double ir, double ia, double v, double w, double aa, int t, Sprite.DESParam img) {
+	public Dot(P o, double ir, double ia, double v, double w, double aa, int t, Sprite.SParam img) {
 		this(P.polar(ir, ia).plus(o), img, new CurveMover(ir, ia, v, w, aa, t));
 	}
 
 	/** curve with constant axial and angular speed */
-	public Dot(P o, double ir, double ia, double v, double w, Sprite.DESParam img) {
+	public Dot(P o, double ir, double ia, double v, double w, Sprite.SParam img) {
 		this(P.polar(ir, ia).plus(o), img, new CurveMover(ir, ia, v, w));
 	}
 
 	/** linear varying speed */
-	public Dot(P p, P v, double a, int t0, int t1, Sprite.DESParam img) {
+	public Dot(P p, P v, double a, int t0, int t1, Sprite.SParam img) {
 		this(p, img, new LineMover(a, t0, t1, v));
 	}
 
 	/** linear varying speed */
-	public Dot(P p, P v, double a, int t, Sprite.DESParam img) {
+	public Dot(P p, P v, double a, int t, Sprite.SParam img) {
 		this(p, img, new LineMover(a, 0, t, v));
 	}
 
 	/** semi-linear */
-	public Dot(P p, P v, P a, int t, Sprite.DESParam img) {
+	public Dot(P p, P v, P a, int t, Sprite.SParam img) {
 		this(p, img, new LineMover(a, t, v));
 	}
 
 	/** linear constant speed */
-	public Dot(P p, P v, Sprite.DESParam img) {
+	public Dot(P p, P v, Sprite.SParam img) {
 		this(p, img, new LineMover(v));
 	}
 
 	/** static */
-	public Dot(P p, Sprite.DESParam img) {
+	public Dot(P p, Sprite.SParam img) {
 		pos = p;
 		tmp = p.copy();
 		if (img == null) {
@@ -274,20 +273,20 @@ public class Dot implements Sprite.DotESprite.Dire, Control.UpdCtrl {
 		}
 	}
 
-	public Dot(P p, Sprite.DESParam img, Mover m) {
+	public Dot(P p, Sprite.SParam img, Mover m) {
 		this(p, img);
 		setMove(m);
 	}
 
-	public Dot(Sprite.DESParam img, TimeMover tm) {
+	public Dot(Sprite.SParam img, TimeMover tm) {
 		this(tm.disp(0), img, tm);
 	}
 
 	@Override
 	public boolean finished() {
-		if (move == null || deout)
+		if (move == null)
 			return false;
-		return move.out(pos, sprite.radius());
+		return move.out(pos, sprite == null ? Sprite.DEFRAD : sprite.radius());
 	}
 
 	@Override
@@ -305,12 +304,6 @@ public class Dot implements Sprite.DotESprite.Dire, Control.UpdCtrl {
 		if (pos.dis(tmp) > 0)
 			dire = pos.atan2(tmp);
 		pos.setTo(tmp);
-	}
-
-	/** indicate whether this dot also serves as a control */
-	public Dot setCtrl(boolean b) {
-		deout = !b;
-		return this;
 	}
 
 	public Dot setMove(Mover m) {

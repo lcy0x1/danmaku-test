@@ -8,6 +8,33 @@ import java.awt.geom.Rectangle2D;
 
 public strictfp class P {
 
+	public static class Line {
+
+		public P[] ps;
+
+		public Line(P... parr) {
+			ps = parr;
+		}
+
+		public double dis(P p) {
+			double dis = ps[ps.length - 1].dis(p);
+			for (int i = 1; i < ps.length; i++) {
+				P p0 = ps[i - 1];
+				P p1 = ps[i];
+				P v0 = p0.sf(p);
+				P v1 = p1.sf(p);
+				P l = p0.sf(p1);
+				// dis to point
+				dis = Math.min(dis, v0.abs());
+				// dis to line
+				if (l.dotP(v0) >= 0 && l.dotP(v1) <= 0)
+					dis = Math.min(dis, Math.abs(l.crossP(v0)) / l.abs());
+			}
+			return dis;
+		}
+
+	}
+
 	public static class Polygon {
 
 		public P[] ps;
@@ -49,33 +76,6 @@ public strictfp class P {
 			if (i >= ps.length)
 				return ps[i - ps.length];
 			return ps[i];
-		}
-
-	}
-
-	public static class Line {
-
-		public P[] ps;
-
-		public Line(P... parr) {
-			ps = parr;
-		}
-
-		public double dis(P p) {
-			double dis = ps[ps.length - 1].dis(p);
-			for (int i = 1; i < ps.length; i++) {
-				P p0 = ps[i - 1];
-				P p1 = ps[i];
-				P v0 = p0.sf(p);
-				P v1 = p1.sf(p);
-				P l = p0.sf(p1);
-				// dis to point
-				dis = Math.min(dis, v0.abs());
-				// dis to line
-				if (l.dotP(v0) >= 0 && l.dotP(v1) <= 0)
-					dis = Math.min(dis, Math.abs(l.crossP(v0)) / l.abs());
-			}
-			return dis;
 		}
 
 	}

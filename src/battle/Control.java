@@ -2,6 +2,24 @@ package battle;
 
 public interface Control {
 
+	public static class ElemCtrl<T> implements Control {
+
+		private final MassCtrl<T> mass;
+
+		private final T mast;
+
+		public ElemCtrl(T master, MassCtrl<T> m) {
+			mass = m;
+			mast = master;
+		}
+
+		@Override
+		public boolean finished() {
+			return mass.finished(mast);
+		}
+
+	}
+
 	public static class EntCtrl implements Control {
 
 		private int hard;
@@ -25,6 +43,12 @@ public interface Control {
 		public void setLv(int lv) {
 			hard = lv;
 		}
+
+	}
+
+	public static interface MassCtrl<T> {
+
+		public boolean finished(T t);
 
 	}
 

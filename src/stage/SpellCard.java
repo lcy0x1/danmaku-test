@@ -27,8 +27,11 @@ public class SpellCard implements Control.UpdCtrl {
 
 	@Override
 	public void post() {
-		if (finished())
-			Engine.RUNNING.add(new Clearer(pc, 0, 1, 1000, K_FINISH));
+		if (finished()) {
+			Engine.RUNNING.add(new Clearer(pc, 0, 1, 1000, K_BULLET));
+			Engine.RUNNING.add(new Clearer(pc, 0, 0.75, 1000, K_FUNCTIONAL));
+			Engine.RUNNING.add(new Clearer(pc, 0, 0.5, 1000, K_FINISH));
+		}
 	}
 
 	@Override

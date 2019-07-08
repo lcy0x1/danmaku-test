@@ -1,9 +1,9 @@
 package stage;
 
 import battle.Sprite;
-import battle.bullet.AbCurve.ListCurve;
-import battle.bullet.AbCurve;
-import battle.bullet.CurveLaser;
+import battle.bullet.Curve.ListCurve;
+import battle.bullet.Curve;
+import battle.bullet.Laser;
 import battle.bullet.Dot;
 import battle.bullet.DotBullet;
 import battle.bullet.Func;
@@ -104,7 +104,7 @@ public class TestStage_006 extends SpellCard implements Emiter.Ticker {
 				ListCurve c = new ListCurve(sps[it % 2]);
 				Adder ad = new Adder(c, vlfs[it % 2], a, it % 2);
 				add(new Emiter(0, dt, dt * mx, ad), ex);
-				add(new CurveLaser(c, lt), ex);
+				add(new Laser(c, lt), ex);
 			}
 		}
 	}
@@ -148,8 +148,8 @@ public class TestStage_006 extends SpellCard implements Emiter.Ticker {
 			return;
 		P p0 = P.polar(dl, p2 / 2 + a).plus(p);
 		PathFunc pf = new PathFunc(p0, a, rand(p2), w, (p0.dis(pc) - rr) / 2);
-		AbCurve c0 = new AbCurve.FuncCurve(pf, m, spr);
-		add(new CurveLaser(c0).setLv(K_FUNCTIONAL));
+		Curve c0 = new Curve.FuncCurve(pf, m, spr);
+		add(new Laser(c0).setLv(K_FUNCTIONAL));
 	}
 
 }

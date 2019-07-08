@@ -34,7 +34,7 @@ public class Player extends Entity implements Sprite.DotESprite.Dire, Shape {
 		deadTime = DEADTIME;
 		deadCount++;
 		if (Data.CLEARBL)
-			Engine.RUNNING.add(new Clearer(pos.copy(), 0, 1, 1000, Control.K_BULLET));
+			Engine.RUNNING.add(new Clearer(pos.copy(), 0, 1, 1300, Control.K_BULLET));
 	}
 
 	@Override

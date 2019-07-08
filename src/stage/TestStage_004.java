@@ -1,8 +1,8 @@
 package stage;
 
 import battle.Sprite;
-import battle.bullet.AbCurve;
-import battle.bullet.CurveLaser;
+import battle.bullet.Curve;
+import battle.bullet.Laser;
 import battle.bullet.Dot;
 import battle.bullet.DotBullet;
 import battle.entity.Emiter;
@@ -14,11 +14,11 @@ public class TestStage_004 extends SpellCard implements Emiter.Ticker {
 
 	private final int f = 40, n = 8, l = 200;
 	private final double v0 = 0.2, maxda = p2 / 12, w0 = p2 / 30000, w1 = p2 / 10000;
-	private final AbCurve.ListCurve[] list;
+	private final Curve.ListCurve[] list;
 
 	public TestStage_004(int diff) {
 		super(60000);
-		list = new AbCurve.ListCurve[n];
+		list = new Curve.ListCurve[n];
 	}
 
 	@Override
@@ -40,8 +40,8 @@ public class TestStage_004 extends SpellCard implements Emiter.Ticker {
 	public void update(int dt) {
 		if (time == 0) {
 			for (int i = 0; i < n; i++) {
-				list[i] = new AbCurve.ListCurve(sp1);
-				add(new CurveLaser(list[i]).setLv(K_FINISH));
+				list[i] = new Curve.ListCurve(sp1);
+				add(new Laser(list[i]).setLv(K_FINISH));
 			}
 			add(new Emiter(0, f, this, this));
 		}

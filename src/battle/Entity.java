@@ -12,7 +12,7 @@ public abstract class Entity implements Updatable {
 	private final List<Updatable> updts = new ArrayList<Updatable>();
 	private final Control.EntCtrl ent = new Control.EntCtrl(0);
 
-	private Entity[] trails;
+	private Updatable[] trails;
 
 	public Entity(int i0, int i1) {
 		base = i0;
@@ -52,7 +52,7 @@ public abstract class Entity implements Updatable {
 		for (Updatable u : updts)
 			u.post();
 		if (isDead() && trails != null)
-			for (Entity e : trails)
+			for (Updatable e : trails)
 				Engine.RUNNING.add(e);
 	}
 
@@ -61,7 +61,7 @@ public abstract class Entity implements Updatable {
 		return this;
 	}
 
-	public final void trail(Entity... es) {
+	public final void trail(Updatable... es) {
 		trails = es;
 	}
 

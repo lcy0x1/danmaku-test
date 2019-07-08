@@ -25,6 +25,11 @@ public interface Mover {
 		}
 
 		@Override
+		public Mover copy() {
+			return new CurveMover(ir, ia, v, w, ar, it);
+		}
+
+		@Override
 		public P disp(int ct) {
 			int at = ct;
 			if (at > it)
@@ -52,14 +57,18 @@ public interface Mover {
 
 		private final Func f;
 		private final double a0;
-
-		private int dt, ind;
+		private final int dt, ind;
 
 		public FuncMover(Func func, int init, int i, double a) {
 			f = func;
 			dt = init;
 			ind = i;
 			a0 = a;
+		}
+
+		@Override
+		public Mover copy() {
+			return new FuncMover(f, dt, ind, a0);
 		}
 
 		@Override
@@ -91,6 +100,11 @@ public interface Mover {
 				invoke(p);
 		}
 
+		@Override
+		public Mover copy() {
+			return new HomingLM(s);
+		}
+
 		public void invoke(P p) {
 			invoked = true;
 			v.setTo(P.polar(s, p.atan2(Engine.RUNNING.pl.pos)));
@@ -108,7 +122,7 @@ public interface Mover {
 
 		public final P a, v;
 
-		public int t0, t1;
+		public final int t0, t1;
 
 		public LineMover(double ap, int st, int et, P vp) {
 			v = vp;
@@ -121,12 +135,26 @@ public interface Mover {
 			v = vp;
 			a = null;
 			t1 = 0;
+			t0 = 0;
 		}
 
 		public LineMover(P ap, int tt, P vp) {
 			v = vp;
 			t1 = tt;
 			a = ap;
+			t0 = 0;
+		}
+
+		public LineMover(P vp, P ap, int ts, int te) {
+			v = vp;
+			a = ap;
+			t0 = ts;
+			t1 = te;
+		}
+
+		@Override
+		public Mover copy() {
+			return new LineMover(v.copy(), a.copy(), t0, t1);
 		}
 
 		@Override
@@ -157,20 +185,27 @@ public interface Mover {
 		private static final int LEFT = 1, RIGHT = 2, UP = 4, DOWN = 8;
 
 		private final P ul, dr, v;
-
-		private final int mode;
-
-		private double r;
+		private final int mode, max;
+		private final double r;
 
 		private int rem;
+
+		public RefMover(P vp, int tot) {
+			this(vp, new P(0, 0), Engine.BOUND, 0, tot, 15);
+		}
 
 		public RefMover(P vp, P b0, P b1, double ra, int tot, int mod) {
 			v = vp;
 			ul = b0;
 			dr = b1;
 			r = ra;
-			rem = tot;
+			rem = max = tot;
 			mode = mod;
+		}
+
+		@Override
+		public Mover copy() {
+			return new RefMover(v.copy(), ul, dr, r, max, mode);
 		}
 
 		@Override
@@ -180,7 +215,7 @@ public interface Mover {
 
 		@Override
 		public boolean out(P pos, double r) {
-			return pos.moveOut(v, Engine.BOUND, r);
+			return rem == 0 && pos.moveOut(v, Engine.BOUND, r);
 		}
 
 		@Override
@@ -189,22 +224,22 @@ public interface Mover {
 			if (rem == 0)
 				return;
 
-			if (d.tmp.x + r > dr.x && (mode & RIGHT) > 0) {
+			if (rem != 0 && d.tmp.x + r > dr.x && (mode & RIGHT) > 0) {
 				d.tmp.x = 2 * dr.x - 2 * r - d.tmp.x;
 				v.x *= -1;
 				rem--;
 			}
-			if (d.tmp.x - r < ul.x && (mode & LEFT) > 0) {
+			if (rem != 0 && d.tmp.x - r < ul.x && (mode & LEFT) > 0) {
 				d.tmp.x = 2 * ul.x + 2 * r - d.tmp.x;
 				v.x *= -1;
 				rem--;
 			}
-			if (d.tmp.y + r > dr.y && (mode & DOWN) > 0) {
+			if (rem != 0 && d.tmp.y + r > dr.y && (mode & DOWN) > 0) {
 				d.tmp.y = 2 * dr.y - 2 * r - d.tmp.y;
 				v.y *= -1;
 				rem--;
 			}
-			if (d.tmp.y - r < ul.y && (mode & UP) > 0) {
+			if (rem != 0 && d.tmp.y - r < ul.y && (mode & UP) > 0) {
 				d.tmp.y = 2 * ul.y + 2 * r - d.tmp.y;
 				v.y *= -1;
 				rem--;
@@ -236,6 +271,10 @@ public interface Mover {
 	}
 
 	public static final int TYPE_TIME = 1, TYPE_LINE = 2;
+
+	public default Mover copy() {
+		return null;
+	}
 
 	public int getType();
 

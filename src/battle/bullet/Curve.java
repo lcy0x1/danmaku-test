@@ -10,9 +10,9 @@ import battle.Shape;
 import battle.Sprite;
 import util.P;
 
-public abstract class AbCurve extends Shape.LineSegs implements Control.UpdCtrl {
+public abstract class Curve extends Shape.LineSegs implements Control.UpdCtrl {
 
-	public static class FuncCurve extends AbCurve {
+	public static class FuncCurve extends Curve {
 
 		private final Func func;
 
@@ -94,7 +94,7 @@ public abstract class AbCurve extends Shape.LineSegs implements Control.UpdCtrl 
 
 	}
 
-	public static class ListCurve extends AbCurve implements Control.MassCtrl<DotBullet> {
+	public static class ListCurve extends Curve implements Control.MassCtrl<DotBullet> {
 
 		private Queue<DotBullet> qd = new ArrayDeque<>();
 
@@ -158,7 +158,7 @@ public abstract class AbCurve extends Shape.LineSegs implements Control.UpdCtrl 
 
 	public final Sprite.CurveESprite sprite;
 
-	public AbCurve(Sprite.SParam cesp) {
+	public Curve(Sprite.SParam cesp) {
 		super(cesp.r);
 		sprite = cesp.getEntity(this);
 	}

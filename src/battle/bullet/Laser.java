@@ -1,19 +1,19 @@
 package battle.bullet;
 
 import battle.Shape;
-import battle.bullet.AbCurve.ListCurve;
+import battle.bullet.Curve.ListCurve;
 import battle.entity.Bullet;
 
-public class CurveLaser extends Bullet {
+public class Laser extends Bullet {
 
-	private final AbCurve curve;
+	private final Curve curve;
 
-	public CurveLaser(AbCurve c) {
+	public Laser(Curve c) {
 		addCtrl(curve = c);
 
 	}
 
-	public CurveLaser(ListCurve c, int lt) {
+	public Laser(ListCurve c, int lt) {
 		super(lt);
 		addCtrl(curve = c);
 	}

@@ -154,7 +154,7 @@ public interface Mover {
 
 		@Override
 		public Mover copy() {
-			return new LineMover(v.copy(), a.copy(), t0, t1);
+			return new LineMover(v.copy(), a == null ? null : a.copy(), t0, t1);
 		}
 
 		@Override

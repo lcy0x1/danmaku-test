@@ -65,9 +65,9 @@ public class TestStage_006 extends SpellCard implements Emiter.Ticker {
 
 	}
 
-	private static final Sprite.SParam spr = new Sprite.SParam(11410, 3, 0.5);
-	private static final Sprite.SParam sp0 = new Sprite.SParam(11402, 1, 1);
-	private static final Sprite.SParam sp1 = new Sprite.SParam(11406, 1, 1);
+	private static final Sprite.SParam spr = new Sprite.SParam(11410, 3, 1);
+	private static final Sprite.SParam sp0 = new Sprite.SParam(11402, 1, 2);
+	private static final Sprite.SParam sp1 = new Sprite.SParam(11406, 1, 2);
 
 	private static final Sprite.SParam[] sps = { sp0, sp1 };
 
@@ -149,7 +149,7 @@ public class TestStage_006 extends SpellCard implements Emiter.Ticker {
 		P p0 = P.polar(dl, p2 / 2 + a).plus(p);
 		PathFunc pf = new PathFunc(p0, a, rand(p2), w, (p0.dis(pc) - rr) / 2);
 		Curve c0 = new Curve.FuncCurve(pf, m, spr);
-		add(new Laser(c0).setLv(K_FUNCTIONAL));
+		add(new Laser(c0));
 	}
 
 }

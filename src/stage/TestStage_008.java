@@ -9,8 +9,8 @@ import util.P;
 
 public class TestStage_008 extends SpellCard implements Emiter.Ticker {
 
-	private static final Sprite.SParam sp0 = new Sprite.SParam(11402, 0, 0.5);
-	private static final Sprite.SParam sp1 = new Sprite.SParam(11406, 0, 0.5);
+	private static final Sprite.SParam sp0 = new Sprite.SParam(11402, 0, 1);
+	private static final Sprite.SParam sp1 = new Sprite.SParam(11406, 0, 1);
 	private static final Sprite.SParam[] sps = { sp0, sp1 };
 	private static final int f0 = 4000, l = 100, ref = 1;
 	private static final double v0 = 0.6;
@@ -32,7 +32,7 @@ public class TestStage_008 extends SpellCard implements Emiter.Ticker {
 				for (int j = 0; j < n; j++) {
 					P pos = p0.middle(p1, 1.0 / n * j).plus(pc);
 					Mover m = new Mover.RefMover(P.polar(v0 / l * pc.dis(pos), pc.atan2(pos)), ref);
-					add(new Laser(new TimeCurve(sps[it % 2], 10, 40, pc, m), f0 * 3).setLv(K_FUNCTIONAL));
+					add(new Laser(new TimeCurve(sps[it % 2], 10, 40, pc, m), f0 * 3), ex);
 				}
 			}
 		}

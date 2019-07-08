@@ -288,7 +288,6 @@ public class GLGraphics implements GeoAuto {
 		compImpl();
 		bind(tm.load(this, s.img));
 		float[] r = s.img.getRect();
-
 		Curve cp = c.copy();
 		cp.times(sh);
 		cp.size(1 / s.rad);
@@ -331,18 +330,18 @@ public class GLGraphics implements GeoAuto {
 		for (int k = 0; k < 2; k++) {
 			g.glBegin(GL.GL_TRIANGLE_STRIP);
 			cl0 = cl1 = end;
-			texc(r, 0, 0.5, pc);
-			texc(r, 0, k, p0[k]);
+			texc(cp, r, 0, 0.5, pc);
+			texc(cp, r, 0, k, p0[k]);
 			for (int i = 0; i < n - 1; i++) {
 				cl1 += lp * ps[i + 1].dis(ps[i]);
 				double clm = (cl0 + cl1) / 2;
-				texc(r, cl0, 0.5, ps[i]);
-				texc(r, clm, k, s0[k][i]);
+				texc(cp, r, cl0, 0.5, ps[i]);
+				texc(cp, r, clm, k, s0[k][i]);
 				cl0 = cl1;
 			}
-			texc(r, cl0, 0.5, ps[n - 1]);
-			texc(r, 1, k, p1[k]);
-			texc(r, 1, 0.5, ec);
+			texc(cp, r, cl0, 0.5, ps[n - 1]);
+			texc(cp, r, 1, k, p1[k]);
+			texc(cp, r, 1, 0.5, ec);
 			g.glEnd();
 		}
 
@@ -530,8 +529,9 @@ public class GLGraphics implements GeoAuto {
 		}
 	}
 
-	private void texc(float[] r, double tx, double ty, P p) {
-		g.glTexCoord2f((float) (r[0] + tx * r[2]), (float) (r[1] + ty * r[3]));
+	private void texc(Curve c, float[] r, double tx, double ty, P p) {
+		double[] fs = c.transform(r, tx, ty);
+		g.glTexCoord2f((float) (fs[0]), (float) (fs[1]));
 		addP(p.x, p.y);
 	}
 

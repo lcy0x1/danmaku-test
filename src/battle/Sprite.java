@@ -8,6 +8,7 @@ import java.util.TreeMap;
 
 import org.apache.commons.io.IOUtils;
 
+import battle.Shape.PosShape;
 import jogl.util.FakeGraphics;
 import jogl.util.FakeGraphics.Coord;
 import jogl.util.FakeGraphics.Curve;
@@ -43,8 +44,8 @@ public class Sprite implements Comparable<Sprite> {
 					continue;
 				P[] np = new P[ps.length];
 				for (int i = 0; i < ps.length; i++)
-					np[rev == 0 ? i : (ps.length - i - 1)] = ps[i].copy();
-				Curve c = new Curve(END, EDR, r, np);
+					np[i] = ps[i].copy();
+				Curve c = new Curve(END, EDR, r, np, rev);
 				c.times(1 / h);
 				Engine.RENDERING.getPool(s).addCurve(c, mode);
 			}
@@ -175,13 +176,27 @@ public class Sprite implements Comparable<Sprite> {
 
 	}
 
-	public static class SParam {
+	public static interface DSParam {
 
-		public final Sprite s;
+		public DotESprite getEntity(DotESprite.Dire d);
 
-		public final int mode;
+		public Shape.PosShape getShape(P pos);
 
-		public final double r;
+	}
+
+	public static interface CSParam {
+
+		public CurveESprite getEntity(Shape.LineSegs d);
+
+		public double getRadius();
+
+	}
+
+	public static class SParam implements DSParam, CSParam {
+
+		private final Sprite s;
+		private final int mode;
+		private final double r;
 
 		public SParam(int id, int t, double m) {
 			this(get(id), t, m);
@@ -200,7 +215,17 @@ public class Sprite implements Comparable<Sprite> {
 		}
 
 		public CurveESprite getEntity(Shape.LineSegs d) {
-			return new CurveESprite(d, r * 2, s, mode & 1, mode >> 1 & 1);
+			return new CurveESprite(d, r, s, mode & 1, mode >> 1);
+		}
+
+		@Override
+		public PosShape getShape(P pos) {
+			return new Shape.Circle(pos, r);
+		}
+
+		@Override
+		public double getRadius() {
+			return r;
 		}
 
 	}

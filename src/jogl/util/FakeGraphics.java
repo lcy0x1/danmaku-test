@@ -40,19 +40,42 @@ public interface FakeGraphics {
 
 		public P[] ps;
 		public double end, dr, r;
+		public int mode;
 
-		public Curve(double e, double d, double ra, P[] p) {
+		public Curve(double e, double d, double ra, P[] p, int m) {
 			end = e;
 			dr = d;
 			r = ra;
 			ps = p;
+			mode = m;
 		}
 
 		public Curve copy() {
 			P[] np = new P[ps.length];
 			for (int i = 0; i < ps.length; i++)
 				np[i] = ps[i].copy();
-			return new Curve(end, dr, r, np);
+			return new Curve(end, dr, r, np, mode);
+		}
+
+		public double[] transform(float[] r, double tx, double ty) {
+			double[] fs = new double[2];
+			if (mode == 0) {
+				fs[0] = r[0] + tx * r[2];
+				fs[1] = r[1] + ty * r[3];
+			}
+			if (mode == 1) {
+				fs[0] = r[0] + (1 - tx) * r[2];
+				fs[1] = r[1] + (1 - ty) * r[3];
+			}
+			if (mode == 2) {
+				fs[0] = r[0] + ty * r[2];
+				fs[1] = r[1] + tx * r[3];
+			}
+			if (mode == 3) {
+				fs[0] = r[0] + (1 - ty) * r[2];
+				fs[1] = r[1] + (1 - tx) * r[3];
+			}
+			return fs;
 		}
 
 		public void size(double m) {

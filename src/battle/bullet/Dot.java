@@ -2,6 +2,7 @@ package battle.bullet;
 
 import battle.Control;
 import battle.Shape;
+import battle.Sprite.DSParam;
 import battle.Sprite;
 import battle.bullet.Mover.*;
 import util.P;
@@ -16,54 +17,54 @@ public class Dot implements Sprite.DotESprite.Dire, Control.UpdCtrl {
 	public Mover move = null;
 
 	/** curve with varying axial and constant angular speed */
-	public Dot(P o, double ir, double ia, double v, double w, double aa, int t, Sprite.SParam img) {
+	public Dot(P o, double ir, double ia, double v, double w, double aa, int t, DSParam img) {
 		this(P.polar(ir, ia).plus(o), img, new CurveMover(ir, ia, v, w, aa, t));
 	}
 
 	/** curve with constant axial and angular speed */
-	public Dot(P o, double ir, double ia, double v, double w, Sprite.SParam img) {
+	public Dot(P o, double ir, double ia, double v, double w, DSParam img) {
 		this(P.polar(ir, ia).plus(o), img, new CurveMover(ir, ia, v, w));
 	}
 
 	/** linear varying speed */
-	public Dot(P p, P v, double a, int t0, int t1, Sprite.SParam img) {
+	public Dot(P p, P v, double a, int t0, int t1, DSParam img) {
 		this(p, img, new LineMover(a, t0, t1, v));
 	}
 
 	/** linear varying speed */
-	public Dot(P p, P v, double a, int t, Sprite.SParam img) {
+	public Dot(P p, P v, double a, int t, DSParam img) {
 		this(p, img, new LineMover(a, 0, t, v));
 	}
 
 	/** semi-linear */
-	public Dot(P p, P v, P a, int t, Sprite.SParam img) {
+	public Dot(P p, P v, P a, int t, DSParam img) {
 		this(p, img, new LineMover(a, t, v));
 	}
 
 	/** linear constant speed */
-	public Dot(P p, P v, Sprite.SParam img) {
+	public Dot(P p, P v, DSParam img) {
 		this(p, img, new LineMover(v));
 	}
 
 	/** static */
-	public Dot(P p, Sprite.SParam img) {
+	public Dot(P p, DSParam img) {
 		pos = p;
 		tmp = p.copy();
 		if (img == null) {
 			shape = null;
 			sprite = null;
 		} else {
-			shape = new Shape.Circle(pos, img.r);
+			shape = img.getShape(pos);
 			sprite = img.getEntity(this);
 		}
 	}
 
-	public Dot(P p, Sprite.SParam img, Mover m) {
+	public Dot(P p, DSParam img, Mover m) {
 		this(p, img);
 		setMove(m);
 	}
 
-	public Dot(Sprite.SParam img, TimeMover tm) {
+	public Dot(DSParam img, TimeMover tm) {
 		this(tm.disp(0), img, tm);
 	}
 

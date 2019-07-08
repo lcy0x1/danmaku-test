@@ -14,7 +14,12 @@ public class Dot implements Sprite.DotESprite.Dire, Control.UpdCtrl {
 	public Sprite.DotESprite sprite;
 	public Shape.PosShape shape;
 	private double dire;
+	private int time;
 	public Mover move = null;
+
+	public Dot(DSParam img, TimeMover tm) {
+		this(tm.disp(0), img, tm);
+	}
 
 	/** curve with varying axial and constant angular speed */
 	public Dot(P o, double ir, double ia, double v, double w, double aa, int t, DSParam img) {
@@ -24,26 +29,6 @@ public class Dot implements Sprite.DotESprite.Dire, Control.UpdCtrl {
 	/** curve with constant axial and angular speed */
 	public Dot(P o, double ir, double ia, double v, double w, DSParam img) {
 		this(P.polar(ir, ia).plus(o), img, new CurveMover(ir, ia, v, w));
-	}
-
-	/** linear varying speed */
-	public Dot(P p, P v, double a, int t0, int t1, DSParam img) {
-		this(p, img, new LineMover(a, t0, t1, v));
-	}
-
-	/** linear varying speed */
-	public Dot(P p, P v, double a, int t, DSParam img) {
-		this(p, img, new LineMover(a, 0, t, v));
-	}
-
-	/** semi-linear */
-	public Dot(P p, P v, P a, int t, DSParam img) {
-		this(p, img, new LineMover(a, t, v));
-	}
-
-	/** linear constant speed */
-	public Dot(P p, P v, DSParam img) {
-		this(p, img, new LineMover(v));
 	}
 
 	/** static */
@@ -64,8 +49,24 @@ public class Dot implements Sprite.DotESprite.Dire, Control.UpdCtrl {
 		setMove(m);
 	}
 
-	public Dot(DSParam img, TimeMover tm) {
-		this(tm.disp(0), img, tm);
+	/** linear varying speed */
+	public Dot(P p, P v, double a, int t, DSParam img) {
+		this(p, img, new LineMover(a, 0, t, v));
+	}
+
+	/** linear varying speed */
+	public Dot(P p, P v, double a, int t0, int t1, DSParam img) {
+		this(p, img, new LineMover(a, t0, t1, v));
+	}
+
+	/** linear constant speed */
+	public Dot(P p, P v, DSParam img) {
+		this(p, img, new LineMover(v));
+	}
+
+	/** semi-linear */
+	public Dot(P p, P v, P a, int t, DSParam img) {
+		this(p, img, new LineMover(a, t, v));
 	}
 
 	@Override
@@ -86,6 +87,11 @@ public class Dot implements Sprite.DotESprite.Dire, Control.UpdCtrl {
 	}
 
 	@Override
+	public int getTime() {
+		return time;
+	}
+
+	@Override
 	public void post() {
 		if (pos.dis(tmp) > 0)
 			dire = pos.atan2(tmp);
@@ -102,6 +108,7 @@ public class Dot implements Sprite.DotESprite.Dire, Control.UpdCtrl {
 		tmp.setTo(pos);
 		if (move != null)
 			move.update(this, t);
+		time += t;
 	}
 
 }

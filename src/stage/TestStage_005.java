@@ -33,8 +33,8 @@ public class TestStage_005 extends SpellCard implements Emiter.Ticker {
 
 	}
 
-	private static final Sprite.SParam sp0 = new Sprite.SParam(11402, 3, 2);
-	private static final Sprite.SParam sp1 = new Sprite.SParam(11406, 3, 2);
+	private static final Sprite.CSP sp0 = new Sprite.CSP(11402, 3, 2);
+	private static final Sprite.CSP sp1 = new Sprite.CSP(11406, 3, 2);
 	private static final int f = 40, n = 8, m = 40, xt = 200, vt = 80;
 	private static final double w = p2 / 6000, dr = 10, ma = p2 / 12;
 

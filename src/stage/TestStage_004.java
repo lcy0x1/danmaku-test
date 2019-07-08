@@ -10,7 +10,7 @@ import util.P;
 
 public class TestStage_004 extends SpellCard implements Emiter.Ticker {
 
-	private static final Sprite.SParam sp1 = new Sprite.SParam(11406, 3, 2);
+	private static final Sprite.CSP sp1 = new Sprite.CSP(11406, 3, 2);
 
 	private final int f = 40, n = 8, l = 200;
 	private final double v0 = 0.2, maxda = p2 / 12, w0 = p2 / 30000, w1 = p2 / 10000;

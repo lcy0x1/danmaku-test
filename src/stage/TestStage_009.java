@@ -8,9 +8,9 @@ import util.P;
 
 public class TestStage_009 extends SpellCard implements Emiter.Ticker {
 
-	private static final Sprite.SParam sp0 = new Sprite.SParam(10102, 0, 1);
-	private static final Sprite.SParam sp1 = new Sprite.SParam(10106, 0, 1);
-	private static final Sprite.SParam[] sps = { sp0, sp1 };
+	private static final Sprite.DSP sp0 = new Sprite.DSP(10102, 0, 1);
+	private static final Sprite.DSP sp1 = new Sprite.DSP(10106, 0, 1);
+	private static final Sprite.DSP[] sps = { sp0, sp1 };
 	private static final int l = 200, m = 5;
 	private static final double v0 = 0.3;
 	private static final int[] ns = { 15, 25, 30, 35 };

@@ -57,6 +57,16 @@ public interface FakeGraphics {
 			return new Curve(end, dr, r, np, mode);
 		}
 
+		public void size(double m) {
+			r *= m;
+		}
+
+		public void times(double m) {
+			for (P p : ps)
+				p.times(m);
+			r *= m;
+		}
+
 		public double[] transform(float[] r, double tx, double ty) {
 			double[] fs = new double[2];
 			if (mode == 0) {
@@ -76,16 +86,6 @@ public interface FakeGraphics {
 				fs[1] = r[1] + (1 - tx) * r[3];
 			}
 			return fs;
-		}
-
-		public void size(double m) {
-			r *= m;
-		}
-
-		public void times(double m) {
-			for (P p : ps)
-				p.times(m);
-			r *= m;
 		}
 
 	}

@@ -12,14 +12,14 @@ public class TestStage_003 extends SpellCard implements Emiter.Ticker {
 	private static final int f = 80, f1 = 120, m = 3;
 	private static final double v0 = 0.1;
 
-	private static final Sprite.SParam sp0 = new Sprite.SParam(10302, 0, 1);
-	private static final Sprite.SParam sp1 = new Sprite.SParam(10306, 0, 1);
-	private static final Sprite.SParam sp2 = new Sprite.SParam(10311, 0, 1);
-	private static final Sprite.SParam sx0 = new Sprite.SParam(30100, 0, 1);
-	private static final Sprite.SParam sx1 = new Sprite.SParam(30101, 0, 1);
-	private static final Sprite.SParam sx2 = new Sprite.SParam(30103, 0, 1);
-	private static final Sprite.SParam[] sps = { sp0, sp1, sp2 };
-	private static final Sprite.SParam[] sxs = { sx0, sx1, sx2 };
+	private static final Sprite.DSP sp0 = new Sprite.DSP(10302, 0, 1);
+	private static final Sprite.DSP sp1 = new Sprite.DSP(10306, 0, 1);
+	private static final Sprite.DSP sp2 = new Sprite.DSP(10311, 0, 1);
+	private static final Sprite.DSP sx0 = new Sprite.DSP(30100, 0, 1);
+	private static final Sprite.DSP sx1 = new Sprite.DSP(30101, 0, 1);
+	private static final Sprite.DSP sx2 = new Sprite.DSP(30103, 0, 1);
+	private static final Sprite.DSP[] sps = { sp0, sp1, sp2 };
+	private static final Sprite.DSP[] sxs = { sx0, sx1, sx2 };
 
 	private static final int[] ns = { 8, 10, 10, 12 };
 	private static final int[] m2s = { 20, 17, 14, 11 };

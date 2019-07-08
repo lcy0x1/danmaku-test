@@ -19,17 +19,60 @@ import util.P;
 
 public class Sprite implements Comparable<Sprite> {
 
+	public static class CSP implements SParam {
+
+		private final Sprite s;
+		private final int mode;
+		private final double r;
+
+		public CSP(int id, int t, double m) {
+			this(get(id), t, m);
+		}
+
+		private CSP(Sprite spr, int t, double m) {
+			s = spr;
+			mode = t;
+			r = s.size * m * MAGNIFY;
+		}
+
+		@Override
+		public DotESprite getEntity(DotESprite.Dire d) {
+			return null;
+		}
+
+		@Override
+		public CurveESprite getEntity(Shape.LineSegs d) {
+			return new CurveESprite(d, r, s, mode & 1, mode >> 1);
+		}
+
+		@Override
+		public double getRadius() {
+			return r;
+		}
+
+		@Override
+		public PosShape getShape(P pos) {
+			return new Shape.Circle(pos, r);
+		}
+
+	}
+
+	public static interface CSParam {
+
+		public CurveESprite getEntity(Shape.LineSegs d);
+
+		public double getRadius();
+
+	}
+
 	public static class CurveESprite {
 
-		public final Sprite s;
-
+		private final Sprite s;
 		private double r;
-
 		private int mode, rev;
-
 		private Shape.LineSegs dire;
 
-		public CurveESprite(Shape.LineSegs d, double ra, Sprite img, int m, int rv) {
+		private CurveESprite(Shape.LineSegs d, double ra, Sprite img, int m, int rv) {
 			s = img;
 			dire = d;
 			r = ra;
@@ -45,9 +88,9 @@ public class Sprite implements Comparable<Sprite> {
 				P[] np = new P[ps.length];
 				for (int i = 0; i < ps.length; i++)
 					np[i] = ps[i].copy();
-				Curve c = new Curve(END, EDR, r, np, rev);
+				Curve c = new Curve(LONG_END, LONG_EDR, r, np, rev);
 				c.times(1 / h);
-				Engine.RENDERING.getPool(s).addCurve(c, mode);
+				Engine.RENDERING.getPool(s).addCurve(c, mode | (s.horiz ? 0 : 2));
 			}
 		}
 
@@ -61,17 +104,16 @@ public class Sprite implements Comparable<Sprite> {
 
 			public P getPos();
 
+			public int getTime();
+
 		}
 
-		public final Sprite s;
+		private final Sprite s;
+		private final double w, h;
+		private final int mode;
+		private final Dire dire;
 
-		private double w, h;
-
-		private int mode;
-
-		private Dire dire;
-
-		public DotESprite(Dire d, double sw, double sh, Sprite img, int m) {
+		private DotESprite(Dire d, double sw, double sh, Sprite img, int m) {
 			s = img;
 			dire = d;
 			w = sw;
@@ -82,7 +124,10 @@ public class Sprite implements Comparable<Sprite> {
 		public void draw() {
 			double r = Engine.BOUND.y;
 			P pos = dire.getPos();
-			Coord c = new Coord(pos.x, pos.y, w, h, dire.getDire() + s.rot);
+			double d = dire.getDire();
+			if (s.roting)
+				d += ROTRATE * dire.getTime();
+			Coord c = new Coord(pos.x, pos.y, w, h, d + (s.horiz ? 0 : Math.PI / 2));
 			c.times(1 / r);
 			Engine.RENDERING.getPool(s).addDot(c, mode);
 		}
@@ -90,6 +135,54 @@ public class Sprite implements Comparable<Sprite> {
 		public double radius() {
 			return new P(w, h).times(s.piv).toBound(w, h);
 		}
+
+	}
+
+	public static class DSP implements SParam {
+
+		private final Sprite s;
+		private final int mode;
+		private final double r;
+
+		public DSP(int id, int t, double m) {
+			this(get(id), t, m);
+		}
+
+		private DSP(Sprite spr, int t, double m) {
+			s = spr;
+			mode = t;
+			r = s.size * m * MAGNIFY;
+		}
+
+		@Override
+		public DotESprite getEntity(DotESprite.Dire d) {
+			if (s == null || s.id / 100 == 114)
+				return null;
+			return new DotESprite(d, r * 2, r * 2, s, mode);
+		}
+
+		@Override
+		public CurveESprite getEntity(Shape.LineSegs d) {
+			return new CurveESprite(d, r, s, mode & 1, mode >> 1);
+		}
+
+		@Override
+		public double getRadius() {
+			return r;
+		}
+
+		@Override
+		public PosShape getShape(P pos) {
+			return new Shape.Circle(pos, r);
+		}
+
+	}
+
+	public static interface DSParam {
+
+		public DotESprite getEntity(DotESprite.Dire d);
+
+		public Shape.PosShape getShape(P pos);
 
 	}
 
@@ -176,57 +269,7 @@ public class Sprite implements Comparable<Sprite> {
 
 	}
 
-	public static interface DSParam {
-
-		public DotESprite getEntity(DotESprite.Dire d);
-
-		public Shape.PosShape getShape(P pos);
-
-	}
-
-	public static interface CSParam {
-
-		public CurveESprite getEntity(Shape.LineSegs d);
-
-		public double getRadius();
-
-	}
-
-	public static class SParam implements DSParam, CSParam {
-
-		private final Sprite s;
-		private final int mode;
-		private final double r;
-
-		public SParam(int id, int t, double m) {
-			this(get(id), t, m);
-		}
-
-		private SParam(Sprite spr, int t, double m) {
-			s = spr;
-			mode = t;
-			r = s.size * m * MAGNIFY;
-		}
-
-		public DotESprite getEntity(DotESprite.Dire d) {
-			if (s == null || s.id / 100 == 114)
-				return null;
-			return new DotESprite(d, r * 2, r * 2, s, mode);
-		}
-
-		public CurveESprite getEntity(Shape.LineSegs d) {
-			return new CurveESprite(d, r, s, mode & 1, mode >> 1);
-		}
-
-		@Override
-		public PosShape getShape(P pos) {
-			return new Shape.Circle(pos, r);
-		}
-
-		@Override
-		public double getRadius() {
-			return r;
-		}
+	public static interface SParam extends DSParam, CSParam {
 
 	}
 
@@ -300,7 +343,10 @@ public class Sprite implements Comparable<Sprite> {
 
 	public static final double MAGNIFY = 1.5;
 
-	private static final double END = 6.0 / 256, EDR = 6.0 / 16;
+	private static final double LONG_END = 6.0 / 256, LONG_EDR = 6.0 / 16;
+	private static final double ROTRATE = Math.PI / 3000;
+
+	private static final int[] ROT = { 0, 110, 111, 201 };
 
 	private static final double[][] SIZE = { { 2 },
 			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 0, 2.4, 2.4, 4, 2.4 }, { 0, 7, 8.5, 7, 6, 7, 0, 10 },
@@ -356,15 +402,23 @@ public class Sprite implements Comparable<Sprite> {
 	private final int id;
 
 	public final P piv;
-	public final double rot, rad, size;
+	public final double rad, size;
+
+	private final boolean horiz, roting;
 
 	private Sprite(GLImage gl, int lv) {
 		img = gl;
 		id = lv;
 		piv = new P(0.5, 0.5);
-		rot = id / 100 == 114 ? 0 : Math.PI / 2;
+		horiz = id / 100 == 114;
 		size = SIZE[lv / 10000][lv / 100 % 100];
 		rad = size * 2 / gl.getHeight();
+
+		boolean b = false;
+		for (int i : ROT)
+			if (id / 100 == i)
+				b = true;
+		roting = b;
 	}
 
 	@Override

@@ -25,7 +25,7 @@ public class Player extends Entity implements Sprite.DotESprite.Dire, Shape {
 		pos = Engine.START.copy();
 		ext = pos.copy();
 		shape = new Shape.Circle(pos.copy(), 2);
-		img = new Sprite.SParam(0, 0, 1).getEntity(this);
+		img = new Sprite.DSP(0, 0, 1).getEntity(this);
 	}
 
 	public void attacked(Entity e) {
@@ -51,7 +51,7 @@ public class Player extends Entity implements Sprite.DotESprite.Dire, Shape {
 
 	@Override
 	public double getDire() {
-		return time * Math.PI / 6000;
+		return 0;
 	}
 
 	@Override
@@ -62,6 +62,11 @@ public class Player extends Entity implements Sprite.DotESprite.Dire, Shape {
 	@Override
 	public Shape getShape() {
 		return this;
+	}
+
+	@Override
+	public int getTime() {
+		return time;
 	}
 
 	@Override

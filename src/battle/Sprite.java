@@ -140,25 +140,6 @@ public class Sprite implements Comparable<Sprite> {
 
 	}
 
-	private static class Radius implements ESprite {
-
-		private final double r;
-
-		private Radius(double ra) {
-			r = ra;
-		}
-
-		@Override
-		public void draw() {
-		}
-
-		@Override
-		public double radius() {
-			return r;
-		}
-
-	}
-
 	private static class CSP implements SParam {
 
 		private final Sprite s;
@@ -236,19 +217,22 @@ public class Sprite implements Comparable<Sprite> {
 
 	private static class DotCurveSprite implements ESprite {
 
-		private final Sprite s, sp1;
-		private final double r, max;
+		private final Sprite s;
+		private final double r, max, maxc;
 		private final int mode, rev;
+		private final boolean conn;
 		private final Shape.LineSegs dire;
 
-		private DotCurveSprite(Shape.LineSegs d, double ra, Sprite img, Sprite ball, int m, int rv, double ma) {
+		private DotCurveSprite(Shape.LineSegs d, double ra, Sprite img, int m, int rv, double ma, double mc,
+				boolean con) {
 			s = img;
-			sp1 = ball;
 			dire = d;
 			r = ra;
 			mode = m;
 			rev = rv;
 			max = ma;
+			maxc = mc;
+			conn = con;
 		}
 
 		@Override
@@ -258,8 +242,6 @@ public class Sprite implements Comparable<Sprite> {
 				if (ps.length == 1)
 					continue;
 				for (int i = 0; i < ps.length; i++) {
-					enddraw(ps[0]);
-					enddraw(ps[ps.length - 1]);
 					if (list.size() < 2) {
 						list.add(ps[i]);
 						continue;
@@ -275,15 +257,14 @@ public class Sprite implements Comparable<Sprite> {
 							ax = max;
 						double a1 = p0.atan2(p1) - p1.atan2(p2);
 						if (Math.cos(ax) > Math.cos(a1)) {
-							if (i < ps.length - 1) {
+							if (conn && i < ps.length - 1) {
 								P p3 = ps[i + 1];
-								P dp = p0.sf(p1);
-								double t = p0.sf(p3).crossP(dp) / dp.crossP(p3.sf(p2));
-								P pv = p3.middle(p2, t);
-								list.add(pv);
+								P pv = connect(p0, p1, p2, p3);
+								if (pv != null)
+									list.add(pv);
 								subdraw(list);
-								enddraw(pv);
-								list.add(pv);
+								if (pv != null)
+									list.add(pv);
 							} else
 								subdraw(list);
 						}
@@ -292,6 +273,20 @@ public class Sprite implements Comparable<Sprite> {
 				}
 				subdraw(list);
 			}
+		}
+
+		@Override
+		public double radius() {
+			return r;
+		}
+
+		private P connect(P p0, P p1, P p2, P p3) {
+			P dp = p0.sf(p1);
+			double den = dp.crossP(p3.sf(p2));
+			if (den == 0 || Double.isNaN(den))
+				return null;
+			double t = p0.sf(p3).crossP(dp) / den;
+			return p3.middle(p2, t);
 		}
 
 		private void subdraw(List<P> list) {
@@ -304,27 +299,13 @@ public class Sprite implements Comparable<Sprite> {
 					if (i != 0)
 						l += np[i - 1].dis(np[i]);
 				}
-				if (1 - np[0].dis(np[np.length - 1]) / l < MAX_CURVE)
+				if (1 - np[0].dis(np[np.length - 1]) / l < maxc)
 					np = new P[] { np[0], np[np.length - 1] };
-				Curve c = getCurve(s.id, rev, r, np, sp1 == null ? 0 : 1);
+				Curve c = getCurve(s.id, rev, r, np, 0);
 				c.times(1 / h);
 				Engine.RENDERING.getPool(s).addCurve(c, mode);
 			}
 			list.clear();
-		}
-
-		private void enddraw(P pos) {
-			if (sp1 == null)
-				return;
-			double h = Engine.BOUND.y;
-			Coord c = new Coord(pos.x, pos.y, r * 2, r * 2, 0);
-			c.times(1 / h);
-			Engine.RENDERING.getPool(sp1).addDot(c, mode);
-		}
-
-		@Override
-		public double radius() {
-			return r;
 		}
 
 	}
@@ -403,31 +384,50 @@ public class Sprite implements Comparable<Sprite> {
 
 	}
 
-	private static class RCSP extends CSP {
+	private static class Radius implements ESprite {
 
-		private final double ma;
+		private final double r;
 
-		private final Sprite ball;
-
-		private RCSP(int id, int id1, int t, double m, double max) {
-			this(get(id), get(id1), t, m, max);
+		private Radius(double ra) {
+			r = ra;
 		}
 
-		private RCSP(Sprite spr, Sprite b, int t, double m, double max) {
+		@Override
+		public void draw() {
+		}
+
+		@Override
+		public double radius() {
+			return r;
+		}
+
+	}
+
+	private static class RCSP extends CSP {
+
+		private final double ma, mc;
+		private final boolean conn;
+
+		private RCSP(int id, int t, double m, double max, double maxc, boolean con) {
+			this(get(id), t, m, max, maxc, con);
+		}
+
+		private RCSP(Sprite spr, int t, double m, double max, double maxc, boolean con) {
 			super(spr, t, m);
 			ma = max;
-			ball = b;
+			conn = con;
+			mc = maxc;
 		}
 
 		@Override
 		public ESprite getEntity(Shape.LineSegs d) {
 			int mode = super.mode;
-			return new DotCurveSprite(d, super.r, super.s, ball, mode & 1, mode >> 1, ma);
+			return new DotCurveSprite(d, super.r, super.s, mode & 1, mode >> 1, ma, mc, conn);
 		}
 
 	}
 
-	public static final int P_D = 0, P_C = 1, P_R = 2;
+	public static final int P_D = 0, P_C = 1, P_CR = 2, P_SR = 3;
 
 	public static final int SRC_GREY = 0;
 	public static final int SRC_REDX = 1;
@@ -502,7 +502,7 @@ public class Sprite implements Comparable<Sprite> {
 
 	private static final double LONG_END = 6.0 / 256, LONG_EDR = 6.0 / 16, LONG_SEG = 6.0 / 256;
 	private static final double OVAL_END = 2.0 / 16, OVAL_EDR = 4.0 / 16, OVAL_SEG = 1.0 / 16;
-	private static final double ROTRATE = Math.PI / 3000, MAX_ANGLE = 1e-3, MAX_CURVE = 1e-3;
+	private static final double ROTRATE = Math.PI / 3000, MAX_ANGLE = Math.PI / 4, MIN_ANGLE = 1e-3, MAX_CURVE = 1e-3;
 
 	private static final int[] ROT = { 0, 110, 111, 201 };
 
@@ -510,10 +510,8 @@ public class Sprite implements Comparable<Sprite> {
 			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 0, 2.4, 2.4, 2.4, 2.4 }, { 6, 7, 8.5, 7, 6, 7, 0, 10 },
 			{ 14, 14 } };
 
-	private static Sprite get(int id) {
-		if (id == -1)
-			return null;
-		return TOT[id / 10000][id / 100 % 100][id % 100];
+	public static SParam getCurve(int id, int mode, double mult, double a, double c, boolean b) {
+		return new RCSP(id, mode, mult, a, c, b);
 	}
 
 	public static SParam getSprite(int type, int id, int mode, double mult) {
@@ -521,8 +519,10 @@ public class Sprite implements Comparable<Sprite> {
 			return new DSP(id, mode, mult);
 		if (type == P_C)
 			return new CSP(id, mode, mult);
-		if (type == P_R)
-			return new RCSP(id, -1, mode, mult, MAX_ANGLE);
+		if (type == P_CR)
+			return new RCSP(id, mode, mult, MAX_ANGLE, 0, false);
+		if (type == P_SR)
+			return new RCSP(id, mode, mult, MIN_ANGLE, MAX_CURVE, true);
 		return null;
 	}
 
@@ -564,6 +564,12 @@ public class Sprite implements Comparable<Sprite> {
 
 		NON[0][0] = new Sprite(gli.getSubimage(258, 17, 64, 64), 0);
 
+	}
+
+	private static Sprite get(int id) {
+		if (id == -1)
+			return null;
+		return TOT[id / 10000][id / 100 % 100][id % 100];
 	}
 
 	private static Curve getCurve(int id, int rev, double r, P[] np, int mode) {

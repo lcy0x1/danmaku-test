@@ -10,12 +10,17 @@ public class TestStage_009 extends SpellCard implements Emiter.Ticker {
 
 	private static final Sprite.SParam sp0 = Sprite.getSprite(Sprite.P_D, 10102, 0, 1);
 	private static final Sprite.SParam sp1 = Sprite.getSprite(Sprite.P_D, 10106, 0, 1);
+	private static final Sprite.SParam st0 = Sprite.getSprite(Sprite.P_D, 20101, 0, 1);
+	private static final Sprite.SParam st1 = Sprite.getSprite(Sprite.P_D, 20103, 0, 1);
 	private static final Sprite.SParam[] sps = { sp0, sp1 };
-	private static final int l = 200, m = 5;
+	private static final Sprite.SParam[] sts = { st0, st1 };
+	private static final int l = 200, m = 5, df = 500;
 	private static final double v0 = 0.3;
 	private static final int[] ns = { 15, 25, 30, 35 };
 	private static final int[] fs = { 2000, 2000, 1800, 1500 };
 	private final int n, f0;
+
+	private double a0;
 
 	public TestStage_009(int diff) {
 		super(60000);
@@ -26,7 +31,18 @@ public class TestStage_009 extends SpellCard implements Emiter.Ticker {
 	@Override
 	public void tick(Emiter e, int it, int ex) {
 		if (e.id == 0) {
-			double a0 = rand(p2);
+			a0 = rand(p2);
+			for (int i = 0; i < 5; i++) {
+				P p0 = P.polar(l, a0 + p2 / 5 * i);
+				P p1 = P.polar(l, a0 + p2 / 5 * (i + 2));
+				for (int j = 0; j < n; j++) {
+					P pv = p0.middle(p1, 1.0 / n * j).times(1.0 / df);
+					add(new DotBullet(new Dot(pc.copy(), pv, sts[it % 2]), df + 20).setLv(K_FUNCTIONAL), ex);
+
+				}
+			}
+		}
+		if (e.id == 1) {
 			for (int i = 0; i < 5; i++) {
 				P p0 = P.polar(l, a0 + p2 / 5 * i);
 				P p1 = P.polar(l, a0 + p2 / 5 * (i + 2));
@@ -41,13 +57,15 @@ public class TestStage_009 extends SpellCard implements Emiter.Ticker {
 				}
 			}
 		}
+
 	}
 
 	@Override
 	public void update(int dt) {
-		if (time == 0) {
+		if (time == 0)
 			add(new Emiter(0, f0, this, this));
-		}
+		if (time == df)
+			add(new Emiter(1, f0, this, this));
 		super.update(dt);
 	}
 

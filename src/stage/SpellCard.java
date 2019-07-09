@@ -18,7 +18,8 @@ public class SpellCard implements Control.UpdCtrl {
 	}
 
 	public static void add(Updatable e, int ex) {
-		e.update(ex);
+		if (ex > 0)
+			e.update(ex);
 		Engine.RUNNING.add(e);
 	}
 

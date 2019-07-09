@@ -179,6 +179,22 @@ public strictfp class P {
 		return false;
 	}
 
+	public P flip(P p, P o) {
+		plus(p, -1);
+		x %= o.x * 2;
+		y %= o.y * 2;
+		if (x < 0)
+			x = -x;
+		if (y < 0)
+			y = -y;
+		if (x > o.x)
+			x = o.x * 2 - x;
+		if (y > o.y)
+			y = o.y * 2 - y;
+		plus(p);
+		return this;
+	}
+
 	public boolean limit(P b2) {
 		return limit(new P(0, 0), b2);
 	}

@@ -156,7 +156,7 @@ public abstract class Curve extends Shape.LineSegs implements Control.UpdCtrl {
 
 	}
 
-	public final Sprite.CurveESprite sprite;
+	public final Sprite.ESprite sprite;
 
 	public Curve(Sprite.SParam cesp) {
 		super(cesp.getRadius());

@@ -7,11 +7,11 @@ import battle.Sprite;
 import battle.bullet.Mover.*;
 import util.P;
 
-public class Dot implements Sprite.DotESprite.Dire, Control.UpdCtrl {
+public class Dot implements Sprite.Dire, Control.UpdCtrl {
 
 	public final P pos, tmp;
 
-	public Sprite.DotESprite sprite;
+	public Sprite.DESprite sprite;
 	public Shape.PosShape shape;
 	private double dire;
 	private int time;

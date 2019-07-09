@@ -33,6 +33,9 @@ public class TestStage_001 extends SpellCard implements Emiter.Ticker {
 
 	}
 
+	private static final Sprite.SParam d0 = Sprite.getSprite(Sprite.P_D, 10702, 0, 1);
+	private static final Sprite.SParam d1 = Sprite.getSprite(Sprite.P_D, 30000, 1, 1);
+
 	private static final int f = 20, l = 200, m = 80;
 	private static final double v0 = 0.1, w0 = p2 / 4690, w1 = p2 / 19752;
 
@@ -47,7 +50,6 @@ public class TestStage_001 extends SpellCard implements Emiter.Ticker {
 
 	@Override
 	public void tick(Emiter e, int it, int ex) {
-		Sprite.DSP d0 = new Sprite.DSP(10702, 0, 1);
 		for (int i = 0; i < n; i++) {
 			if ((it + 2 * m * i / n) / m % 2 == 0)
 				continue;
@@ -64,9 +66,8 @@ public class TestStage_001 extends SpellCard implements Emiter.Ticker {
 	@Override
 	public void update(int dt) {
 		if (time == 0) {
-			Sprite.DSP d = new Sprite.DSP(30000, 1, 1);
 			for (int i = 0; i < n; i++)
-				add(new DotBullet(new Dot(d, new Orbit(i, n))).setLv(K_FUNCTIONAL));
+				add(new DotBullet(new Dot(d1, new Orbit(i, n))).setLv(K_FUNCTIONAL));
 			add(new Emiter(0, f, this, this));
 		}
 		super.update(dt);

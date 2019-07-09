@@ -8,7 +8,7 @@ import battle.Sprite;
 import util.Data;
 import util.P;
 
-public class Player extends Entity implements Sprite.DotESprite.Dire, Shape {
+public class Player extends Entity implements Sprite.Dire, Shape {
 
 	private static final int DEADTIME = 3000;
 
@@ -16,7 +16,7 @@ public class Player extends Entity implements Sprite.DotESprite.Dire, Shape {
 	public int deadCount;
 
 	private final Shape.Circle shape;
-	private final Sprite.DotESprite img;
+	private final Sprite.DESprite img;
 
 	private int time, deadTime;
 
@@ -25,7 +25,7 @@ public class Player extends Entity implements Sprite.DotESprite.Dire, Shape {
 		pos = Engine.START.copy();
 		ext = pos.copy();
 		shape = new Shape.Circle(pos.copy(), 2);
-		img = new Sprite.DSP(0, 0, 1).getEntity(this);
+		img = Sprite.getSprite(Sprite.P_D, 0, 0, 1).getEntity(this);
 	}
 
 	public void attacked(Entity e) {

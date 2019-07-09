@@ -31,6 +31,11 @@ public class TestStage_000 extends SpellCard {
 
 	}
 
+	private static final Sprite.SParam s0 = Sprite.getSprite(Sprite.P_D, 20301, 1, 1);
+	private static final Sprite.SParam s1 = Sprite.getSprite(Sprite.P_D, 20303, 1, 1);
+	private static final Sprite.SParam s2 = Sprite.getSprite(Sprite.P_D, 20305, 1, 1);
+	private static final Sprite.SParam s3 = Sprite.getSprite(Sprite.P_D, 20306, 1, 1);
+
 	private static final int[] ds = { 75000, 80000, 85000, 90000 };
 	private static final int[] ns = { 6, 7, 8, 9 };
 
@@ -50,10 +55,6 @@ public class TestStage_000 extends SpellCard {
 	public void update(int dt) {
 		if (time == 0) {
 			double w = p2 / 2 / d;
-			Sprite.DSP s0 = new Sprite.DSP(20301, 1, 1);
-			Sprite.DSP s1 = new Sprite.DSP(20303, 1, 1);
-			Sprite.DSP s2 = new Sprite.DSP(20305, 1, 1);
-			Sprite.DSP s3 = new Sprite.DSP(20306, 1, 1);
 			for (int i = -n; i <= n; i++)
 				for (int j = -n; j <= n; j++) {
 					Dot d0 = new Dot(s0, new TrigMover(w * i, w * j, 0, p2 / 4));

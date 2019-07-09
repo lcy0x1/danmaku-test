@@ -29,8 +29,8 @@ public class TestStage_002 extends SpellCard implements Emiter.Ticker {
 			double a = pos.atan2(pl);
 			for (int i = 0; i < n; i++)
 				for (int j = 2; j <= 4; j++) {
-					Sprite.DSP sp = n == 2 ? spr : sp0;
-					Dot d = new Dot(pos.copy(), P.polar(0.1 * j, a + (i - (n - 1) / 2) * da), sp);
+					P pv = P.polar(0.1 * j, a + (i - (n - 1) / 2) * da);
+					Dot d = new Dot(pos.copy(), pv, n == 2 ? spr : sp0);
 					add(new DotBullet(d), ex);
 				}
 		}
@@ -41,8 +41,11 @@ public class TestStage_002 extends SpellCard implements Emiter.Ticker {
 	private static final double[] sls = { 0.2, 0.22, 0.25, 0.29 };
 	private static final int[] d0s = { 8, 10, 12, 14 };
 	private static final int[] d1s = { 24, 32, 40, 48 };
-	private static final Sprite.DSP spr = new Sprite.DSP(10102, 0, 1);
-	private static final Sprite.DSP sp0 = new Sprite.DSP(10106, 0, 1);
+	private static final Sprite.SParam spr = Sprite.getSprite(Sprite.P_D, 10102, 0, 1);
+	private static final Sprite.SParam sp0 = Sprite.getSprite(Sprite.P_D, 10106, 0, 1);
+
+	private static final Sprite.SParam sp2 = Sprite.getSprite(Sprite.P_D, 30000, 1, 1);
+	private static final Sprite.SParam sp3 = Sprite.getSprite(Sprite.P_D, 30001, 1, 1);
 	private int dire = 1;
 
 	private final int diff;
@@ -76,12 +79,11 @@ public class TestStage_002 extends SpellCard implements Emiter.Ticker {
 	}
 
 	private void adds(int it, double a0, int x, int ex) {
-		Sprite.DSP sp = new Sprite.DSP(x == 2 ? 30000 : 30001, 0, 1);
 		double a1 = a0 + p2 / 4 * dire;
 		P pv = P.polar(1, a1);
 		P p = P.polar(400, a0).plus(pc).plus(pv, -l0);
 		P pl = Engine.RUNNING.pl.pos.copy();
-		Dot d = new Dot(p, pv, sp);
+		Dot d = new Dot(p, pv, x == 2 ? sp2 : sp3);
 		add(new DotBullet(d, l0 * 3).setLv(K_FUNCTIONAL), ex);
 		add(new Emiter(2, f2, l0 * 2, new SubEmit(p, pl, x, diff)), ex);
 	}

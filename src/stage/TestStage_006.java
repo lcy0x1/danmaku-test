@@ -65,11 +65,11 @@ public class TestStage_006 extends SpellCard implements Emiter.Ticker {
 
 	}
 
-	private static final Sprite.CSP spr = new Sprite.CSP(11410, 3, 1);
-	private static final Sprite.CSP sp0 = new Sprite.CSP(11402, 1, 2);
-	private static final Sprite.CSP sp1 = new Sprite.CSP(11406, 1, 2);
+	private static final Sprite.SParam spr = Sprite.getSprite(Sprite.P_C, 11410, 3, 1);
+	private static final Sprite.SParam sp0 = Sprite.getSprite(Sprite.P_C, 11402, 1, 2);
+	private static final Sprite.SParam sp1 = Sprite.getSprite(Sprite.P_C, 11406, 1, 2);
 
-	private static final Sprite.CSP[] sps = { sp0, sp1 };
+	private static final Sprite.SParam[] sps = { sp0, sp1 };
 
 	private static final int dt = 60, fac = dt, dlt = dt;
 	private static final int f = 25 * fac, mx = 4, x = 3;

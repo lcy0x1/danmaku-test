@@ -19,170 +19,41 @@ import util.P;
 
 public class Sprite implements Comparable<Sprite> {
 
-	public static class CSP implements SParam {
-
-		private final Sprite s;
-		private final int mode;
-		private final double r;
-
-		public CSP(int id, int t, double m) {
-			this(get(id), t, m);
-		}
-
-		private CSP(Sprite spr, int t, double m) {
-			s = spr;
-			mode = t;
-			r = s.size * m * MAGNIFY;
-		}
-
-		@Override
-		public DotESprite getEntity(DotESprite.Dire d) {
-			return null;
-		}
-
-		@Override
-		public CurveESprite getEntity(Shape.LineSegs d) {
-			return new CurveESprite(d, r, s, mode & 1, mode >> 1);
-		}
-
-		@Override
-		public double getRadius() {
-			return r;
-		}
-
-		@Override
-		public PosShape getShape(P pos) {
-			return new Shape.Circle(pos, r);
-		}
-
-	}
-
 	public static interface CSParam {
 
-		public CurveESprite getEntity(Shape.LineSegs d);
+		public ESprite getEntity(Shape.LineSegs d);
 
 		public double getRadius();
 
 	}
 
-	public static class CurveESprite {
+	public static interface DESprite extends ESprite {
 
-		private final Sprite s;
-		private double r;
-		private int mode, rev;
-		private Shape.LineSegs dire;
-
-		private CurveESprite(Shape.LineSegs d, double ra, Sprite img, int m, int rv) {
-			s = img;
-			dire = d;
-			r = ra;
-			mode = m;
-			rev = rv;
-		}
-
-		public void draw() {
-			double h = Engine.BOUND.y;
-			for (P[] ps : dire.getPos()) {
-				if (ps.length == 1)
-					continue;
-				P[] np = new P[ps.length];
-				for (int i = 0; i < ps.length; i++)
-					np[i] = ps[i].copy();
-				Curve c = new Curve(LONG_END, LONG_EDR, r, np, rev);
-				c.times(1 / h);
-				Engine.RENDERING.getPool(s).addCurve(c, mode | (s.horiz ? 0 : 2));
-			}
-		}
+		public double radius();
 
 	}
 
-	public static class DotESprite {
+	public static interface Dire {
 
-		public static interface Dire {
+		public double getDire();
 
-			public double getDire();
+		public P getPos();
 
-			public P getPos();
-
-			public int getTime();
-
-		}
-
-		private final Sprite s;
-		private final double w, h;
-		private final int mode;
-		private final Dire dire;
-
-		private DotESprite(Dire d, double sw, double sh, Sprite img, int m) {
-			s = img;
-			dire = d;
-			w = sw;
-			h = sh;
-			mode = m;
-		}
-
-		public void draw() {
-			double r = Engine.BOUND.y;
-			P pos = dire.getPos();
-			double d = dire.getDire();
-			if (s.roting)
-				d += ROTRATE * dire.getTime();
-			Coord c = new Coord(pos.x, pos.y, w, h, d + (s.horiz ? 0 : Math.PI / 2));
-			c.times(1 / r);
-			Engine.RENDERING.getPool(s).addDot(c, mode);
-		}
-
-		public double radius() {
-			return new P(w, h).times(s.piv).toBound(w, h);
-		}
-
-	}
-
-	public static class DSP implements SParam {
-
-		private final Sprite s;
-		private final int mode;
-		private final double r;
-
-		public DSP(int id, int t, double m) {
-			this(get(id), t, m);
-		}
-
-		private DSP(Sprite spr, int t, double m) {
-			s = spr;
-			mode = t;
-			r = s.size * m * MAGNIFY;
-		}
-
-		@Override
-		public DotESprite getEntity(DotESprite.Dire d) {
-			if (s == null || s.id / 100 == 114)
-				return null;
-			return new DotESprite(d, r * 2, r * 2, s, mode);
-		}
-
-		@Override
-		public CurveESprite getEntity(Shape.LineSegs d) {
-			return new CurveESprite(d, r, s, mode & 1, mode >> 1);
-		}
-
-		@Override
-		public double getRadius() {
-			return r;
-		}
-
-		@Override
-		public PosShape getShape(P pos) {
-			return new Shape.Circle(pos, r);
-		}
+		public int getTime();
 
 	}
 
 	public static interface DSParam {
 
-		public DotESprite getEntity(DotESprite.Dire d);
+		public DESprite getEntity(Dire d);
 
 		public Shape.PosShape getShape(P pos);
+
+	}
+
+	public static interface ESprite {
+
+		public void draw();
 
 	}
 
@@ -218,10 +89,10 @@ public class Sprite implements Comparable<Sprite> {
 				int i = 0;
 				for (Curve c : rgc)
 					for (P p : c.ps)
-						cs[i++] = new Coord(p.x, p.y, c.r, c.r, 0);
+						cs[i++] = new Coord(p.x, p.y, c.r * 2, c.r * 2, 0);
 				for (Curve c : ltc)
 					for (P p : c.ps)
-						cs[i++] = new Coord(p.x, p.y, c.r, c.r, 0);
+						cs[i++] = new Coord(p.x, p.y, c.r * 2, c.r * 2, 0);
 				for (Curve c : ltc)
 					n += c.ps.length;
 				for (Coord c : reg)
@@ -273,8 +144,254 @@ public class Sprite implements Comparable<Sprite> {
 
 	}
 
+	private static class CSP implements SParam {
+
+		private final Sprite s;
+		private final int mode;
+		private final double r;
+
+		private CSP(int id, int t, double m) {
+			this(get(id), t, m);
+		}
+
+		private CSP(Sprite spr, int t, double m) {
+			s = spr;
+			mode = t;
+			r = s.size * m * MAGNIFY;
+		}
+
+		@Override
+		public DotESprite getEntity(Dire d) {
+			return null;
+		}
+
+		@Override
+		public ESprite getEntity(Shape.LineSegs d) {
+			return new CurveESprite(d, r, s, mode & 1, mode >> 1);
+		}
+
+		@Override
+		public double getRadius() {
+			return r;
+		}
+
+		@Override
+		public PosShape getShape(P pos) {
+			return new Shape.Circle(pos, r);
+		}
+
+	}
+
+	private static class CurveESprite implements ESprite {
+
+		private final Sprite s;
+		private final double r;
+		private final int mode, rev;
+		private final Shape.LineSegs dire;
+
+		private CurveESprite(Shape.LineSegs d, double ra, Sprite img, int m, int rv) {
+			s = img;
+			dire = d;
+			r = ra;
+			mode = m;
+			rev = rv;
+		}
+
+		@Override
+		public void draw() {
+			double h = Engine.BOUND.y;
+			for (P[] ps : dire.getPos()) {
+				if (ps.length == 1)
+					continue;
+				P[] np = new P[ps.length];
+				for (int i = 0; i < ps.length; i++)
+					np[i] = ps[i].copy();
+				Curve c = getCurve(s.id, rev, r, np, 0);
+				c.times(1 / h);
+				Engine.RENDERING.getPool(s).addCurve(c, mode);
+			}
+		}
+
+	}
+
+	private static class DotCurveSprite implements ESprite {
+
+		private final Sprite s;
+		private final double r, max;
+		private final int mode, rev;
+		private final Shape.LineSegs dire;
+
+		private DotCurveSprite(Shape.LineSegs d, double ra, Sprite img, int m, int rv, double ma) {
+			s = img;
+			dire = d;
+			r = ra;
+			mode = m;
+			rev = rv;
+			max = ma;
+		}
+
+		@Override
+		public void draw() {
+			List<P> list = new ArrayList<>();
+			for (P[] ps : dire.getPos()) {
+				if (ps.length == 1)
+					continue;
+				for (int i = 0; i < ps.length; i++) {
+					if (list.size() < 2) {
+						list.add(ps[i]);
+						continue;
+					} else {
+						double rx = r / s.rad;
+						P p0 = list.get(list.size() - 2);
+						P p1 = list.get(list.size() - 1);
+						P p2 = ps[i];
+						double d0 = p0.dis(p1);
+						double d1 = p1.dis(p2);
+						double ax = Math.PI - Math.atan2(rx, d0) - Math.atan2(rx, d1);
+						if (ax > max)
+							ax = max;
+						double a1 = p0.atan2(p1) - p1.atan2(p2);
+						if (Math.cos(ax) > Math.cos(a1)) {
+							if (i < ps.length - 1) {
+								P p3 = ps[i + 1];
+								P dp = p0.sf(p1);
+								double t = p0.sf(p3).crossP(dp) / dp.crossP(p3.sf(p2));
+								P pv = p3.middle(p2, t);
+								list.add(pv);
+								subdraw(list);
+								list.add(pv);
+							} else
+								subdraw(list);
+						}
+						list.add(p2);
+					}
+				}
+				subdraw(list);
+			}
+		}
+
+		private void subdraw(List<P> list) {
+			if (list.size() > 1) {
+				double h = Engine.BOUND.y;
+				P[] np = new P[list.size()];
+				double l = 0;
+				for (int i = 0; i < np.length; i++) {
+					np[i] = list.get(i).copy();
+					if (i != 0)
+						l += np[i - 1].dis(np[i]);
+				}
+				if (1 - np[0].dis(np[np.length - 1]) / l < MAX_CURVE)
+					np = new P[] { np[0], np[np.length - 1] };
+				Curve c = getCurve(s.id, rev, r, np, 1);
+				c.times(1 / h);
+				Engine.RENDERING.getPool(s).addCurve(c, mode);
+			}
+			list.clear();
+		}
+
+	}
+
+	private static class DotESprite implements DESprite {
+
+		private final Sprite s;
+		private final double w, h;
+		private final int mode;
+		private final Dire dire;
+
+		private DotESprite(Dire d, double sw, double sh, Sprite img, int m) {
+			s = img;
+			dire = d;
+			w = sw;
+			h = sh;
+			mode = m;
+		}
+
+		@Override
+		public void draw() {
+			double r = Engine.BOUND.y;
+			P pos = dire.getPos();
+			double d = dire.getDire();
+			if (s.roting)
+				d += ROTRATE * dire.getTime();
+			Coord c = new Coord(pos.x, pos.y, w, h, d + (s.horiz ? 0 : Math.PI / 2));
+			c.times(1 / r);
+			Engine.RENDERING.getPool(s).addDot(c, mode);
+		}
+
+		@Override
+		public double radius() {
+			return new P(w, h).times(s.piv).toBound(w, h);
+		}
+
+	}
+
+	private static class DSP implements SParam {
+
+		private final Sprite s;
+		private final int mode;
+		private final double r;
+
+		private DSP(int id, int t, double m) {
+			this(get(id), t, m);
+		}
+
+		private DSP(Sprite spr, int t, double m) {
+			s = spr;
+			mode = t;
+			r = s.size * m * MAGNIFY;
+		}
+
+		@Override
+		public DESprite getEntity(Dire d) {
+			if (s == null || s.id / 100 == 114)
+				return null;
+			return new DotESprite(d, r * 2, r * 2, s, mode);
+		}
+
+		@Override
+		public ESprite getEntity(Shape.LineSegs d) {
+			return new CurveESprite(d, r, s, mode & 1, mode >> 1);
+		}
+
+		@Override
+		public double getRadius() {
+			return r;
+		}
+
+		@Override
+		public PosShape getShape(P pos) {
+			return new Shape.Circle(pos, r);
+		}
+
+	}
+
+	private static class RCSP extends CSP {
+
+		private final double ma;
+
+		private RCSP(int id, int t, double m, double max) {
+			this(get(id), t, m, max);
+		}
+
+		private RCSP(Sprite spr, int t, double m, double max) {
+			super(spr, t, m);
+			ma = max;
+		}
+
+		@Override
+		public ESprite getEntity(Shape.LineSegs d) {
+			int mode = super.mode;
+			return new DotCurveSprite(d, super.r, super.s, mode & 1, mode >> 1, ma);
+		}
+
+	}
+
+	public static final int P_D = 0, P_C = 1, P_R = 2;
+
 	public static final int SRC_GREY = 0;
+
 	public static final int SRC_REDX = 1;
+
 	public static final int SRC_RED = 2;
 	public static final int SRC_PINKX = 3;
 	public static final int SRC_PINK = 4;
@@ -289,9 +406,9 @@ public class Sprite implements Comparable<Sprite> {
 	public static final int SRC_YELLOW = 13;
 	public static final int SRC_ORANGE = 14;
 	public static final int SRC_WHITE = 15;
-
 	public static final int SRB_SLASER = 0;
 	public static final int SRB_SCALE = 1;
+
 	public static final int SRB_CIRCLE = 2;
 	public static final int SRB_BALL = 3;
 	public static final int SRB_OVAL = 4;
@@ -306,56 +423,66 @@ public class Sprite implements Comparable<Sprite> {
 	public static final int SRB_S_BALL = 13;
 	public static final int SRB_LONG = 14;
 	public static final int SRB_DROP = 15;
-
 	public static final int SOC_GREY = 0;
 	public static final int SOC_RED = 1;
+
 	public static final int SOC_PINK = 2;
 	public static final int SOC_BLUE = 3;
 	public static final int SOC_CYAN = 4;
 	public static final int SOC_GREEN = 5;
 	public static final int SOC_YELLOW = 6;
 	public static final int SOC_WHITE = 7;
-
 	public static final int SOB_LIGHT = 0;
 	public static final int SOB_STAR = 1;
+
 	public static final int SOB_BALL = 2;
 	public static final int SOB_BUTTERFLY = 3;
 	public static final int SOB_KNIFE = 4;
 	public static final int SOB_OVAL = 5;
 	public static final int SOB_LIGHTX = 6;
 	public static final int SOB_HEART = 7;
-
 	public static final int SLC_RED = 0;
 	public static final int SLC_BLUE = 1;
+
 	public static final int SLC_GREEN = 2;
 	public static final int SLC_YELLOW = 3;
-
 	public static final int SLB_BALL = 0;
 	public static final int SLB_ROSE = 1;
 
 	public static final Sprite[][] NON = new Sprite[1][1];
 	public static final Sprite[][] REG = new Sprite[16][16];
+
 	public static final Sprite[][] OCT = new Sprite[8][8];
 	public static final Sprite[][] LRG = new Sprite[2][4];
 	public static final Sprite[][] OTH = new Sprite[4][];
-
 	public static final Sprite[][][] TOT = { NON, REG, OCT, LRG, OTH };
-
 	public static final double MAGNIFY = 1.5;
 
-	private static final double LONG_END = 6.0 / 256, LONG_EDR = 6.0 / 16;
-	private static final double ROTRATE = Math.PI / 3000;
+	private static final double LONG_END = 6.0 / 256, LONG_EDR = 6.0 / 16, LONG_SEG = 6.0 / 256;
+
+	private static final double OVAL_END = 2.0 / 16, OVAL_EDR = 4.0 / 16, OVAL_SEG = 1.0 / 16;
+	private static final double ROTRATE = Math.PI / 3000, MAX_ANGLE = 1e-3, MAX_CURVE = 1e-3;
 
 	private static final int[] ROT = { 0, 110, 111, 201 };
 
 	private static final double[][] SIZE = { { 2 },
-			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 0, 2.4, 2.4, 4, 2.4 }, { 0, 7, 8.5, 7, 6, 7, 0, 10 },
+			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 0, 2.4, 2.4, 2.4, 2.4 }, { 0, 7, 8.5, 7, 6, 7, 0, 10 },
 			{ 14, 14 } };
 
 	public static final double DEFRAD = 10;
 
 	public static Sprite get(int id) {
 		return TOT[id / 10000][id / 100 % 100][id % 100];
+	}
+
+	public static SParam getSprite(int type, int id, int mode, double mult) {
+		if (type == P_D)
+			return new DSP(id, mode, mult);
+		if (type == P_C)
+			return new CSP(id, mode, mult);
+		if (type == P_R)
+			return new RCSP(id, mode, mult, MAX_ANGLE);
+		return null;
 	}
 
 	public static void read() {
@@ -396,6 +523,26 @@ public class Sprite implements Comparable<Sprite> {
 
 		NON[0][0] = new Sprite(gli.getSubimage(258, 17, 64, 64), 0);
 
+	}
+
+	private static Curve getCurve(int id, int rev, double r, P[] np, int mode) {
+		double end, edr, seg;
+		if (id / 100 == 114) {
+			end = LONG_END;
+			edr = LONG_EDR;
+			seg = LONG_SEG;
+		} else if (id / 100 == 104) {
+			end = OVAL_END;
+			edr = OVAL_EDR;
+			seg = OVAL_SEG;
+			rev += 2;
+		} else
+			return null;
+		if (mode == 1) {
+			edr = 0;
+			end = seg;
+		}
+		return new Curve(end, edr, r, np, rev);
 	}
 
 	public final GLImage img;

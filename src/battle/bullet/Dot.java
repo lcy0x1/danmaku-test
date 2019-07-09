@@ -2,16 +2,18 @@ package battle.bullet;
 
 import battle.Control;
 import battle.Shape;
-import battle.Sprite.DSParam;
 import battle.Sprite;
-import battle.bullet.Mover.*;
+import battle.Sprite.DSParam;
+import battle.bullet.Mover.CurveMover;
+import battle.bullet.Mover.LineMover;
+import battle.bullet.Mover.TimeMover;
 import util.P;
 
 public class Dot implements Sprite.Dire, Control.UpdCtrl {
 
 	public final P pos, tmp;
 
-	public Sprite.DESprite sprite;
+	public Sprite.ESprite sprite;
 	public Shape.PosShape shape;
 	private double dire;
 	private int time;

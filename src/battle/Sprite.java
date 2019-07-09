@@ -12,8 +12,8 @@ import battle.Shape.PosShape;
 import jogl.util.FakeGraphics;
 import jogl.util.FakeGraphics.Coord;
 import jogl.util.FakeGraphics.Curve;
-import main.MainTH;
 import jogl.util.GLImage;
+import main.MainTH;
 import util.Data;
 import util.P;
 
@@ -24,12 +24,6 @@ public class Sprite implements Comparable<Sprite> {
 		public ESprite getEntity(Shape.LineSegs d);
 
 		public double getRadius();
-
-	}
-
-	public static interface DESprite extends ESprite {
-
-		public double radius();
 
 	}
 
@@ -45,7 +39,7 @@ public class Sprite implements Comparable<Sprite> {
 
 	public static interface DSParam {
 
-		public DESprite getEntity(Dire d);
+		public ESprite getEntity(Dire d);
 
 		public Shape.PosShape getShape(P pos);
 
@@ -54,6 +48,8 @@ public class Sprite implements Comparable<Sprite> {
 	public static interface ESprite {
 
 		public void draw();
+
+		public double radius();
 
 	}
 
@@ -144,6 +140,25 @@ public class Sprite implements Comparable<Sprite> {
 
 	}
 
+	private static class Radius implements ESprite {
+
+		private final double r;
+
+		private Radius(double ra) {
+			r = ra;
+		}
+
+		@Override
+		public void draw() {
+		}
+
+		@Override
+		public double radius() {
+			return r;
+		}
+
+	}
+
 	private static class CSP implements SParam {
 
 		private final Sprite s;
@@ -161,8 +176,8 @@ public class Sprite implements Comparable<Sprite> {
 		}
 
 		@Override
-		public DotESprite getEntity(Dire d) {
-			return null;
+		public ESprite getEntity(Dire d) {
+			return new Radius(DEFRAD);
 		}
 
 		@Override
@@ -212,17 +227,23 @@ public class Sprite implements Comparable<Sprite> {
 			}
 		}
 
+		@Override
+		public double radius() {
+			return r;
+		}
+
 	}
 
 	private static class DotCurveSprite implements ESprite {
 
-		private final Sprite s;
+		private final Sprite s, sp1;
 		private final double r, max;
 		private final int mode, rev;
 		private final Shape.LineSegs dire;
 
-		private DotCurveSprite(Shape.LineSegs d, double ra, Sprite img, int m, int rv, double ma) {
+		private DotCurveSprite(Shape.LineSegs d, double ra, Sprite img, Sprite ball, int m, int rv, double ma) {
 			s = img;
+			sp1 = ball;
 			dire = d;
 			r = ra;
 			mode = m;
@@ -237,6 +258,8 @@ public class Sprite implements Comparable<Sprite> {
 				if (ps.length == 1)
 					continue;
 				for (int i = 0; i < ps.length; i++) {
+					enddraw(ps[0]);
+					enddraw(ps[ps.length - 1]);
 					if (list.size() < 2) {
 						list.add(ps[i]);
 						continue;
@@ -259,6 +282,7 @@ public class Sprite implements Comparable<Sprite> {
 								P pv = p3.middle(p2, t);
 								list.add(pv);
 								subdraw(list);
+								enddraw(pv);
 								list.add(pv);
 							} else
 								subdraw(list);
@@ -282,16 +306,30 @@ public class Sprite implements Comparable<Sprite> {
 				}
 				if (1 - np[0].dis(np[np.length - 1]) / l < MAX_CURVE)
 					np = new P[] { np[0], np[np.length - 1] };
-				Curve c = getCurve(s.id, rev, r, np, 1);
+				Curve c = getCurve(s.id, rev, r, np, sp1 == null ? 0 : 1);
 				c.times(1 / h);
 				Engine.RENDERING.getPool(s).addCurve(c, mode);
 			}
 			list.clear();
 		}
 
+		private void enddraw(P pos) {
+			if (sp1 == null)
+				return;
+			double h = Engine.BOUND.y;
+			Coord c = new Coord(pos.x, pos.y, r * 2, r * 2, 0);
+			c.times(1 / h);
+			Engine.RENDERING.getPool(sp1).addDot(c, mode);
+		}
+
+		@Override
+		public double radius() {
+			return r;
+		}
+
 	}
 
-	private static class DotESprite implements DESprite {
+	private static class DotESprite implements ESprite {
 
 		private final Sprite s;
 		private final double w, h;
@@ -342,7 +380,7 @@ public class Sprite implements Comparable<Sprite> {
 		}
 
 		@Override
-		public DESprite getEntity(Dire d) {
+		public ESprite getEntity(Dire d) {
 			if (s == null || s.id / 100 == 114)
 				return null;
 			return new DotESprite(d, r * 2, r * 2, s, mode);
@@ -369,19 +407,22 @@ public class Sprite implements Comparable<Sprite> {
 
 		private final double ma;
 
-		private RCSP(int id, int t, double m, double max) {
-			this(get(id), t, m, max);
+		private final Sprite ball;
+
+		private RCSP(int id, int id1, int t, double m, double max) {
+			this(get(id), get(id1), t, m, max);
 		}
 
-		private RCSP(Sprite spr, int t, double m, double max) {
+		private RCSP(Sprite spr, Sprite b, int t, double m, double max) {
 			super(spr, t, m);
 			ma = max;
+			ball = b;
 		}
 
 		@Override
 		public ESprite getEntity(Shape.LineSegs d) {
 			int mode = super.mode;
-			return new DotCurveSprite(d, super.r, super.s, mode & 1, mode >> 1, ma);
+			return new DotCurveSprite(d, super.r, super.s, ball, mode & 1, mode >> 1, ma);
 		}
 
 	}
@@ -389,9 +430,7 @@ public class Sprite implements Comparable<Sprite> {
 	public static final int P_D = 0, P_C = 1, P_R = 2;
 
 	public static final int SRC_GREY = 0;
-
 	public static final int SRC_REDX = 1;
-
 	public static final int SRC_RED = 2;
 	public static final int SRC_PINKX = 3;
 	public static final int SRC_PINK = 4;
@@ -406,9 +445,9 @@ public class Sprite implements Comparable<Sprite> {
 	public static final int SRC_YELLOW = 13;
 	public static final int SRC_ORANGE = 14;
 	public static final int SRC_WHITE = 15;
+
 	public static final int SRB_SLASER = 0;
 	public static final int SRB_SCALE = 1;
-
 	public static final int SRB_CIRCLE = 2;
 	public static final int SRB_BALL = 3;
 	public static final int SRB_OVAL = 4;
@@ -423,31 +462,34 @@ public class Sprite implements Comparable<Sprite> {
 	public static final int SRB_S_BALL = 13;
 	public static final int SRB_LONG = 14;
 	public static final int SRB_DROP = 15;
+
 	public static final int SOC_GREY = 0;
 	public static final int SOC_RED = 1;
-
 	public static final int SOC_PINK = 2;
 	public static final int SOC_BLUE = 3;
 	public static final int SOC_CYAN = 4;
 	public static final int SOC_GREEN = 5;
 	public static final int SOC_YELLOW = 6;
 	public static final int SOC_WHITE = 7;
+
 	public static final int SOB_LIGHT = 0;
 	public static final int SOB_STAR = 1;
-
 	public static final int SOB_BALL = 2;
 	public static final int SOB_BUTTERFLY = 3;
 	public static final int SOB_KNIFE = 4;
 	public static final int SOB_OVAL = 5;
 	public static final int SOB_LIGHTX = 6;
 	public static final int SOB_HEART = 7;
+
 	public static final int SLC_RED = 0;
 	public static final int SLC_BLUE = 1;
-
 	public static final int SLC_GREEN = 2;
 	public static final int SLC_YELLOW = 3;
+
 	public static final int SLB_BALL = 0;
 	public static final int SLB_ROSE = 1;
+
+	public static final double DEFRAD = 20;
 
 	public static final Sprite[][] NON = new Sprite[1][1];
 	public static final Sprite[][] REG = new Sprite[16][16];
@@ -459,19 +501,18 @@ public class Sprite implements Comparable<Sprite> {
 	public static final double MAGNIFY = 1.5;
 
 	private static final double LONG_END = 6.0 / 256, LONG_EDR = 6.0 / 16, LONG_SEG = 6.0 / 256;
-
 	private static final double OVAL_END = 2.0 / 16, OVAL_EDR = 4.0 / 16, OVAL_SEG = 1.0 / 16;
 	private static final double ROTRATE = Math.PI / 3000, MAX_ANGLE = 1e-3, MAX_CURVE = 1e-3;
 
 	private static final int[] ROT = { 0, 110, 111, 201 };
 
 	private static final double[][] SIZE = { { 2 },
-			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 0, 2.4, 2.4, 2.4, 2.4 }, { 0, 7, 8.5, 7, 6, 7, 0, 10 },
+			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 0, 2.4, 2.4, 2.4, 2.4 }, { 6, 7, 8.5, 7, 6, 7, 0, 10 },
 			{ 14, 14 } };
 
-	public static final double DEFRAD = 10;
-
-	public static Sprite get(int id) {
+	private static Sprite get(int id) {
+		if (id == -1)
+			return null;
 		return TOT[id / 10000][id / 100 % 100][id % 100];
 	}
 
@@ -481,7 +522,7 @@ public class Sprite implements Comparable<Sprite> {
 		if (type == P_C)
 			return new CSP(id, mode, mult);
 		if (type == P_R)
-			return new RCSP(id, mode, mult, MAX_ANGLE);
+			return new RCSP(id, -1, mode, mult, MAX_ANGLE);
 		return null;
 	}
 

@@ -2,8 +2,8 @@ package stage;
 
 import battle.Sprite;
 import battle.bullet.Dot;
-import battle.bullet.Mover;
 import battle.bullet.DotBullet;
+import battle.bullet.Mover;
 import battle.entity.Emiter;
 import util.P;
 

@@ -16,7 +16,7 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 	public int deadCount;
 
 	private final Shape.Circle shape;
-	private final Sprite.DESprite img;
+	private final Sprite.ESprite img;
 
 	private int time, deadTime;
 

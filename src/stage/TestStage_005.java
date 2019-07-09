@@ -2,8 +2,8 @@ package stage;
 
 import battle.Sprite;
 import battle.bullet.Curve;
-import battle.bullet.Laser;
 import battle.bullet.Func;
+import battle.bullet.Laser;
 import battle.entity.Emiter;
 import util.P;
 

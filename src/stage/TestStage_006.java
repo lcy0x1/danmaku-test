@@ -1,13 +1,13 @@
 package stage;
 
 import battle.Sprite;
-import battle.bullet.Curve.ListCurve;
 import battle.bullet.Curve;
-import battle.bullet.Laser;
+import battle.bullet.Curve.ListCurve;
 import battle.bullet.Dot;
 import battle.bullet.DotBullet;
 import battle.bullet.Func;
 import battle.bullet.Func.VeloListFunc;
+import battle.bullet.Laser;
 import battle.bullet.Mover.FuncMover;
 import battle.entity.Emiter;
 import util.P;

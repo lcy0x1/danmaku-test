@@ -13,7 +13,7 @@ public class Koishi implements Control.UpdCtrl {
 	private final DotBullet b;
 
 	private final Shape.PosShape s0, s1;
-	private final Sprite.DESprite d0, d1;
+	private final Sprite.ESprite d0, d1;
 
 	private int time;
 

@@ -1,5 +1,8 @@
 package jogl.util;
 
+import static jogl.GLStatic.GLP;
+import static jogl.GLStatic.MIP;
+
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -11,11 +14,9 @@ import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 
-import util.P;
 import jogl.GLStatic;
 import main.Printer;
-
-import static jogl.GLStatic.*;
+import util.P;
 
 public class GLImage {
 

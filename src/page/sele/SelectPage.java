@@ -24,7 +24,7 @@ public class SelectPage extends Page {
 	private final JTG tex = new JTG("draw texture");
 
 	private final JList<String> list = new JList<String>(new String[] { "Okina", "Reimu", "Youmu", "Koishi", "Yukari",
-			"Yuuka", "Yuyuko", "ref", "laser star", "rot star", "gene", "concious" });
+			"Yuuka", "Yuyuko", "ref", "laser star", "rot star", "gene", "concious", "wall", "wave", "fence" });
 	private final JComboBox<String> jcb = new JComboBox<>(new String[] { "easy", "normal", "hard", "lunatic" });
 	private final JScrollPane jspl = new JScrollPane(list);
 

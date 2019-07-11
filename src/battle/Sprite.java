@@ -59,7 +59,9 @@ public class Sprite implements Comparable<Sprite> {
 
 			private final Sprite s;
 			private final List<Coord> reg = new ArrayList<>();
+			private final List<Coord> hlf = new ArrayList<>();
 			private final List<Coord> lit = new ArrayList<>();
+
 			private final List<Curve> rgc = new ArrayList<>();
 			private final List<Curve> ltc = new ArrayList<>();
 
@@ -72,7 +74,7 @@ public class Sprite implements Comparable<Sprite> {
 			}
 
 			private void addDot(Coord c, int mode) {
-				(mode == 0 ? reg : lit).add(c);
+				(mode == 0 ? reg : mode == 1 ? lit : hlf).add(c);
 			}
 
 			private void debug(FakeGraphics fg) {
@@ -81,7 +83,7 @@ public class Sprite implements Comparable<Sprite> {
 					n += c.ps.length;
 				for (Curve c : ltc)
 					n += c.ps.length;
-				Coord[] cs = new Coord[n + reg.size() + lit.size()];
+				Coord[] cs = new Coord[n + reg.size() + lit.size() + hlf.size()];
 				int i = 0;
 				for (Curve c : rgc)
 					for (P p : c.ps)
@@ -95,10 +97,16 @@ public class Sprite implements Comparable<Sprite> {
 					cs[i++] = c;
 				for (Coord c : lit)
 					cs[i++] = c;
+				for (Coord c : hlf)
+					cs[i++] = c;
 				fg.drawCircles(cs);
 			}
 
 			private void flush(FakeGraphics fg) {
+				fg.setComposite(FakeGraphics.BLEND, 64, 0);
+				if (hlf.size() > 0)
+					fg.drawImages(s, hlf.size(), hlf.toArray(new Coord[0]));
+
 				fg.setComposite(FakeGraphics.BLEND, 256, 0);
 				for (Curve c : rgc)
 					fg.drawCurve(s, c);

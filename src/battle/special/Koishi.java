@@ -1,48 +1,68 @@
 package battle.special;
 
-import battle.Control;
 import battle.Shape;
+import battle.Shape.PosShape;
 import battle.Sprite;
+import battle.Sprite.ESprite;
 import battle.bullet.Dot;
-import battle.bullet.DotBullet;
 
-public class Koishi implements Control.UpdCtrl {
+public class Koishi implements Dot.PosSprite {
 
 	private final int f, s;
-	private final Dot d;
-	private final DotBullet b;
 
-	private final Shape.PosShape s0, s1;
-	private final Sprite.ESprite d0, d1;
+	private final Sprite.DSParam ds0, ds1;
+
+	private Shape.PosShape sc, s0, s1;
+	private Sprite.ESprite dc, d0, d1;
 
 	private int time;
 
-	public Koishi(DotBullet db, Sprite.DSParam des, int F, int T, int S) {
-		b = db;
-		d = db.dot;
+	public Koishi(Sprite.DSParam x0, Sprite.DSParam x1, int F, int T, int S) {
+		ds0 = x0;
+		ds1 = x1;
 		f = F;
 		s = S;
 		time = T;
-		s0 = d.shape;
-		d0 = d.sprite;
-		s1 = des.getShape(d.pos);
-		d1 = des.getEntity(d);
+
 	}
 
 	@Override
-	public boolean finished() {
-		return b.isDead();
+	public boolean active() {
+		return true;
+	}
+
+	@Override
+	public PosShape getShape() {
+		return sc;
+	}
+
+	@Override
+	public ESprite getSprite() {
+		return dc;
+	}
+
+	@Override
+	public void load(Dot d) {
+		sc = s0 = ds0.getShape(d.pos);
+		dc = d0 = ds0.getEntity(d);
+		s1 = ds1.getShape(d.pos);
+		d1 = ds1.getEntity(d);
 	}
 
 	@Override
 	public void post() {
 		if (time < s) {
-			d.shape = s0;
-			d.sprite = d0;
+			sc = s0;
+			dc = d0;
 		} else {
-			d.shape = s1;
-			d.sprite = d1;
+			sc = s1;
+			dc = d1;
 		}
+	}
+
+	@Override
+	public double radius() {
+		return Math.max(d0.radius(), d1.radius());
 	}
 
 	@Override

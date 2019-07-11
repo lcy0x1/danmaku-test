@@ -124,32 +124,23 @@ public interface Mover {
 
 		public final int t0, t1;
 
-		public LineMover(double ap, int st, int et, P vp) {
+		public LineMover(P vp) {
+			this(vp, null, 0, 0);
+		}
+
+		public LineMover(P vp, double ap, int st, int et) {
+			this(vp, P.polar(ap, vp.atan2()), st, et);
+		}
+
+		public LineMover(P vp, P ap, int tt) {
+			this(vp, ap, 0, tt);
+		}
+
+		public LineMover(P vp, P ap, int st, int et) {
 			v = vp;
+			a = ap;
 			t0 = st;
 			t1 = et;
-			a = P.polar(ap, vp.atan2());
-		}
-
-		public LineMover(P vp) {
-			v = vp;
-			a = null;
-			t1 = 0;
-			t0 = 0;
-		}
-
-		public LineMover(P ap, int tt, P vp) {
-			v = vp;
-			t1 = tt;
-			a = ap;
-			t0 = 0;
-		}
-
-		public LineMover(P vp, P ap, int ts, int te) {
-			v = vp;
-			a = ap;
-			t0 = ts;
-			t1 = te;
 		}
 
 		@Override

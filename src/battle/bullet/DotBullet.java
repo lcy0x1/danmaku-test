@@ -1,5 +1,6 @@
 package battle.bullet;
 
+import battle.Entity;
 import battle.Shape;
 import battle.entity.Bullet;
 
@@ -17,14 +18,23 @@ public class DotBullet extends Bullet {
 	}
 
 	@Override
+	public void attack(Entity e) {
+		if (!dot.spr.active())
+			return;
+		super.attack(e);
+	}
+
+	@Override
 	public Shape getShape() {
-		return dot.shape;
+		return dot.spr.getShape();
 	}
 
 	@Override
 	protected void draw() {
-		if (dot.sprite != null)
-			dot.sprite.draw();
+		if (dot.finished())
+			return;
+		if (dot.spr.getSprite() != null)
+			dot.spr.getSprite().draw();
 	}
 
 }

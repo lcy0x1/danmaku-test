@@ -53,6 +53,23 @@ public interface Shape {
 
 	}
 
+	public static class NonShape extends PosShape {
+
+		public NonShape(P p) {
+			super(p);
+		}
+
+		@Override
+		public double dis(Shape s) {
+			if (s instanceof Circle) {
+				Circle c = (Circle) s;
+				return c.pos.dis(pos) - c.r;
+			}
+			return s.dis(this);
+		}
+
+	}
+
 	public static class Polygon extends PosShape {
 
 		public final P.Polygon poly;

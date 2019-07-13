@@ -13,13 +13,17 @@ public class Clearer extends Entity {
 
 	private double nr;
 
-	public Clearer(P pos, double r, double v, int t, int lv) {
-		super(0, C_BULLET | C_ENEMY);
+	public Clearer(int atk, P pos, double r, double v, int t, int lv) {
+		super(0, atk);
 		shape = new Shape.Circle(pos, r);
 		addCtrl(new Control.TimeCtrl(t));
 		nr = r;
 		vr = v;
 		hard = lv;
+	}
+
+	public Clearer(P pos, double r, double v, int t, int lv) {
+		this(C_BULLET | C_ENEMY, pos, r, v, t, lv);
 	}
 
 	@Override

@@ -185,6 +185,10 @@ public interface Mover {
 			this(vp, new P(0, 0), Engine.BOUND, 0, tot, 15);
 		}
 
+		public RefMover(P vp, int tot, int mod) {
+			this(vp, new P(0, 0), Engine.BOUND, 0, tot, mod);
+		}
+
 		public RefMover(P vp, P b0, P b1, double ra, int tot, int mod) {
 			v = vp;
 			ul = b0;

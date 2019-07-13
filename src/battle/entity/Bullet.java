@@ -10,7 +10,15 @@ public abstract class Bullet extends Entity {
 	}
 
 	public Bullet(int t) {
-		super(C_BULLET, C_PLAYER);
+		this(C_BULLET, C_PLAYER, t);
+	}
+
+	public Bullet(int base, int atk) {
+		super(base, atk);
+	}
+
+	public Bullet(int base, int atk, int t) {
+		super(base, atk);
 		addCtrl(new Control.TimeCtrl(t));
 	}
 

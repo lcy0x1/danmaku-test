@@ -3,35 +3,11 @@ package stage;
 import battle.Sprite;
 import battle.bullet.Dot;
 import battle.bullet.DotBullet;
-import battle.bullet.Mover;
 import battle.entity.Emiter;
+import stage.bullet.Roting;
 import util.P;
 
 public class TestStage_013 extends SpellCard implements Emiter.Ticker {
-
-	private static class Roting extends Mover.TimeMover {
-
-		private final P v;
-		private final double w, a, l;
-
-		private Roting(P v0, double w0, double a0, double r0) {
-			v = v0;
-			w = w0;
-			a = a0;
-			l = r0;
-		}
-
-		@Override
-		public P disp(int t) {
-			return P.polar(l, w * t + a).plus(v, t).plus(pc);
-		}
-
-		@Override
-		public boolean out(P pos, double r) {
-			return P.polar(v.abs() * time - l, v.atan2()).plus(pc).moveOut(v, o, r);
-		}
-
-	}
 
 	private static final Sprite.SParam d0 = Sprite.getSprite(Sprite.P_D, 10402, 0, 1);
 	private static final Sprite.SParam d1 = Sprite.getSprite(Sprite.P_D, 10406, 0, 1);
@@ -82,7 +58,7 @@ public class TestStage_013 extends SpellCard implements Emiter.Ticker {
 			double a2 = a1 + p2 / n * m * i;
 			P pv = P.polar(v0, a1);
 			for (int j = 0; j < m; j++)
-				add(new DotBullet(new Dot(d, new Roting(pv, s0 * w0, a2 + p2 / m * j, l))), ex);
+				add(new DotBullet(new Dot(d, new Roting(pc, pv, s0 * w0, a2 + p2 / m * j, l))), ex);
 		}
 	}
 

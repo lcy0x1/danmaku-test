@@ -17,6 +17,20 @@ public class DotBullet extends Bullet {
 		addUpdt(dot = d);
 	}
 
+	public DotBullet(int base, int atk, Dot d) {
+		super(base, atk);
+		addCtrl(dot = d);
+	}
+
+	public DotBullet(int atk, int base, Dot d, int t, boolean add) {
+		super(t);
+		dot = d;
+		if (add)
+			addCtrl(d);
+		else
+			addUpdt(d);
+	}
+
 	@Override
 	public void attack(Entity e) {
 		if (!dot.spr.active())

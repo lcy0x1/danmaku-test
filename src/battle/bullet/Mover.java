@@ -204,13 +204,26 @@ public interface Mover {
 		}
 
 		@Override
+		public double getDire() {
+			return v.atan2();
+		}
+
+		@Override
 		public int getType() {
 			return TYPE_LINE;
 		}
 
 		@Override
 		public boolean out(P pos, double r) {
-			return rem == 0 && pos.moveOut(v, Engine.BOUND, r);
+			if (pos.x + r > dr.x && v.x > 0)
+				return !(rem != 0 && (mode & RIGHT) > 0);
+			if (pos.x - r < ul.x && v.x < 0)
+				return !(rem != 0 && (mode & LEFT) > 0);
+			if (pos.y + r > dr.y && v.y > 0)
+				return !(rem != 0 && (mode & DOWN) > 0);
+			if (pos.y - r < ul.y && v.y < 0)
+				return !(rem != 0 && (mode & UP) > 0);
+			return false;
 		}
 
 		@Override
@@ -251,6 +264,11 @@ public interface Mover {
 		public abstract P disp(int t);
 
 		@Override
+		public double getDire() {
+			return disp(time).sf(disp(time + 1)).atan2();
+		}
+
+		@Override
 		public int getType() {
 			return TYPE_TIME;
 		}
@@ -269,6 +287,10 @@ public interface Mover {
 
 	public default Mover copy() {
 		return null;
+	}
+
+	public default double getDire() {
+		return Double.NaN;
 	}
 
 	public int getType();

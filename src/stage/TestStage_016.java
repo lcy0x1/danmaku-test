@@ -19,13 +19,15 @@ public class TestStage_016 extends SpellCard implements Emiter.Ticker {
 
 	private static final int f0 = 8000, f1 = 20, f2 = 160, t2 = 30, t3 = 120;
 	private static final int del3 = 4000, ref = 1, n3 = 20, x = 10;
-	private static final double v0 = 0.4, v1 = 0.05, v2 = 0.8, vc = 1.2, dr = 0.9998;
+	private static final double v1 = 0.05, v2 = 0.8, vc = 1.2, dr = 0.9998;
 	private static final P pos = new P(400, 200);
 
 	private static final int[] ns = { 2, 2, 2, 2 };
 	private static final int[] ts = { 40, 50, 60, 70 };
+	private static final double[] vs = { 0.35, 0.4, 0.45, 0.5 };
 
 	private final int n, t1;
+	private final double v0;
 
 	private double[] tmpd;
 	private Dot[] tmpp;
@@ -34,6 +36,7 @@ public class TestStage_016 extends SpellCard implements Emiter.Ticker {
 		super(60000);
 		n = ns[diff];
 		t1 = ts[diff];
+		v0 = vs[diff];
 	}
 
 	@Override

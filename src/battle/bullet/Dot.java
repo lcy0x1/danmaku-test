@@ -138,7 +138,7 @@ public class Dot implements Sprite.Dire, Control.UpdCtrl {
 
 	public Mover move = null;
 
-	private double dire;
+	private double dire = Double.NaN;
 	private int time;
 
 	public Dot(DSParam img, TimeMover tm) {
@@ -199,6 +199,11 @@ public class Dot implements Sprite.Dire, Control.UpdCtrl {
 		spr.load(this);
 	}
 
+	public Dot delay(int t) {
+		time -= t;
+		return this;
+	}
+
 	@Override
 	public boolean finished() {
 		if (move == null)
@@ -208,7 +213,7 @@ public class Dot implements Sprite.Dire, Control.UpdCtrl {
 
 	@Override
 	public double getDire() {
-		return dire;
+		return Double.isNaN(dire) ? 0 : dire;
 	}
 
 	@Override
@@ -223,7 +228,10 @@ public class Dot implements Sprite.Dire, Control.UpdCtrl {
 
 	@Override
 	public void post() {
-		if (pos.dis(tmp) > 0)
+		double d = move == null ? Double.NaN : move.getDire();
+		if (!Double.isNaN(d))
+			dire = d;
+		else if (pos.dis(tmp) > 0)
 			dire = pos.atan2(tmp);
 		pos.setTo(tmp);
 		spr.post();
@@ -231,6 +239,9 @@ public class Dot implements Sprite.Dire, Control.UpdCtrl {
 
 	public Dot setMove(Mover m) {
 		move = m;
+		double d = m.getDire();
+		if (!Double.isNaN(d))
+			dire = d;
 		return this;
 	}
 
@@ -249,7 +260,7 @@ public class Dot implements Sprite.Dire, Control.UpdCtrl {
 	@Override
 	public void update(int t) {
 		tmp.setTo(pos);
-		if (move != null)
+		if (time >= 0 && move != null)
 			move.update(this, t);
 		spr.update(t);
 		time += t;

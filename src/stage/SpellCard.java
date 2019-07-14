@@ -4,6 +4,7 @@ import battle.Control;
 import battle.Engine;
 import battle.Updatable;
 import battle.entity.Clearer;
+import battle.entity.Player;
 import util.P;
 
 public class SpellCard implements Control.UpdCtrl {
@@ -21,6 +22,10 @@ public class SpellCard implements Control.UpdCtrl {
 		if (ex > 0)
 			e.update(ex);
 		Engine.RUNNING.add(e);
+	}
+
+	public static Player getPlayer() {
+		return Engine.RUNNING.pl;
 	}
 
 	public static double rand(double a) {

@@ -61,8 +61,9 @@ public abstract class Entity implements Updatable {
 		return this;
 	}
 
-	public final void trail(Updatable... es) {
+	public final Entity trail(Updatable... es) {
 		trails = es;
+		return this;
 	}
 
 	/** main entrance of timer. this implementation updates control only */

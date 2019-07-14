@@ -112,7 +112,6 @@ public class Engine {
 
 	public void update(int t) {
 		RUNNING = this;
-		clearTmp();
 		time.start(t);
 		updc.forEach(e -> e.update(time.dispach(null)));
 		entities.forEach((i, l) -> l.forEach(e -> e.update(time.dispach(e))));
@@ -134,6 +133,7 @@ public class Engine {
 		updc.removeIf(e -> e.finished());
 		entities.forEach((i, l) -> l.removeIf(e -> e.isDead()));
 		time.end();
+		clearTmp();
 		RUNNING = null;
 	}
 

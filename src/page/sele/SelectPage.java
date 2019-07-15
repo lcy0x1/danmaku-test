@@ -25,7 +25,7 @@ public class SelectPage extends Page {
 
 	private final JList<String> list = new JList<String>(new String[] { "Okina", "Reimu", "Youmu", "Koishi", "Yukari",
 			"Yuuka", "Yuyuko", "ref", "laser star", "rot star", "gene", "concious", "wall", "wave", "fence", "flow",
-			"Sakuya", "sakuya ref", "sakuya warn", "star" });
+			"Sakuya", "sakuya ref", "sakuya warn", "star", "large" });
 	private final JComboBox<String> jcb = new JComboBox<>(new String[] { "easy", "normal", "hard", "lunatic" });
 	private final JScrollPane jspl = new JScrollPane(list);
 

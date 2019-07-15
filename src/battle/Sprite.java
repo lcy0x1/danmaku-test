@@ -508,9 +508,12 @@ public class Sprite implements Comparable<Sprite> {
 	public static final Sprite[][][] TOT = { NON, REG, OCT, LRG, OTH };
 	public static final double MAGNIFY = 1.5;
 
+	public static final int ROT_CONST = 3000;
+
 	private static final double LONG_END = 6.0 / 256, LONG_EDR = 6.0 / 16, LONG_SEG = 6.0 / 256;
 	private static final double OVAL_END = 2.0 / 16, OVAL_EDR = 4.0 / 16, OVAL_SEG = 1.0 / 16;
-	private static final double ROTRATE = Math.PI / 3000, MAX_ANGLE = Math.PI / 4, MIN_ANGLE = 1e-3, MAX_CURVE = 1e-3;
+	private static final double ROTRATE = Math.PI / ROT_CONST, MAX_ANGLE = Math.PI / 4, MIN_ANGLE = 1e-3,
+			MAX_CURVE = 1e-3;
 
 	private static final int[] ROT = { 0, 110, 111, 201 };
 

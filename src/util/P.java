@@ -93,6 +93,10 @@ public strictfp class P {
 		return t0 < t1 ? t1 : t0;
 	}
 
+	public static double middleC(double d) {
+		return (1 - Math.cos(Math.PI * d)) / 2;
+	}
+
 	public static P polar(double r, double t) {
 		return new P(r * Math.cos(t), r * Math.sin(t));
 	}

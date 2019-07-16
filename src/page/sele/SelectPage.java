@@ -9,6 +9,7 @@ import javax.swing.event.ListSelectionListener;
 import page.JBTN;
 import page.JTG;
 import page.Page;
+import stage.StageSet;
 import util.Data;
 
 public class SelectPage extends Page {
@@ -23,9 +24,7 @@ public class SelectPage extends Page {
 	private final JTG geo = new JTG("draw geomotry");
 	private final JTG tex = new JTG("draw texture");
 
-	private final JList<String> list = new JList<String>(new String[] { "Okina", "Reimu", "Youmu", "Koishi", "Yukari",
-			"Yuuka", "Yuyuko", "ref", "laser star", "rot star", "gene", "concious", "wall", "wave", "fence", "flow",
-			"Sakuya", "sakuya ref", "sakuya warn", "star", "large" });
+	private final JList<String> list = new JList<String>(StageSet.SPNAME);
 	private final JComboBox<String> jcb = new JComboBox<>(new String[] { "easy", "normal", "hard", "lunatic" });
 	private final JScrollPane jspl = new JScrollPane(list);
 
@@ -42,13 +41,13 @@ public class SelectPage extends Page {
 	protected void resized(int x, int y) {
 		setBounds(0, 0, x, y);
 		set(back, x, y, 0, 0, 200, 50);
-		set(strt, x, y, 200, 200, 200, 50);
-		set(jspl, x, y, 200, 300, 200, 800);
-		set(jcb, x, y, 450, 300, 200, 50);
-		set(cbl, x, y, 450, 400, 200, 50);
-		set(cbg, x, y, 450, 500, 200, 50);
-		set(geo, x, y, 450, 600, 200, 50);
-		set(tex, x, y, 450, 700, 200, 50);
+		set(strt, x, y, 200, 200, 400, 50);
+		set(jspl, x, y, 200, 300, 400, 800);
+		set(jcb, x, y, 650, 300, 200, 50);
+		set(cbl, x, y, 650, 400, 200, 50);
+		set(cbg, x, y, 650, 500, 200, 50);
+		set(geo, x, y, 650, 600, 200, 50);
+		set(tex, x, y, 650, 700, 200, 50);
 	}
 
 	private void addListeners() {

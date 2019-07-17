@@ -30,9 +30,9 @@ public class BattlePage extends Page {
 
 	private boolean up, down, left, right, shift;
 
-	protected BattlePage(Page p, int sta, int diff) {
+	protected BattlePage(Page p, int cha,int sta, int diff) {
 		super(p);
-		e = new Engine(StageSet.getStage(Data.str(sta, 3), diff));
+		e = new Engine(StageSet.getStage(cha,sta, diff));
 		fpc = new GLFPC(e);
 		ini();
 		resized();

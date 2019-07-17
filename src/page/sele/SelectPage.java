@@ -24,11 +24,13 @@ public class SelectPage extends Page {
 	private final JTG geo = new JTG("draw geomotry");
 	private final JTG tex = new JTG("draw texture");
 
-	private final JList<String> list = new JList<String>(StageSet.SPNAME);
+	private final JList<String> jlm = new JList<String>(StageSet.getNames());
+	private final JList<String> jls = new JList<String>();
 	private final JComboBox<String> jcb = new JComboBox<>(new String[] { "easy", "normal", "hard", "lunatic" });
-	private final JScrollPane jspl = new JScrollPane(list);
+	private final JScrollPane jspm = new JScrollPane(jlm);
+	private final JScrollPane jsps = new JScrollPane(jls);
 
-	private int sele;
+	private int sele,ssub;
 
 	public SelectPage(Page p) {
 		super(p);
@@ -41,40 +43,54 @@ public class SelectPage extends Page {
 	protected void resized(int x, int y) {
 		setBounds(0, 0, x, y);
 		set(back, x, y, 0, 0, 200, 50);
-		set(strt, x, y, 200, 200, 400, 50);
-		set(jspl, x, y, 200, 300, 400, 800);
-		set(jcb, x, y, 650, 300, 200, 50);
-		set(cbl, x, y, 650, 400, 200, 50);
-		set(cbg, x, y, 650, 500, 200, 50);
-		set(geo, x, y, 650, 600, 200, 50);
-		set(tex, x, y, 650, 700, 200, 50);
+		set(jspm, x, y, 200, 200, 400, 800);
+		set(jsps, x, y, 650, 200, 400, 800);
+		set(strt, x, y, 1100, 200, 200, 50);
+		set(jcb, x, y, 1100, 300, 200, 50);
+		set(cbl, x, y, 1100, 400, 200, 50);
+		set(cbg, x, y, 1100, 500, 200, 50);
+		set(geo, x, y, 1100, 600, 200, 50);
+		set(tex, x, y, 1100, 700, 200, 50);
 	}
 
 	private void addListeners() {
 		back.setLnr(e -> changePanel(getFront()));
-		strt.setLnr(e -> changePanel(new BattlePage(this, sele, jcb.getSelectedIndex())));
+		strt.setLnr(e -> changePanel(new BattlePage(this, sele,ssub, jcb.getSelectedIndex())));
 
 		cbl.setLnr(x -> Data.CLEARBL = cbl.isSelected());
 		cbg.setLnr(x -> Data.CLEARBG = cbg.isSelected());
 		geo.setLnr(x -> Data.DEBUG = geo.isSelected());
 		tex.setLnr(x -> Data.DRAWSPRITE = tex.isSelected());
 
-		list.addListSelectionListener(new ListSelectionListener() {
+		jlm.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if (e.getValueIsAdjusting())
+				if (isAdj()||e.getValueIsAdjusting())
 					return;
-				setSele(list.getSelectedIndex());
+				setMain(jlm.getSelectedIndex());
 			}
 
 		});
+		
+		jls.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (isAdj()||e.getValueIsAdjusting())
+					return;
+				setSub(jls.getSelectedIndex());
+			}
+
+		});
+		
 	}
 
 	private void ini() {
 		add(back);
 		add(strt);
-		add(jspl);
+		add(jspm);
+		add(jsps);
 		add(jcb);
 		add(cbl);
 		add(cbg);
@@ -87,13 +103,30 @@ public class SelectPage extends Page {
 		tex.setSelected(Data.DRAWSPRITE);
 
 		jcb.setSelectedIndex(0);
-		setSele(-1);
+		setMain(-1);
 		addListeners();
 	}
 
-	private void setSele(int s) {
+	private void setMain(int s) {
+		change(true);
 		sele = s;
-		strt.setEnabled(sele >= 0);
+		if(s==-1) {
+			jls.clearSelection();
+			jls.setListData(new String[0]);
+			setSub(-1);
+		}
+		else {
+			jls.clearSelection();
+			jls.setListData(StageSet.getNames(s));
+			jls.setSelectedIndex(0);
+			setSub(0);
+		}
+		change(false);
+	}
+	
+	private void setSub(int s) {
+		ssub = s;
+		strt.setEnabled(ssub >= 0);
 	}
 
 }

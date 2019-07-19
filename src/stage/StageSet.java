@@ -6,27 +6,27 @@ import java.util.List;
 import battle.Control;
 
 public class StageSet {
-	
+
 	public static class Spell {
-		
+
 		public final String name;
-		
+
 		private final Class<? extends SpellCard> cls;
-		
+
 		private Spell(Class<? extends SpellCard> clas, String str) {
-			name=str;
-			cls=clas;
+			name = str;
+			cls = clas;
 		}
-		
+
 		public Control.UpdCtrl getStage(int diff) {
 			try {
-				return (SpellCard) cls.getConstructor(Integer.TYPE).newInstance(diff);
+				return cls.getConstructor(Integer.TYPE).newInstance(diff);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return null;
 		}
-		
+
 	}
 
 	public static class SpellSet {
@@ -40,7 +40,7 @@ public class StageSet {
 		}
 
 		private SpellSet add(Class<? extends SpellCard> cls, String str) {
-			list.add(new Spell(cls,str));
+			list.add(new Spell(cls, str));
 			return this;
 		}
 
@@ -49,7 +49,7 @@ public class StageSet {
 	public static final List<SpellSet> list = new ArrayList<>();
 
 	static {
-		
+
 		list.add(new SpellSet("Okina")//
 				.add(TestStage_015.class, "NS1 flow")//
 				.add(TestStage_000.class, "S1 resonance")//
@@ -72,7 +72,8 @@ public class StageSet {
 				.add(TestStage_018.class, "NS1 warn")//
 				.add(TestStage_016.class, "S1 trace")//
 				.add(TestStage_017.class, "NS2 ref")//
-				.add(TestStage_021.class, "S2 trap"));
+				.add(TestStage_021.class, "S2 trap")//
+				.add(TestStage_022.class, "S3 shrink"));
 
 		list.add(new SpellSet("Yukari")//
 				.add(TestStage_004.class, "S1 tantacle"));
@@ -92,23 +93,23 @@ public class StageSet {
 
 	}
 
-	public static Control.UpdCtrl getStage(int i,int j, int diff) {
-		return list.get(i).list.get(j).getStage(diff);
-	}
-	
 	public static String[] getNames() {
-		String[] ans=new String[list.size()];
-		for(int i=0;i<list.size();i++)
-			ans[i]=list.get(i).name;
+		String[] ans = new String[list.size()];
+		for (int i = 0; i < list.size(); i++)
+			ans[i] = list.get(i).name;
 		return ans;
 	}
-	
+
 	public static String[] getNames(int n) {
-		SpellSet ss=list.get(n);
-		String[] ans=new String[ss.list.size()];
-		for(int i=0;i<ss.list.size();i++)
-			ans[i]=ss.list.get(i).name;
+		SpellSet ss = list.get(n);
+		String[] ans = new String[ss.list.size()];
+		for (int i = 0; i < ss.list.size(); i++)
+			ans[i] = ss.list.get(i).name;
 		return ans;
+	}
+
+	public static Control.UpdCtrl getStage(int i, int j, int diff) {
+		return list.get(i).list.get(j).getStage(diff);
 	}
 
 }

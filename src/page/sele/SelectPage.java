@@ -30,7 +30,7 @@ public class SelectPage extends Page {
 	private final JScrollPane jspm = new JScrollPane(jlm);
 	private final JScrollPane jsps = new JScrollPane(jls);
 
-	private int sele,ssub;
+	private int sele, ssub;
 
 	public SelectPage(Page p) {
 		super(p);
@@ -55,7 +55,7 @@ public class SelectPage extends Page {
 
 	private void addListeners() {
 		back.setLnr(e -> changePanel(getFront()));
-		strt.setLnr(e -> changePanel(new BattlePage(this, sele,ssub, jcb.getSelectedIndex())));
+		strt.setLnr(e -> changePanel(new BattlePage(this, sele, ssub, jcb.getSelectedIndex())));
 
 		cbl.setLnr(x -> Data.CLEARBL = cbl.isSelected());
 		cbg.setLnr(x -> Data.CLEARBG = cbg.isSelected());
@@ -66,24 +66,24 @@ public class SelectPage extends Page {
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if (isAdj()||e.getValueIsAdjusting())
+				if (isAdj() || e.getValueIsAdjusting())
 					return;
 				setMain(jlm.getSelectedIndex());
 			}
 
 		});
-		
+
 		jls.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if (isAdj()||e.getValueIsAdjusting())
+				if (isAdj() || e.getValueIsAdjusting())
 					return;
 				setSub(jls.getSelectedIndex());
 			}
 
 		});
-		
+
 	}
 
 	private void ini() {
@@ -110,12 +110,11 @@ public class SelectPage extends Page {
 	private void setMain(int s) {
 		change(true);
 		sele = s;
-		if(s==-1) {
+		if (s == -1) {
 			jls.clearSelection();
 			jls.setListData(new String[0]);
 			setSub(-1);
-		}
-		else {
+		} else {
 			jls.clearSelection();
 			jls.setListData(StageSet.getNames(s));
 			jls.setSelectedIndex(0);
@@ -123,7 +122,7 @@ public class SelectPage extends Page {
 		}
 		change(false);
 	}
-	
+
 	private void setSub(int s) {
 		ssub = s;
 		strt.setEnabled(ssub >= 0);

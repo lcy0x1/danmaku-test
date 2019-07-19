@@ -229,10 +229,11 @@ public class Dot implements Sprite.Dire, Control.UpdCtrl {
 	@Override
 	public void post() {
 		double d = move == null ? Double.NaN : move.getDire();
+		if (Double.isNaN(d))
+			if (pos.dis(tmp) > 0)
+				d = pos.atan2(tmp);
 		if (!Double.isNaN(d))
 			dire = d;
-		else if (pos.dis(tmp) > 0)
-			dire = pos.atan2(tmp);
 		pos.setTo(tmp);
 		spr.post();
 	}

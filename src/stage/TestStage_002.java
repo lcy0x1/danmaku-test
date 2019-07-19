@@ -60,7 +60,7 @@ public class TestStage_002 extends SpellCard implements Emiter.Ticker {
 		if (e.id == 0) {
 			dire = it % 2 * 2 - 1;
 			add(new Emiter(1, f1, f1 * 8, this), ex);
-			Engine.RUNNING.time.slow(sls[diff], (int) (f1 * 8 / sls[diff]), null);
+			Engine.RUNNING.time.slowExc(sls[diff], (int) (f1 * 8 / sls[diff]), getPlayer());
 		} else if (e.id == 1)
 			adds(dire, (dire * it - 2) * Math.PI * 2 / 8, 3, ex);
 		else if (e.id == 3)

@@ -214,14 +214,14 @@ public interface Mover {
 		}
 
 		@Override
-		public boolean out(P pos, double r) {
-			if (pos.x + r > dr.x && v.x > 0)
+		public boolean out(P pos, double ra) {
+			if (pos.x - ra > dr.x && v.x > 0)
 				return !(rem != 0 && (mode & RIGHT) > 0);
-			if (pos.x - r < ul.x && v.x < 0)
+			if (pos.x + ra < ul.x && v.x < 0)
 				return !(rem != 0 && (mode & LEFT) > 0);
-			if (pos.y + r > dr.y && v.y > 0)
+			if (pos.y - ra > dr.y && v.y > 0)
 				return !(rem != 0 && (mode & DOWN) > 0);
-			if (pos.y - r < ul.y && v.y < 0)
+			if (pos.y + ra < ul.y && v.y < 0)
 				return !(rem != 0 && (mode & UP) > 0);
 			return false;
 		}

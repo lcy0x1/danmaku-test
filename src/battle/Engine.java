@@ -15,18 +15,58 @@ public class Engine {
 
 	public static class Time {
 
-		private static class Mask {
-
-			private final double mult;
+		public static abstract class Mask {
 
 			private int len;
 
+			public Mask(int l) {
+				len = l;
+			}
+
+			public abstract double slow(Entity e);
+
+		}
+
+		private static class MaskExc extends Mask {
+
+			private final double mult;
+
 			private final Collection<Entity> ce;
 
-			public Mask(double m, int l, Collection<Entity> c) {
+			public MaskExc(double m, int l, Collection<Entity> c) {
+				super(l);
 				mult = m;
-				len = l;
 				ce = c;
+			}
+
+			@Override
+			public double slow(Entity e) {
+				if (ce == null || !ce.contains(e))
+					return mult;
+				return 1;
+			}
+
+		}
+
+		private static class MaskInc extends Mask {
+
+			private final double mult;
+
+			private final Collection<Entity> ce;
+
+			public MaskInc(double m, int l, Collection<Entity> c) {
+				super(l);
+				mult = m;
+				ce = c;
+			}
+
+			@Override
+			public double slow(Entity e) {
+				if (e == null)
+					return 1;
+				if (ce == null || ce.contains(e))
+					return mult;
+				return 1;
 			}
 
 		}
@@ -38,15 +78,26 @@ public class Engine {
 		private final List<Mask> mask = new ArrayList<>();
 		private final List<Mask> temp = new ArrayList<>();
 
-		public void slow(double mult, int len, Collection<Entity> e) {
-			temp.add(new Mask(mult, len, e));
+		/** slow all callers except ones in list */
+		public void slowExc(double mult, int len, Collection<Entity> e) {
+			temp.add(new MaskExc(mult, len, e));
+		}
+
+		public void slowExc(double mult, int len, Entity e) {
+			List<Entity> l = new ArrayList<>();
+			l.add(e);
+			temp.add(new MaskExc(mult, len, l));
+		}
+
+		/** slow all callers in list, if list is null then slow all non-null */
+		public void slowInc(double mult, int len, Collection<Entity> e) {
+			temp.add(new MaskInc(mult, len, e));
 		}
 
 		private int dispach(Entity e) {
 			double ans = t;
 			for (Mask m : mask)
-				if (m.ce == null || !m.ce.contains(e))
-					ans *= m.mult;
+				ans *= m.slow(e);
 			return (int) ans;
 		}
 

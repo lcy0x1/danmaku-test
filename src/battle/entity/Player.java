@@ -18,7 +18,7 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 	private final Shape.Circle shape;
 	private final Sprite.ESprite img;
 
-	private int time, deadTime;
+	private int time, deadTime, dt;
 
 	public Player() {
 		super(C_PLAYER, 0);
@@ -71,11 +71,13 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 
 	@Override
 	public void post() {
-		pos.setTo(ext);
+		pos.setTo(pos.middle(ext, dt / 20.0));
+		ext.setTo(pos);
 	}
 
 	@Override
 	public void update(int t) {
+		dt = t;
 		time += t;
 		if (deadTime > 0)
 			deadTime -= t;

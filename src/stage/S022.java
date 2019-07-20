@@ -7,6 +7,7 @@ import battle.Engine;
 import battle.Sprite;
 import battle.bullet.Dot;
 import battle.bullet.DotBullet;
+import battle.bullet.Mover;
 import battle.entity.Emiter;
 import util.P;
 
@@ -14,10 +15,14 @@ public class S022 extends SpellCard implements Emiter.Ticker {
 
 	private static final Sprite.SParam d0 = Sprite.getSprite(Sprite.P_D, 20401, 0, 1);
 	private static final Sprite.SParam d1 = Sprite.getSprite(Sprite.P_D, 20403, 0, 1);
+	private static final Sprite.SParam d2 = Sprite.getSprite(Sprite.P_D, 20400, 0, 1);
 
-	private static final int f0 = 3000, t0 = 2000, t2 = 2200, t1 = 800, f1 = 60, f3 = 240, f2 = 20, t3 = 6000;
-	private static final double v0 = 0.2, v1 = 0.3;
-	private static final double rad = 600, RAD = 1.2011224;
+	private static final int f0 = 3000, f1 = 60, f2 = 20, f3 = 240, f4 = 200;
+	private static final int t0 = 2000, t1 = 800, t2 = 2200, t4 = 1000;
+	private static final double v0 = 0.2, v1 = 0.3, v2 = 0.8, dv = 1e-5, v3 = 0.4, v4 = 2;
+	private static final double rad = 800, RAD = 1.2011224;
+
+	private static final P lim0 = new P(100, 100), lim1 = new P(700, 300);
 
 	private static final int[] ns = { 4, 5, 6, 7 };
 	private static final int[] ms = { 8, 10, 12, 14 };
@@ -27,15 +32,18 @@ public class S022 extends SpellCard implements Emiter.Ticker {
 
 	private final int n, m;
 	private final double w0, w1, fac;
+	private final P pos;
 	private final List<DotBullet> list = new ArrayList<DotBullet>();
+	private final List<DotBullet> home = new ArrayList<DotBullet>();
 
-	private double[] ds;
+	private Emiter prim;
 	private P[] ps, ts;
-	private P tmpp;
+	private P tmpp, ppos, npos;
 	private double ta0, tb0;
 
 	public S022(int diff) {
 		super(60000);
+		pos = new P(400, 200);
 		n = ns[diff];
 		m = ms[diff];
 		w0 = p2 / w0s[diff];
@@ -46,9 +54,15 @@ public class S022 extends SpellCard implements Emiter.Ticker {
 	@Override
 	public void tick(Emiter e, int it, int ex) {
 		if (e.id == 0) {
+			for (DotBullet db : home)
+				db.getEntCtrl().killed(K_FUNCTIONAL);
+			home.clear();
+
 			add(new Emiter(1, f1, t0, this));
-			add(new Emiter(3, f3, t0, this));
 			add(new Emiter(2, f2, t0 + t1, this).setDelay(t2));
+			add(new Emiter(3, f3, t0, this));
+			add(new Emiter(4, f4, t4, this));
+
 		}
 		if (e.id == 1) {
 			if (it == 0)
@@ -56,7 +70,7 @@ public class S022 extends SpellCard implements Emiter.Ticker {
 			double a0 = ta0 + it * f1 * w0;
 			for (int i = 0; i < n; i++) {
 				double a1 = a0 + p2 / n * i;
-				DotBullet d = new DotBullet(new Dot(pc.copy(), P.polar(v0, a1), d1), t3);
+				DotBullet d = new DotBullet(new Dot(pos.copy(), P.polar(v0, a1), d1));
 				add(d);
 				list.add(d);
 			}
@@ -67,39 +81,63 @@ public class S022 extends SpellCard implements Emiter.Ticker {
 			double b0 = tb0 + it * f1 * w1;
 			for (int i = 0; i < m; i++) {
 				double b1 = b0 + p2 / m * i;
-				DotBullet d = new DotBullet(new Dot(pc.copy(), P.polar(v1, b1), d0), t3);
+				DotBullet d = new DotBullet(new Dot(pos.copy(), P.polar(v1, b1), d0));
 				add(d);
 				list.add(d);
 			}
 		}
 		if (e.id == 2) {
 			if (it == 0) {
+				ppos = pos.copy();
+				npos = P.polar(rand(200), rand(p2)).plus(pos);
+				npos.limit(lim0, lim1);
 				tmpp = getPlayer().pos.copy();
 				list.removeIf(d -> d.isDead());
-				ds = new double[list.size()];
 				ps = new P[list.size()];
 				ts = new P[list.size()];
 				for (int i = 0; i < ps.length; i++) {
 					ps[i] = list.get(i).dot.pos;
 					ts[i] = ps[i].copy();
-					ds[i] = ps[i].dis(tmpp);
 				}
-				Engine.RUNNING.time.slowInc(0, t1, null);
+				Engine.RUNNING.time.slowExc(0, t1, e, prim, this);
 			}
-			for (int i = 0; i < ps.length; i++) {
-				double c0 = Math.pow(ds[i] / rad / RAD, 2);
-				double c1 = fac / t1 * f2 * it * Math.pow(Math.E, -c0);
-				double c2 = ds[i] * P.middleC(c1);
-				ps[i].setTo(P.polar(c2, ts[i].atan2(tmpp)).plus(ts[i]));
+
+			double tim = 1.0 * f2 * it / t1;
+			for (int i = 0; i < ps.length; i++)
+				ps[i].setTo(move(ts[i], tim));
+
+			for (DotBullet db : home) {
+				double a0 = db.dot.getDire();
+				P pv = P.polar(v3, a0);
+				P p0 = P.polar(v4 * it * f2, a0).plus(db.dot.pos);
+				add(new DotBullet(new Dot(p0, pv, d2)));
 			}
+
+			pos.setTo(ppos.middleC(npos, tim));
+		}
+		if (e.id == 4) {
+			P p0 = pos.copy();
+			P pv = P.polar(v2, pos.atan2(getPlayer().pos));
+			DotBullet b0 = new DotBullet(new Dot(p0, pv, d2));
+			DotBullet b1 = new DotBullet(new Dot(p0, d2, new Mover.HomingLM(dv)));
+			home.add(b1);
+			add(b0.trail(b1.setLv(K_FUNCTIONAL)).setLv(K_FUNCTIONAL), ex);
 		}
 	}
 
 	@Override
 	public void update(int dt) {
 		if (time == 0)
-			add(new Emiter(0, f0, this, this));
+			add(prim = new Emiter(0, f0, this, this));
 		super.update(dt);
+	}
+
+	private P move(P tsi, double tim) {
+		double dsi = tsi.dis(tmpp);
+		double c0 = Math.pow(dsi / rad / RAD, 2);
+		double c1 = fac * tim * Math.pow(Math.E, -c0);
+		double c2 = dsi * P.middleC(c1);
+		return P.polar(c2, tsi.atan2(tmpp)).plus(tsi);
 	}
 
 }

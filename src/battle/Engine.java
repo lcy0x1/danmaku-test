@@ -2,16 +2,18 @@ package battle;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.TreeMap;
 
 import battle.entity.Player;
 import jogl.util.FakeGraphics;
 import util.P;
 
-public class Engine {
+public class Engine implements Updatable {
 
 	public static class Time {
 
@@ -23,7 +25,7 @@ public class Engine {
 				len = l;
 			}
 
-			public abstract double slow(Entity e);
+			public abstract double slow(Updatable e);
 
 		}
 
@@ -31,19 +33,19 @@ public class Engine {
 
 			private final double mult;
 
-			private final Collection<Entity> ce;
+			private final Collection<Updatable> ce;
 
-			public MaskExc(double m, int l, Collection<Entity> c) {
+			public MaskExc(double m, int l, Collection<Updatable> c) {
 				super(l);
 				mult = m;
 				ce = c;
 			}
 
 			@Override
-			public double slow(Entity e) {
-				if (ce == null || !ce.contains(e))
-					return mult;
-				return 1;
+			public double slow(Updatable e) {
+				if (ce.contains(e))
+					return 1;
+				return mult;
 			}
 
 		}
@@ -52,19 +54,17 @@ public class Engine {
 
 			private final double mult;
 
-			private final Collection<Entity> ce;
+			private final Collection<Updatable> ce;
 
-			public MaskInc(double m, int l, Collection<Entity> c) {
+			public MaskInc(double m, int l, Collection<Updatable> c) {
 				super(l);
 				mult = m;
 				ce = c;
 			}
 
 			@Override
-			public double slow(Entity e) {
-				if (e == null)
-					return 1;
-				if (ce == null || ce.contains(e))
+			public double slow(Updatable e) {
+				if (ce.contains(e))
 					return mult;
 				return 1;
 			}
@@ -78,23 +78,32 @@ public class Engine {
 		private final List<Mask> mask = new ArrayList<>();
 		private final List<Mask> temp = new ArrayList<>();
 
-		/** slow all callers except ones in list */
-		public void slowExc(double mult, int len, Collection<Entity> e) {
-			temp.add(new MaskExc(mult, len, e));
-		}
-
-		public void slowExc(double mult, int len, Entity e) {
-			List<Entity> l = new ArrayList<>();
-			l.add(e);
+		public void slowExc(double mult, int len, Updatable... es) {
+			Set<Updatable> l = new HashSet<>();
+			for (Updatable e : es)
+				l.add(e);
+			l.add(RUNNING);
 			temp.add(new MaskExc(mult, len, l));
 		}
 
+		/** slow all callers except ones in list */
+		public void slowExcC(double mult, int len, Collection<Updatable> e) {
+			temp.add(new MaskExc(mult, len, e));
+		}
+
+		public void slowInc(double mult, int len, Updatable... es) {
+			Set<Updatable> l = new HashSet<>();
+			for (Updatable e : es)
+				l.add(e);
+			temp.add(new MaskInc(mult, len, l));
+		}
+
 		/** slow all callers in list, if list is null then slow all non-null */
-		public void slowInc(double mult, int len, Collection<Entity> e) {
+		public void slowIncC(double mult, int len, Collection<Updatable> e) {
 			temp.add(new MaskInc(mult, len, e));
 		}
 
-		private int dispach(Entity e) {
+		private int dispach(Updatable e) {
 			double ans = t;
 			for (Mask m : mask)
 				ans *= m.slow(e);
@@ -102,7 +111,7 @@ public class Engine {
 		}
 
 		private void end() {
-			time += dispach(null);
+			time += dispach(RUNNING);
 			clock += t;
 			for (Mask m : mask)
 				m.len -= t;
@@ -161,10 +170,11 @@ public class Engine {
 		RENDERING = null;
 	}
 
+	@Override
 	public void update(int t) {
 		RUNNING = this;
 		time.start(t);
-		updc.forEach(e -> e.update(time.dispach(null)));
+		updc.forEach(e -> e.update(time.dispach(e)));
 		entities.forEach((i, l) -> l.forEach(e -> e.update(time.dispach(e))));
 		entities.forEach((i, l) -> {
 			int atk = i >> 16 & 65535;

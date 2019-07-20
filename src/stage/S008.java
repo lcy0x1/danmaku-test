@@ -7,7 +7,7 @@ import battle.bullet.TimeCurve;
 import battle.entity.Emiter;
 import util.P;
 
-public class TestStage_008 extends SpellCard implements Emiter.Ticker {
+public class S008 extends SpellCard implements Emiter.Ticker {
 
 	private static final Sprite.SParam sp0 = Sprite.getSprite(Sprite.P_SR, 10402, 0, 1);
 	private static final Sprite.SParam sp1 = Sprite.getSprite(Sprite.P_SR, 10406, 0, 1);
@@ -17,7 +17,7 @@ public class TestStage_008 extends SpellCard implements Emiter.Ticker {
 	private static final int[] ns = { 20, 25, 30, 35 };
 	private final int n;
 
-	public TestStage_008(int diff) {
+	public S008(int diff) {
 		super(60000);
 		n = ns[diff];
 	}

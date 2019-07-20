@@ -9,7 +9,7 @@ import battle.bullet.Laser;
 import battle.entity.Emiter;
 import util.P;
 
-public class TestStage_005 extends SpellCard implements Emiter.Ticker {
+public class S005 extends SpellCard implements Emiter.Ticker {
 
 	private static class PathFunc implements Func {
 
@@ -59,7 +59,7 @@ public class TestStage_005 extends SpellCard implements Emiter.Ticker {
 	private final int n1, f;
 	private final double w;
 
-	public TestStage_005(int diff) {
+	public S005(int diff) {
 		super(60000);
 		w = ws[diff];
 		f = fs[diff];

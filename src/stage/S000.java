@@ -6,7 +6,7 @@ import battle.bullet.DotBullet;
 import battle.bullet.Mover;
 import util.P;
 
-public class TestStage_000 extends SpellCard {
+public class S000 extends SpellCard {
 
 	private static class TrigMover extends Mover.TimeMover {
 
@@ -45,7 +45,7 @@ public class TestStage_000 extends SpellCard {
 	private final int n, d;
 	private final boolean extra = true;
 
-	public TestStage_000(int diff) {
+	public S000(int diff) {
 		super(ds[diff]);
 		d = ds[diff];
 		n = ns[diff];

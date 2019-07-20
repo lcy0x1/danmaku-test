@@ -10,7 +10,7 @@ import battle.bullet.Mover;
 import battle.entity.Emiter;
 import util.P;
 
-public class TestStage_019 extends SpellCard implements Emiter.Ticker {
+public class S019 extends SpellCard implements Emiter.Ticker {
 
 	private static class CosCurve extends Mover.TimeMover {
 
@@ -58,7 +58,7 @@ public class TestStage_019 extends SpellCard implements Emiter.Ticker {
 	private final List<P> lp = new ArrayList<P>();
 	private final List<DotBullet> lb = new ArrayList<DotBullet>();
 
-	public TestStage_019(int diff) {
+	public S019(int diff) {
 		super(60000);
 		n = ns[diff];
 		tx = ts[diff];

@@ -51,45 +51,45 @@ public class StageSet {
 	static {
 
 		list.add(new SpellSet("Okina")//
-				.add(TestStage_015.class, "NS1 flow")//
-				.add(TestStage_000.class, "S1 resonance")//
-				.add(TestStage_013.class, "NS2 wave")//
-				.add(TestStage_012.class, "S2 wall")//
-				.add(TestStage_014.class, "S3 fence"));
+				.add(S015.class, "NS1 flow")//
+				.add(S000.class, "S1 resonance")//
+				.add(S013.class, "NS2 wave")//
+				.add(S012.class, "S2 wall")//
+				.add(S014.class, "S3 fence"));
 
 		list.add(new SpellSet("Reimu")//
-				.add(TestStage_011.class, "S1 concious")//
-				.add(TestStage_001.class, "S2 immunity")//
-				.add(TestStage_020.class, "S3 square"));
+				.add(S011.class, "S1 concious")//
+				.add(S001.class, "S2 immunity")//
+				.add(S020.class, "S3 square"));
 
 		list.add(new SpellSet("Sanae")//
-				.add(TestStage_009.class, "NS1 rotate")//
-				.add(TestStage_007.class, "S1 ref")//
-				.add(TestStage_008.class, "NS2 laser ref")//
-				.add(TestStage_019.class, "S2 star"));
+				.add(S009.class, "NS1 rotate")//
+				.add(S007.class, "S1 ref")//
+				.add(S008.class, "NS2 laser ref")//
+				.add(S019.class, "S2 star"));
 
 		list.add(new SpellSet("Sakuya")//
-				.add(TestStage_018.class, "NS1 warn")//
-				.add(TestStage_016.class, "S1 trace")//
-				.add(TestStage_017.class, "NS2 ref")//
-				.add(TestStage_021.class, "S2 trap")//
-				.add(TestStage_022.class, "S3 shrink"));
+				.add(S018.class, "NS1 warn")//
+				.add(S016.class, "S1 trace")//
+				.add(S017.class, "NS2 ref")//
+				.add(S021.class, "S2 trap")//
+				.add(S022.class, "S3 shrink"));
 
 		list.add(new SpellSet("Yukari")//
-				.add(TestStage_004.class, "S1 tantacle"));
+				.add(S004.class, "S1 tantacle"));
 
 		list.add(new SpellSet("Yuuka")//
-				.add(TestStage_005.class, "S1")//
-				.add(TestStage_010.class, "S2 gene"));
+				.add(S005.class, "S1")//
+				.add(S010.class, "S2 gene"));
 
 		list.add(new SpellSet("Yuyuko")//
-				.add(TestStage_006.class, "S1"));
+				.add(S006.class, "S1"));
 
 		list.add(new SpellSet("Youmu")//
-				.add(TestStage_002.class, "S1"));
+				.add(S002.class, "S1"));
 
 		list.add(new SpellSet("Koishi")//
-				.add(TestStage_003.class, "S1"));
+				.add(S003.class, "S1"));
 
 	}
 

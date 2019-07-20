@@ -7,7 +7,7 @@ import battle.entity.Emiter;
 import battle.special.Koishi;
 import util.P;
 
-public class TestStage_003 extends SpellCard implements Emiter.Ticker {
+public class S003 extends SpellCard implements Emiter.Ticker {
 
 	private static final int f = 80, f1 = 120, m = 3;
 	private static final double v0 = 0.1;
@@ -29,7 +29,7 @@ public class TestStage_003 extends SpellCard implements Emiter.Ticker {
 	private final int m2, dt, n;
 	private final double w1;
 
-	public TestStage_003(int diff) {
+	public S003(int diff) {
 		super(50000);
 		n = ns[diff];
 		m2 = m2s[diff];

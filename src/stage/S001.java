@@ -7,7 +7,7 @@ import battle.bullet.Mover;
 import battle.entity.Emiter;
 import util.P;
 
-public class TestStage_001 extends SpellCard implements Emiter.Ticker {
+public class S001 extends SpellCard implements Emiter.Ticker {
 
 	private static class Orbit extends Mover.TimeMover {
 
@@ -43,7 +43,7 @@ public class TestStage_001 extends SpellCard implements Emiter.Ticker {
 
 	private final int n;
 
-	public TestStage_001(int diff) {
+	public S001(int diff) {
 		super(50000);
 		n = ns[diff];
 	}

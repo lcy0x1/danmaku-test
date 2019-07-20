@@ -7,7 +7,7 @@ import battle.bullet.DotBullet;
 import battle.entity.Emiter;
 import util.P;
 
-public class TestStage_002 extends SpellCard implements Emiter.Ticker {
+public class S002 extends SpellCard implements Emiter.Ticker {
 
 	private static class SubEmit implements Emiter.Ticker {
 
@@ -50,7 +50,7 @@ public class TestStage_002 extends SpellCard implements Emiter.Ticker {
 
 	private final int diff;
 
-	public TestStage_002(int df) {
+	public S002(int df) {
 		super(50000);
 		diff = df;
 	}

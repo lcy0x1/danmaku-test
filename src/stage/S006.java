@@ -12,7 +12,7 @@ import battle.bullet.Mover.FuncMover;
 import battle.entity.Emiter;
 import util.P;
 
-public class TestStage_006 extends SpellCard implements Emiter.Ticker {
+public class S006 extends SpellCard implements Emiter.Ticker {
 
 	private static class Adder implements Emiter.Ticker {
 
@@ -87,7 +87,7 @@ public class TestStage_006 extends SpellCard implements Emiter.Ticker {
 
 	private VeloListFunc[] vlfs = new VeloListFunc[2];
 
-	public TestStage_006(int diff) {
+	public S006(int diff) {
 		super(60000);
 		nr = nrs[diff];
 		n = ns[diff];

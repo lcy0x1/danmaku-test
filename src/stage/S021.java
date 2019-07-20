@@ -6,7 +6,7 @@ import battle.bullet.DotBullet;
 import battle.entity.Emiter;
 import util.P;
 
-public class TestStage_021 extends SpellCard implements Emiter.Ticker {
+public class S021 extends SpellCard implements Emiter.Ticker {
 
 	private static final Sprite.SParam d0 = Sprite.getSprite(Sprite.P_D, 20203, 0, 1);
 	private static final Sprite.SParam d1 = Sprite.getSprite(Sprite.P_D, 10506, 0, 1);
@@ -23,7 +23,7 @@ public class TestStage_021 extends SpellCard implements Emiter.Ticker {
 	private P tmpp;
 	private double tmpa;
 
-	public TestStage_021(int diff) {
+	public S021(int diff) {
 		super(60000);
 		n = ns[diff];
 		m = n / 2;

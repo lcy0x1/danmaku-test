@@ -50,6 +50,12 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 	}
 
 	@Override
+	public void draw() {
+		if (deadTime <= 0 || deadTime / 100 % 2 == 0)
+			img.draw();
+	}
+
+	@Override
 	public double getDire() {
 		return 0;
 	}
@@ -85,12 +91,6 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 
 	@Override
 	protected void attack(Entity e) {
-	}
-
-	@Override
-	protected void draw() {
-		if (deadTime <= 0 || deadTime / 100 % 2 == 0)
-			img.draw();
 	}
 
 }

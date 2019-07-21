@@ -165,6 +165,7 @@ public class Engine implements Updatable {
 
 	public void draw(FakeGraphics fg) {
 		RENDERING = new Sprite.Pool();
+		updc.forEach(e -> e.draw());
 		entities.forEach((i, l) -> l.forEach(e -> e.draw()));
 		RENDERING.flush(fg);
 		RENDERING = null;

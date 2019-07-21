@@ -30,7 +30,6 @@ public class S022 extends SpellCard implements Emiter.Ticker {
 
 	private final int n, m;
 	private final double w0, w1, fac;
-	private final P pos;
 	private final List<DotBullet> list = new ArrayList<DotBullet>();
 
 	private Emiter prim;
@@ -39,8 +38,7 @@ public class S022 extends SpellCard implements Emiter.Ticker {
 	private double ta0, tb0;
 
 	public S022(int diff) {
-		super(60000);
-		pos = new P(400, 200);
+		super(60000, new P(400, 200));
 		n = ns[diff];
 		m = ms[diff];
 		w0 = p2 / w0s[diff];

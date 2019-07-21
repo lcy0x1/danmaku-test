@@ -26,17 +26,15 @@ public class S023 extends SpellCard implements Emiter.Ticker {
 	private static final int[] ms = { 8, 10, 12, 14 };
 
 	private final int n, m;
-	private final P pos;
 	private final List<DotBullet> home = new ArrayList<DotBullet>();
 
 	private Emiter prim;
 	private P ppos, npos;
 
 	public S023(int diff) {
-		super(60000);
+		super(60000, new P(400, 200));
 		n = ns[diff];
 		m = ms[diff];
-		pos = new P(400, 200);
 	}
 
 	@Override

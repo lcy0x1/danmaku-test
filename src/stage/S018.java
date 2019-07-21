@@ -16,14 +16,13 @@ public class S018 extends SpellCard implements Emiter.Ticker {
 	private static final int f0 = 8000, f1 = 20;
 	private static final int ref = 2, n3 = 20;
 	private static final double v0 = 0.8, v1 = 6e-2, av = 5e-4, dr = 15, minr = 300;
-	private static final P pos = new P(400, 200);
 
 	private static final int[] ns = { 24, 32, 40, 48 };
 	private static final int[] ts = { 215, 220, 225, 230 };
 	private final int n, t1;
 
 	public S018(int diff) {
-		super(60000);
+		super(60000, new P(400, 200));
 		t1 = ts[diff];
 		n = ns[diff];
 	}

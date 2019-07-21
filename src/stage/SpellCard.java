@@ -2,12 +2,13 @@ package stage;
 
 import battle.Control;
 import battle.Engine;
+import battle.Sprite;
 import battle.Updatable;
 import battle.entity.Clearer;
 import battle.entity.Player;
 import util.P;
 
-public class SpellCard implements Control.UpdCtrl {
+public class SpellCard implements Control.UpdCtrl, Sprite.Dire {
 
 	public static final P o = Engine.BOUND;
 	public static final P pc = new P(o.x / 2, o.y / 2);
@@ -34,15 +35,45 @@ public class SpellCard implements Control.UpdCtrl {
 
 	public int time;
 
+	public final P pos;
+
 	private final int length;
 
+	private final Sprite.ESprite esp;
+
 	protected SpellCard(int tot) {
+		this(tot, pc.copy());
+	}
+
+	protected SpellCard(int tot, P p) {
 		length = tot;
+		pos = p;
+		esp = Sprite.getSprite(Sprite.P_D, 1, 0, 1).getEntity(this);
+	}
+
+	@Override
+	public void draw() {
+		esp.draw();
 	}
 
 	@Override
 	public boolean finished() {
 		return time > length;
+	}
+
+	@Override
+	public double getDire() {
+		return 0;
+	}
+
+	@Override
+	public P getPos() {
+		return pos;
+	}
+
+	@Override
+	public int getTime() {
+		return time;
 	}
 
 	@Override

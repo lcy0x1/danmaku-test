@@ -499,7 +499,7 @@ public class Sprite implements Comparable<Sprite> {
 
 	public static final double DEFRAD = 20;
 
-	public static final Sprite[][] NON = new Sprite[1][1];
+	public static final Sprite[][] NON = new Sprite[1][2];
 	public static final Sprite[][] REG = new Sprite[16][16];
 
 	public static final Sprite[][] OCT = new Sprite[8][8];
@@ -548,32 +548,31 @@ public class Sprite implements Comparable<Sprite> {
 		}
 		for (int i = 0; i < 12; i++)
 			for (int j = 0; j < 16; j++)
-				REG[i][j] = new Sprite(gli.getSubimage(1 + j * 16, 1 + i * 16, 16, 16), 10000 + i * 100 + j);
+				new Sprite(gli.getSubimage(1 + j * 16, 1 + i * 16, 16, 16), 10000 + i * 100 + j);
 		for (int i = 0; i < 2; i++)
 			for (int j = 0; j < 8; j++) {
-				REG[SRB_S_CROSS][i * 8 + j] = new Sprite(gli.getSubimage(1 + j * 8, 193 + i * 8, 8, 8),
-						11200 + i * 8 + j);
-				REG[SRB_S_BALL][i * 8 + j] = new Sprite(gli.getSubimage(1 + j * 8, 241 + i * 8, 8, 8),
-						11300 + i * 8 + j);
+				new Sprite(gli.getSubimage(1 + j * 8, 193 + i * 8, 8, 8), 11200 + i * 8 + j);
+				new Sprite(gli.getSubimage(1 + j * 8, 241 + i * 8, 8, 8), 11300 + i * 8 + j);
 			}
 		for (int i = 0; i < 16; i++) {
-			REG[SRB_LONG][i] = new Sprite(gli.getSubimage(1, 515 + i * 16, 256, 16), 11400 + i);
-			REG[SRB_DROP][i] = new Sprite(gli.getSubimage(258 + i * 16, 449, 16, 16), 11500 + i);
+			new Sprite(gli.getSubimage(1, 515 + i * 16, 256, 16), 11400 + i);
+			new Sprite(gli.getSubimage(258 + i * 16, 449, 16, 16), 11500 + i);
 		}
 		for (int i = 0; i < 8; i++) {
-			OCT[SOB_LIGHT][i] = new Sprite(gli.getSubimage(1 + i * 32, 209, 32, 32), 20000 + i);
-			OCT[SOB_HEART][i] = new Sprite(gli.getSubimage(258 + i * 32, 257, 32, 32), 20700 + i);
+			new Sprite(gli.getSubimage(1 + i * 32, 209, 32, 32), 20000 + i);
+			new Sprite(gli.getSubimage(258 + i * 32, 257, 32, 32), 20700 + i);
 		}
 		for (int i = 0; i < 6; i++)
 			for (int j = 0; j < 8; j++)
-				OCT[i + 1][j] = new Sprite(gli.getSubimage(1 + j * 32, 257 + i * 32, 32, 32), 20100 + i * 100 + j);
+				new Sprite(gli.getSubimage(1 + j * 32, 257 + i * 32, 32, 32), 20100 + i * 100 + j);
 
 		for (int i = 0; i < 4; i++) {
-			LRG[SLB_BALL][i] = new Sprite(gli.getSubimage(1 + i * 64, 449, 64, 64), 30000 + i);
-			LRG[SLB_ROSE][i] = new Sprite(gli.getSubimage(258 + i * 64, 290, 64, 64), 30100 + i);
+			new Sprite(gli.getSubimage(1 + i * 64, 449, 64, 64), 30000 + i);
+			new Sprite(gli.getSubimage(258 + i * 64, 290, 64, 64), 30100 + i);
 		}
 
-		NON[0][0] = new Sprite(gli.getSubimage(258, 17, 64, 64), 0);
+		new Sprite(gli.getSubimage(258, 17, 64, 64), 0);
+		new Sprite(gli.getSubimage(386, 81, 128, 128), 1);
 
 	}
 
@@ -612,6 +611,7 @@ public class Sprite implements Comparable<Sprite> {
 	private final boolean horiz, roting;
 
 	private Sprite(GLImage gl, int lv) {
+		TOT[lv / 10000][lv / 100 % 100][lv % 100] = this;
 		img = gl;
 		id = lv;
 		piv = new P(0.5, 0.5);
@@ -623,6 +623,8 @@ public class Sprite implements Comparable<Sprite> {
 		for (int i : ROT)
 			if (id / 100 == i)
 				b = true;
+		if (id == 1)
+			b = true;
 		roting = b;
 	}
 
@@ -634,6 +636,8 @@ public class Sprite implements Comparable<Sprite> {
 	private int getLayer() {
 		if (id / 100 == 301)
 			return -id + 20200;
+		if (id == 1)
+			return -50000;
 		return -id;// FIXME
 	}
 

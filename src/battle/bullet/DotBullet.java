@@ -39,16 +39,16 @@ public class DotBullet extends Bullet {
 	}
 
 	@Override
-	public Shape getShape() {
-		return dot.spr.getShape();
-	}
-
-	@Override
-	protected void draw() {
+	public void draw() {
 		if (dot.finished())
 			return;
 		if (dot.spr.getSprite() != null)
 			dot.spr.getSprite().draw();
+	}
+
+	@Override
+	public Shape getShape() {
+		return dot.spr.getShape();
 	}
 
 }

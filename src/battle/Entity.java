@@ -76,6 +76,4 @@ public abstract class Entity implements Updatable {
 	/** this entity attacks the entity e */
 	protected abstract void attack(Entity e);
 
-	protected abstract void draw();
-
 }

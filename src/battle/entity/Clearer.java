@@ -49,9 +49,4 @@ public class Clearer extends Entity {
 			e.getEntCtrl().killed(hard);
 	}
 
-	@Override
-	protected void draw() {
-
-	}
-
 }

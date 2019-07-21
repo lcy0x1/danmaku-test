@@ -52,7 +52,6 @@ public class S024 extends SpellCard implements Emiter.Ticker {
 	}
 
 	private static final Sprite.SParam d0 = Sprite.getSprite(Sprite.P_D, 10702, 0, 1);
-	private static final Sprite.SParam d1 = Sprite.getSprite(Sprite.P_D, 30000, 1, 1);
 
 	private static final int f0 = 5000, f1 = 20, t0 = 2000, t1 = 2000, t2 = 500, t3 = 1000;
 	private static final double v0 = 0.5, av = 3e-4;
@@ -63,16 +62,14 @@ public class S024 extends SpellCard implements Emiter.Ticker {
 	private static final int[] ms = { 21, 28, 35, 42 };
 
 	private final int n, m;
-	private final P pos;
 
 	private double dire;
 	private P ppos, npos;
 
 	public S024(int diff) {
-		super(60000);
+		super(60000, new P(400, 200));
 		n = ns[diff];
 		m = ms[diff];
-		pos = new P(400, 200);
 	}
 
 	@Override
@@ -102,10 +99,8 @@ public class S024 extends SpellCard implements Emiter.Ticker {
 
 	@Override
 	public void update(int dt) {
-		if (time == 0) {
-			add(new DotBullet(new Dot(pos, d1)).setLv(K_FINISH));
+		if (time == 0)
 			add(new Emiter(0, f0, this, this));
-		}
 		super.update(dt);
 	}
 

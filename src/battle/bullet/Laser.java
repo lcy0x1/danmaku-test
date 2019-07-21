@@ -22,13 +22,13 @@ public class Laser extends Bullet {
 	}
 
 	@Override
-	public Shape getShape() {
-		return curve;
+	public void draw() {
+		curve.sprite.draw();
 	}
 
 	@Override
-	protected void draw() {
-		curve.sprite.draw();
+	public Shape getShape() {
+		return curve;
 	}
 
 }

@@ -2,9 +2,10 @@ package battle.bullet;
 
 import battle.Entity;
 import battle.Shape;
+import battle.bullet.Curve.DotCont;
 import battle.entity.Bullet;
 
-public class DotBullet extends Bullet {
+public class DotBullet extends Bullet implements DotCont {
 
 	public Dot dot;
 
@@ -49,6 +50,11 @@ public class DotBullet extends Bullet {
 	@Override
 	public Shape getShape() {
 		return dot.spr.getShape();
+	}
+
+	@Override
+	public Dot getDot() {
+		return dot;
 	}
 
 }

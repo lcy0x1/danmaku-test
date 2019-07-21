@@ -27,7 +27,8 @@ public abstract class Entity implements Updatable {
 	}
 
 	public final void addUpdt(Updatable d) {
-		updts.add(d);
+		if (d != this)
+			updts.add(d);
 	}
 
 	public final void clearCtrl(Class<? extends Control> cls) {
@@ -75,5 +76,7 @@ public abstract class Entity implements Updatable {
 
 	/** this entity attacks the entity e */
 	protected abstract void attack(Entity e);
+
+	public abstract void draw();
 
 }

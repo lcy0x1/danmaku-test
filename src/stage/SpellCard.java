@@ -1,43 +1,40 @@
 package stage;
 
-import battle.Control;
-import battle.Engine;
 import battle.Sprite;
-import battle.Updatable;
-import battle.entity.Clearer;
-import battle.entity.Player;
+import battle.bullet.Dot;
+import battle.entity.Life;
 import util.P;
 
-public class SpellCard implements Control.UpdCtrl, Sprite.Dire {
+public class SpellCard extends StageSection implements Sprite.Dire {
 
-	public static final P o = Engine.BOUND;
-	public static final P pc = new P(o.x / 2, o.y / 2);
+	public static class BossSpell extends SpellCard {
 
-	public static final double p2 = Math.PI * 2;
+		private final Life l;
+		private final Dot dot;
 
-	public static void add(Updatable e) {
-		Engine.RUNNING.add(e);
+		protected BossSpell(int tot, P p, Sprite.DSParam sp) {
+			super(tot, p);
+			l = new Life(tot, tot, dot = new Dot(p.copy(), sp));
+		}
+
+		public void update(int dt) {
+			super.update(dt);
+			l.update(dt);
+		}
+
+		public void post() {
+			dot.tmp.setTo(pos);
+			l.post();
+			super.post();
+		}
+
+		public boolean finished() {
+			return super.finished() || l.isDead();
+		}
+
 	}
-
-	public static void add(Updatable e, int ex) {
-		if (ex > 0)
-			e.update(ex);
-		Engine.RUNNING.add(e);
-	}
-
-	public static Player getPlayer() {
-		return Engine.RUNNING.pl;
-	}
-
-	public static double rand(double a) {
-		return Engine.RUNNING.r.nextDouble() * a;
-	}
-
-	public int time;
 
 	public final P pos;
-
-	private final int length;
 
 	private final Sprite.ESprite esp;
 
@@ -46,7 +43,7 @@ public class SpellCard implements Control.UpdCtrl, Sprite.Dire {
 	}
 
 	protected SpellCard(int tot, P p) {
-		length = tot;
+		super(tot);
 		pos = p;
 		esp = Sprite.getSprite(Sprite.P_D, 1, 0, 1).getEntity(this);
 	}
@@ -54,11 +51,6 @@ public class SpellCard implements Control.UpdCtrl, Sprite.Dire {
 	@Override
 	public void draw() {
 		esp.draw();
-	}
-
-	@Override
-	public boolean finished() {
-		return time > length;
 	}
 
 	@Override
@@ -74,20 +66,6 @@ public class SpellCard implements Control.UpdCtrl, Sprite.Dire {
 	@Override
 	public int getTime() {
 		return time;
-	}
-
-	@Override
-	public void post() {
-		if (finished()) {
-			add(new Clearer(pc, 0, 1, 1300, K_BULLET));
-			add(new Clearer(pc, 0, 0.75, 1700, K_FUNCTIONAL));
-			add(new Clearer(pc, 0, 0.5, 2600, K_FINISH));
-		}
-	}
-
-	@Override
-	public void update(int dt) {
-		time += dt;
 	}
 
 }

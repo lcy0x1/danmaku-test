@@ -49,4 +49,10 @@ public class Clearer extends Entity {
 			e.getEntCtrl().killed(hard);
 	}
 
+	@Override
+	public void draw() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

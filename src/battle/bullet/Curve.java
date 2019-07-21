@@ -12,6 +12,18 @@ import util.P;
 
 public abstract class Curve extends Shape.LineSegs implements Control.UpdCtrl {
 
+	public static interface DotCont {
+
+		public Dot getDot();
+
+		public boolean isDead();
+
+		public void clearCtrl(Class<? extends Control> cls);
+
+		public void addCtrl(Control ctrl);
+
+	}
+
 	public static class FuncCurve extends Curve {
 
 		private final Func func;
@@ -94,17 +106,17 @@ public abstract class Curve extends Shape.LineSegs implements Control.UpdCtrl {
 
 	}
 
-	public static class ListCurve extends Curve implements Control.MassCtrl<DotBullet> {
+	public static class ListCurve extends Curve implements Control.MassCtrl<DotCont> {
 
-		private Queue<DotBullet> qd = new ArrayDeque<>();
+		private Queue<DotCont> qd = new ArrayDeque<>();
 
 		public ListCurve(Sprite.SParam cesp) {
 			super(cesp);
 		}
 
-		public void addP(DotBullet d) {
+		public void addP(DotCont d) {
 			d.clearCtrl(Dot.class);
-			d.addCtrl(new Control.ElemCtrl<DotBullet>(d, this));
+			d.addCtrl(new Control.ElemCtrl<DotCont>(d, this));
 			qd.add(d);
 		}
 
@@ -114,19 +126,19 @@ public abstract class Curve extends Shape.LineSegs implements Control.UpdCtrl {
 		}
 
 		@Override
-		public boolean finished(DotBullet b) {
-			return !qd.contains(b) || qd.peek() == b && b.dot.finished();
+		public boolean finished(DotCont b) {
+			return !qd.contains(b) || qd.peek() == b && b.getDot().finished();
 		}
 
 		@Override
 		public P[][] getPos() {
 			List<P[]> list = new ArrayList<>();
 			List<P> cur = null;
-			for (DotBullet d : qd) {
+			for (DotCont d : qd) {
 				if (!d.isDead()) {
 					if (cur == null)
 						cur = new ArrayList<>();
-					cur.add(d.dot.pos);
+					cur.add(d.getDot().pos);
 				} else {
 					if (cur != null)
 						list.add(cur.toArray(new P[0]));

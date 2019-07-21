@@ -11,9 +11,9 @@ public class StageSet {
 
 		public final String name;
 
-		private final Class<? extends SpellCard> cls;
+		private final Class<? extends StageSection> cls;
 
-		private Spell(Class<? extends SpellCard> clas, String str) {
+		private Spell(Class<? extends StageSection> clas, String str) {
 			name = str;
 			cls = clas;
 		}

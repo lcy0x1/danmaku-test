@@ -18,18 +18,6 @@ public abstract class PlAtk extends Entity {
 		}
 
 		@Override
-		protected void doAttack(Life l) {
-			if (isDead() || !dot.spr.active())
-				return;
-			l.attacked(T_N, atk);
-			getEntCtrl().killed(Control.K_FUNCTIONAL);
-		}
-
-		@Override
-		public Shape getShape() {
-			return dot.spr.getShape();
-		}
-
 		public void draw() {
 			if (dot.finished())
 				return;
@@ -40,6 +28,19 @@ public abstract class PlAtk extends Entity {
 		@Override
 		public Dot getDot() {
 			return dot;
+		}
+
+		@Override
+		public Shape getShape() {
+			return dot.spr.getShape();
+		}
+
+		@Override
+		protected void doAttack(Life l) {
+			if (isDead() || !dot.spr.active())
+				return;
+			l.attacked(T_N, atk);
+			getEntCtrl().killed(Control.K_FUNCTIONAL);
 		}
 
 	}

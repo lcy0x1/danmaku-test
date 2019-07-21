@@ -17,19 +17,22 @@ public class SpellCard extends StageSection implements Sprite.Dire {
 			l = new Life(tot, tot, dot = new Dot(p.copy(), sp));
 		}
 
-		public void update(int dt) {
-			super.update(dt);
-			l.update(dt);
+		@Override
+		public boolean finished() {
+			return super.finished() || l.isDead();
 		}
 
+		@Override
 		public void post() {
 			dot.tmp.setTo(pos);
 			l.post();
 			super.post();
 		}
 
-		public boolean finished() {
-			return super.finished() || l.isDead();
+		@Override
+		public void update(int dt) {
+			super.update(dt);
+			l.update(dt);
 		}
 
 	}

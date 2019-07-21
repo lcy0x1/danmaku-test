@@ -48,13 +48,13 @@ public class DotBullet extends Bullet implements DotCont {
 	}
 
 	@Override
-	public Shape getShape() {
-		return dot.spr.getShape();
+	public Dot getDot() {
+		return dot;
 	}
 
 	@Override
-	public Dot getDot() {
-		return dot;
+	public Shape getShape() {
+		return dot.spr.getShape();
 	}
 
 }

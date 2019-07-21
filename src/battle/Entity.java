@@ -35,6 +35,9 @@ public abstract class Entity implements Updatable {
 		ctrls.removeIf(c -> cls.isInstance(c));
 	}
 
+	@Override
+	public abstract void draw();
+
 	public final Control.EntCtrl getEntCtrl() {
 		return ent;
 	}
@@ -76,7 +79,5 @@ public abstract class Entity implements Updatable {
 
 	/** this entity attacks the entity e */
 	protected abstract void attack(Entity e);
-
-	public abstract void draw();
 
 }

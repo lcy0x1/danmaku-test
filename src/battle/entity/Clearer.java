@@ -27,6 +27,12 @@ public class Clearer extends Entity {
 	}
 
 	@Override
+	public void draw() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	public Shape getShape() {
 		return shape;
 	}
@@ -47,12 +53,6 @@ public class Clearer extends Entity {
 	protected void attack(Entity e) {
 		if (shape.dis(e.getShape()) < 0)
 			e.getEntCtrl().killed(hard);
-	}
-
-	@Override
-	public void draw() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

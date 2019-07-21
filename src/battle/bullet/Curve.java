@@ -14,13 +14,13 @@ public abstract class Curve extends Shape.LineSegs implements Control.UpdCtrl {
 
 	public static interface DotCont {
 
-		public Dot getDot();
-
-		public boolean isDead();
+		public void addCtrl(Control ctrl);
 
 		public void clearCtrl(Class<? extends Control> cls);
 
-		public void addCtrl(Control ctrl);
+		public Dot getDot();
+
+		public boolean isDead();
 
 	}
 

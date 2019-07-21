@@ -21,6 +21,19 @@ public class Life extends Entity implements Control {
 	}
 
 	@Override
+	public void draw() {
+		if (dot.finished())
+			return;
+		if (dot.spr.getSprite() != null)
+			dot.spr.getSprite().draw();
+	}
+
+	@Override
+	public boolean finished() {
+		return health <= 0;
+	}
+
+	@Override
 	public Shape getShape() {
 		return dot.spr.getShape();
 	}
@@ -40,19 +53,6 @@ public class Life extends Entity implements Control {
 			health -= atk / ndef;
 		if (type == PlAtk.T_S)
 			health -= atk / sdef;
-	}
-
-	@Override
-	public void draw() {
-		if (dot.finished())
-			return;
-		if (dot.spr.getSprite() != null)
-			dot.spr.getSprite().draw();
-	}
-
-	@Override
-	public boolean finished() {
-		return health <= 0;
 	}
 
 }

@@ -51,7 +51,7 @@ public abstract class Entity implements Updatable {
 	public void post() {
 		for (Updatable u : updts)
 			u.post();
-		if (isDead() && trails != null)
+		if (!ent.finished() && isDead() && trails != null)
 			for (Updatable e : trails)
 				Engine.RUNNING.add(e);
 	}

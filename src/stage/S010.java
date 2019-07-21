@@ -64,11 +64,6 @@ public class S010 extends SpellCard implements Emiter.Ticker {
 		}
 
 		@Override
-		public int getType() {
-			return 0;
-		}
-
-		@Override
 		public boolean out(P pos, double r) {
 			return false;
 		}
@@ -89,11 +84,6 @@ public class S010 extends SpellCard implements Emiter.Ticker {
 		private PathPrim(P o, P v) {
 			ori = o;
 			pv = v;
-		}
-
-		@Override
-		public int getType() {
-			return 0;
 		}
 
 		@Override

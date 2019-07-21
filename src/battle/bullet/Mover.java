@@ -158,13 +158,6 @@ public interface Mover {
 		}
 
 		@Override
-		public int getType() {
-			if (time > t1)
-				return TYPE_TIME | TYPE_LINE;
-			return TYPE_TIME;
-		}
-
-		@Override
 		public boolean out(P pos, double r) {
 			return pos.moveOut(v, Engine.BOUND, r);
 		}
@@ -206,11 +199,6 @@ public interface Mover {
 		@Override
 		public double getDire() {
 			return v.atan2();
-		}
-
-		@Override
-		public int getType() {
-			return TYPE_LINE;
 		}
 
 		@Override
@@ -269,11 +257,6 @@ public interface Mover {
 		}
 
 		@Override
-		public int getType() {
-			return TYPE_TIME;
-		}
-
-		@Override
 		public void update(Dot d, int dt) {
 			P p0 = disp(time);
 			P p1 = disp(time + dt);
@@ -292,8 +275,6 @@ public interface Mover {
 	public default double getDire() {
 		return Double.NaN;
 	}
-
-	public int getType();
 
 	public boolean out(P pos, double r);
 

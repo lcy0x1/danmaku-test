@@ -11,8 +11,8 @@ public class S017 extends SpellCard implements Emiter.Ticker {
 
 	private static final Sprite.SParam d0 = Sprite.getSprite(Sprite.P_D, 20403, 0, 1);
 
-	private static final int f0 = 8000, f1 = 100, t1 = 40;
-	private static final int ref = 2;
+	private static final int f0 = 8000, f1 = 100, t1 = 30;
+	private static final int ref = 1;
 
 	private static final double v0 = 0.4;
 

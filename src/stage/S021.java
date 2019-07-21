@@ -12,13 +12,13 @@ public class S021 extends SpellCard implements Emiter.Ticker {
 	private static final Sprite.SParam d1 = Sprite.getSprite(Sprite.P_D, 10506, 0, 1);
 	private static final Sprite.SParam d2 = Sprite.getSprite(Sprite.P_D, 30001, 1, 1);
 
-	private static final int f0 = 8000, t0 = 1000, t1 = 6000, f1 = 60, t2 = 1000, f2 = 160;
+	private static final int f0 = 8000, t0 = 1000, t1 = 6000, f1 = 60, t2 = 1000, f2 = 160, t3 = 500, m = 4;
 
 	private static final double v0 = 0.4, dt = 1e-4, va = -v0 / t0, v1 = 0.4;
 
 	private static final int[] ns = { 24, 32, 40, 48 };
 
-	private final int n, m;
+	private final int n;
 
 	private P tmpp;
 	private double tmpa;
@@ -26,7 +26,6 @@ public class S021 extends SpellCard implements Emiter.Ticker {
 	public S021(int diff) {
 		super(60000);
 		n = ns[diff];
-		m = n / 2;
 	}
 
 	@Override
@@ -39,7 +38,7 @@ public class S021 extends SpellCard implements Emiter.Ticker {
 				if (i == 0)
 					tmpp = p0;
 				P pv = P.polar(v0 + dt, a1);
-				add(new DotBullet(new Dot(p0, pv, va, t0, d0), t1));
+				add(new DotBullet(new Dot(p0, pv, va, t0, d0), t1).setLv(K_FUNCTIONAL), ex);
 			}
 			add(new Emiter(1, f1, t1, this).setDelay(t0));
 			add(new Emiter(2, f2, t1, this).setDelay(t0 + t2));
@@ -50,14 +49,15 @@ public class S021 extends SpellCard implements Emiter.Ticker {
 			for (int i = 0; i < n; i++) {
 				double a1 = tmpa + p2 / n * i;
 				P p0 = P.polar(pc.dis(tmpp), pc.atan2(tmpp) + p2 / n * i).plus(pc);
-				add(new DotBullet(new Dot(p0, P.polar(v1, a1), d1)));
+				add(new DotBullet(new Dot(p0.copy(), P.polar(v1, a1), d1)), ex);
+				add(new DotBullet(new Dot(p0, P.polar(v1, p0.atan2(pc)), d1), t3), ex);
 			}
 		}
 		if (e.id == 2) {
 			double a0 = pc.atan2(getPlayer().pos);
-			for (int i = 0; i < m; i++) {
-				double a1 = a0 + p2 / m * i;
-				add(new DotBullet(new Dot(pc.copy(), P.polar(v1, a1), d2)));
+			for (int i = 0; i < n / m; i++) {
+				double a1 = a0 + p2 / n * m * i;
+				add(new DotBullet(new Dot(pc.copy(), P.polar(v1, a1), d2)), ex);
 			}
 		}
 	}

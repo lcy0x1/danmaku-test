@@ -19,7 +19,7 @@ public class S018 extends SpellCard implements Emiter.Ticker {
 	private static final P pos = new P(400, 200);
 
 	private static final int[] ns = { 24, 32, 40, 48 };
-	private static final int[] ts = { 150, 175, 200, 225 };
+	private static final int[] ts = { 215, 220, 225, 230 };
 	private final int n, t1;
 
 	public S018(int diff) {

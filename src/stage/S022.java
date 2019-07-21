@@ -7,7 +7,6 @@ import battle.Engine;
 import battle.Sprite;
 import battle.bullet.Dot;
 import battle.bullet.DotBullet;
-import battle.bullet.Mover;
 import battle.entity.Emiter;
 import util.P;
 
@@ -15,12 +14,11 @@ public class S022 extends SpellCard implements Emiter.Ticker {
 
 	private static final Sprite.SParam d0 = Sprite.getSprite(Sprite.P_D, 20401, 0, 1);
 	private static final Sprite.SParam d1 = Sprite.getSprite(Sprite.P_D, 20403, 0, 1);
-	private static final Sprite.SParam d2 = Sprite.getSprite(Sprite.P_D, 20400, 0, 1);
 
-	private static final int f0 = 3000, f1 = 60, f2 = 20, f3 = 240, f4 = 200;
-	private static final int t0 = 2000, t1 = 800, t2 = 2200, t4 = 1000;
-	private static final double v0 = 0.2, v1 = 0.3, v2 = 0.8, dv = 1e-5, v3 = 0.4, v4 = 2;
-	private static final double rad = 800, RAD = 1.2011224;
+	private static final int f0 = 3000, f1 = 40, f2 = 20, f3 = 180;
+	private static final int t0 = 2000, t1 = 800, t2 = 2200;
+	private static final double v0 = 0.2, v1 = 0.3;
+	private static final double rad = 600, RAD = 1.2011224;
 
 	private static final P lim0 = new P(100, 100), lim1 = new P(700, 300);
 
@@ -28,13 +26,12 @@ public class S022 extends SpellCard implements Emiter.Ticker {
 	private static final int[] ms = { 8, 10, 12, 14 };
 	private static final int[] w0s = { 2500, 2700, 2900, 3100 };
 	private static final int[] w1s = { 5000, 5500, 6000, 6500 };
-	private static final double[] facs = { 0.55, 0.6, 0.65, 0.7 };
+	private static final double[] facs = { 0.66, 0.69, 0.72, 0.75 };
 
 	private final int n, m;
 	private final double w0, w1, fac;
 	private final P pos;
 	private final List<DotBullet> list = new ArrayList<DotBullet>();
-	private final List<DotBullet> home = new ArrayList<DotBullet>();
 
 	private Emiter prim;
 	private P[] ps, ts;
@@ -54,14 +51,10 @@ public class S022 extends SpellCard implements Emiter.Ticker {
 	@Override
 	public void tick(Emiter e, int it, int ex) {
 		if (e.id == 0) {
-			for (DotBullet db : home)
-				db.getEntCtrl().killed(K_FUNCTIONAL);
-			home.clear();
 
 			add(new Emiter(1, f1, t0, this));
 			add(new Emiter(2, f2, t0 + t1, this).setDelay(t2));
 			add(new Emiter(3, f3, t0, this));
-			add(new Emiter(4, f4, t4, this));
 
 		}
 		if (e.id == 1) {
@@ -106,22 +99,7 @@ public class S022 extends SpellCard implements Emiter.Ticker {
 			for (int i = 0; i < ps.length; i++)
 				ps[i].setTo(move(ts[i], tim));
 
-			for (DotBullet db : home) {
-				double a0 = db.dot.getDire();
-				P pv = P.polar(v3, a0);
-				P p0 = P.polar(v4 * it * f2, a0).plus(db.dot.pos);
-				add(new DotBullet(new Dot(p0, pv, d2)));
-			}
-
 			pos.setTo(ppos.middleC(npos, tim));
-		}
-		if (e.id == 4) {
-			P p0 = pos.copy();
-			P pv = P.polar(v2, pos.atan2(getPlayer().pos));
-			DotBullet b0 = new DotBullet(new Dot(p0, pv, d2));
-			DotBullet b1 = new DotBullet(new Dot(p0, d2, new Mover.HomingLM(dv)));
-			home.add(b1);
-			add(b0.trail(b1.setLv(K_FUNCTIONAL)).setLv(K_FUNCTIONAL), ex);
 		}
 	}
 

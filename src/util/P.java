@@ -233,6 +233,18 @@ public strictfp class P {
 				|| y - r > b2.y && v.y >= 0;
 	}
 
+	public P onLimit(P v, P b1, P b2) {
+		if (x < b1.x)
+			return new P(b1.x, y - (x - b1.x) / v.x * v.y);
+		if (x > b2.x)
+			return new P(b2.x, y - (x - b2.x) / v.x * v.y);
+		if (y < b1.y)
+			return new P(x - (y - b1.y) / v.y * v.x, b1.y);
+		if (y > b2.y)
+			return new P(x - (y - b2.y) / v.y * v.x, b2.y);
+		return this;
+	}
+
 	public boolean out(int[] rect, double sca, double r) {
 		P p0 = new P(rect[0], rect[1]);
 		P p1 = new P(rect[2], rect[3]).plus(p0);

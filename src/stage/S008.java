@@ -14,7 +14,7 @@ public class S008 extends SpellCard implements Emiter.Ticker {
 	private static final Sprite.SParam[] sps = { sp0, sp1 };
 	private static final int f0 = 4000, l = 100, ref = 1;
 	private static final double v0 = 0.6;
-	private static final int[] ns = { 20, 25, 30, 35 };
+	private static final int[] ns = { 14, 21, 28, 35 };
 	private final int n;
 
 	public S008(int diff) {

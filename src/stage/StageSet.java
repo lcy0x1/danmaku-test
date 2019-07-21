@@ -60,7 +60,8 @@ public class StageSet {
 		list.add(new SpellSet("Reimu")//
 				.add(S011.class, "S1 concious")//
 				.add(S001.class, "S2 immunity")//
-				.add(S020.class, "S3 square"));
+				.add(S020.class, "S3 square")//
+				.add(S024.class, "S4 enclose"));
 
 		list.add(new SpellSet("Sanae")//
 				.add(S009.class, "NS1 rotate")//
@@ -72,8 +73,9 @@ public class StageSet {
 				.add(S018.class, "NS1 warn")//
 				.add(S016.class, "S1 trace")//
 				.add(S017.class, "NS2 ref")//
-				.add(S021.class, "S2 trap")//
-				.add(S022.class, "S3 shrink"));
+				.add(S023.class, "S2 extend")//
+				.add(S022.class, "S3 shrink")//
+				.add(S021.class, "S4 trap"));
 
 		list.add(new SpellSet("Yukari")//
 				.add(S004.class, "S1 tantacle"));

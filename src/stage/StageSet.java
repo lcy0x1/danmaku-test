@@ -78,7 +78,8 @@ public class StageSet {
 				.add(S021.class, "S4 trap"));
 
 		list.add(new SpellSet("Yukari")//
-				.add(S004.class, "S1 tantacle"));
+				.add(S004.class, "S1 tantacle")//
+				.add(S025.class, "S2 elec"));
 
 		list.add(new SpellSet("Yuuka")//
 				.add(S005.class, "S1")//

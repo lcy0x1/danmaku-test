@@ -109,10 +109,7 @@ public class BattlePage extends Page {
 				move.x++;
 			move.times(shift ? 2 : 5);
 			e.pl.ext.plus(move).plus(disp).limit(Engine.BOUND);
-			// long t0=System.nanoTime();
 			e.update(Timer.p);
-			// long t1=System.nanoTime();
-			// System.out.println(t1-t0);
 			jctn.setText("count:" + e.count());
 			int sec = e.time.clock / 1000;
 			jtim.setText("time:" + Data.str(sec / 60, 2) + ":" + Data.str(sec % 60, 2));

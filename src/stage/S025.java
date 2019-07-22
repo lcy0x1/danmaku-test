@@ -95,15 +95,15 @@ public class S025 extends SpellCard implements Emiter.Ticker {
 
 	private static final int f1 = 20, f2 = 40, f3 = 300, t3 = 2000, t4 = 4000;
 
-	private static final double v0 = 0.1, v1 = 0.4, v2 = 0.4, a2 = 5e-3, v3 = 1e-5, a3 = 2e-4, a4 = 5e-5;
+	private static final double v0 = 0.1, v1 = 0.4, v2 = 0.3, a2 = 5e-3, v3 = 1e-5, a3 = 2e-4, a4 = 5e-5;
 	private static final int val0 = 1, val1 = 3, val2 = 5, mass = 1;
-	private static final double c0 = 5e0, c1 = 5e-3;
+	private static final double c0 = 5e0, c1 = 5e-3, da = p2 / 24;
 
 	private static final P lim0 = new P(-50, -50), lim1 = new P(850, 1050);
 
 	private static final int[] ns = { 45, 60, 75, 90 };
 	private static final int[] ms = { 8, 10, 12, 14 };
-	private static final int[] rs = { 50, 60, 70, 80 };
+	private static final int[] rs = { 100, 120, 140, 160 };
 	private static final int[] fs = { 2000, 1700, 1400, 1100 };
 
 	private final List<Interact> list = new ArrayList<Interact>();
@@ -152,8 +152,10 @@ public class S025 extends SpellCard implements Emiter.Ticker {
 			path.removeIf(x -> x.isDead());
 			for (DotBullet b0 : path) {
 				P pos = b0.dot.pos.copy();
-				P pv = P.polar(v3, b0.dot.getDire());
-				add(new DotBullet(new Dot(pos, pv, a3, f0 * m, f0 * m + t3, d2)), ex);
+				double a0 = b0.dot.getDire();
+				P pv = P.polar(v3, a0);
+				P pa = P.polar(a3, a0 + rand(da) - da / 2);
+				add(new DotBullet(new Dot(pos, pv, pa, f0 * m, f0 * m + t3, d2)), ex);
 			}
 		}
 		if (e.id == 4) {

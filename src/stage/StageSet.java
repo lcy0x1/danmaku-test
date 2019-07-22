@@ -80,6 +80,7 @@ public class StageSet {
 				.add(S021.class, "S4 trap"));
 
 		list.add(new SpellSet("Yukari")//
+				.add(S028.class, "NS1 wave-particle")//
 				.add(S004.class, "S1 tantacle")//
 				.add(S025.class, "S2 elec"));
 

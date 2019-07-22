@@ -191,6 +191,11 @@ public class Dot implements Sprite.Dire, Control.UpdCtrl {
 		this(p, img, new LineMover(v, a, t));
 	}
 
+	/** semi-linear */
+	public Dot(P p, P v, P a, int t0, int t1, DSParam img) {
+		this(p, img, new LineMover(v, a, t0, t1));
+	}
+
 	/** custom sprite */
 	public Dot(P p, PosSprite ps) {
 		pos = p;

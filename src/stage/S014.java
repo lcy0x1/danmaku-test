@@ -6,7 +6,7 @@ import battle.bullet.Dot;
 import battle.bullet.DotBullet;
 import battle.bullet.Laser;
 import battle.entity.Emiter;
-import stage.bullet.Roting;
+import battle.special.Roting;
 import util.P;
 
 public class S014 extends SpellCard implements Emiter.Ticker {

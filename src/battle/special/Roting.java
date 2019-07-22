@@ -1,4 +1,4 @@
-package stage.bullet;
+package battle.special;
 
 import battle.Engine;
 import battle.bullet.Mover;

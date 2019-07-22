@@ -58,7 +58,9 @@ public class StageSet {
 				.add(S014.class, "S3 fence"));
 
 		list.add(new SpellSet("Reimu")//
+				.add(S026.class, "NS1 double")//
 				.add(S011.class, "S1 concious")//
+				.add(S027.class, "NS2 chaos")//
 				.add(S001.class, "S2 immunity")//
 				.add(S020.class, "S3 square")//
 				.add(S024.class, "S4 enclose"));

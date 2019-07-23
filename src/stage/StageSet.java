@@ -51,25 +51,26 @@ public class StageSet {
 	static {
 
 		list.add(new SpellSet("Okina")//
-				.add(S015.class, "NS1 flow")//
-				.add(S000.class, "S1 resonance")//
+				.add(S007.class, "NS1 ref")//
+				.add(S014.class, "S1 fence")//
 				.add(S013.class, "NS2 wave")//
-				.add(S012.class, "S2 wall")//
-				.add(S014.class, "S3 fence"));
+				.add(S000.class, "S2 resonance")//
+				.add(S015.class, "NS3 flow")//
+				.add(S012.class, "S3 wall"));
 
 		list.add(new SpellSet("Reimu")//
 				.add(S026.class, "NS1 double")//
 				.add(S011.class, "S1 concious")//
 				.add(S027.class, "NS2 chaos")//
 				.add(S001.class, "S2 immunity")//
+				.add(S029.class, "NS3 boundary")//
 				.add(S020.class, "S3 square")//
 				.add(S024.class, "S4 enclose"));
 
 		list.add(new SpellSet("Sanae")//
 				.add(S009.class, "NS1 rotate")//
-				.add(S007.class, "S1 ref")//
-				.add(S008.class, "NS2 laser ref")//
-				.add(S019.class, "S2 star"));
+				.add(S019.class, "S2 star")//
+				.add(S008.class, "NS2 laser ref"));
 
 		list.add(new SpellSet("Sakuya")//
 				.add(S018.class, "NS1 warn")//
@@ -82,6 +83,7 @@ public class StageSet {
 		list.add(new SpellSet("Yukari")//
 				.add(S028.class, "NS1 wave-particle")//
 				.add(S004.class, "S1 tantacle")//
+				.add(S030.class, "NS2 wave-particle")//
 				.add(S025.class, "S2 elec"));
 
 		list.add(new SpellSet("Yuuka")//

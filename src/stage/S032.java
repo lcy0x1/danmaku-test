@@ -63,7 +63,7 @@ public class S032 extends SpellCard implements Emiter.Ticker {
 	private static final Sprite.SParam d3 = Sprite.getSprite(Sprite.P_D, 10115, 0, 1);
 	private static final Sprite.SParam d4 = Sprite.getSprite(Sprite.P_D, 30000, 1, 1);
 
-	private static final int f0 = 6000, f1 = 20, t0 = 3000, l0 = 500, l1 = 200, m = 3, t2 = 3000;
+	private static final int f0 = 6000, f1 = 20, t0 = 3000, l0 = 500, l1 = 200, m = 3, t2 = 3000, t3 = 1000;
 	private static final double v0 = 0.2, v1 = (l0 - l1) * 2.0 / t0, v2 = 0.1, da = p2 / 6, ac0 = 2e-4, ac1 = 1e-4;
 	private static final double m0 = 0.5, m1 = 1;
 
@@ -81,17 +81,25 @@ public class S032 extends SpellCard implements Emiter.Ticker {
 		if (e.id == 0) {
 			double a = rand(p2);
 			int s = it % 2 * 2 - 1;
-			double w1 = s * (p2 / t0 / 2 + rand(p2 / t0 / 2));
+			double w1 = s * (p2 / t0 / 4 + rand(p2 / t0 / 4 * 3));
 			for (int i = 0; i < m; i++) {
 				double a0 = a + p2 / n / m * i;
 				int nx = 3 + (int) rand(3);
-				double w2 = s * (p2 / t0 * m0 + m1 * rand(p2 / t0));
-				double ia = rand(p2);
 				double dia = rand(da) - da / 2;
 				for (int j = 0; j < n; j++) {
 					double a1 = a0 + p2 / n * j;
-					add(new DotBullet(new Dot(pos, l0, a1, 0, w1, d4), t0), ex);
-					add(new Emiter(i, f1, t0, new Sub(a1, dia, w1, ia + a1, nx, w2, pos)), ex);
+					double w2 = s * (p2 / t0 * m0 + m1 * rand(p2 / t0));
+					double ia = rand(p2);
+					DotBullet b0 = new DotBullet(new Dot(pos, l0, a1, 0, w1, d4), t0);
+					P pv0 = P.polar(w1 * l0, a1 + p2 / 4);
+					P p0 = P.polar(l0, a1).plus(pos).plus(pv0, -t3);
+					DotBullet b1 = new DotBullet(new Dot(p0, pv0, d4), t3);
+					P p1 = P.polar(l0, a1 + w1 * t0).plus(pos);
+					P pv1 = P.polar(w1 * l0, a1 + w1 * t0 + p2 / 4);
+					DotBullet b2 = new DotBullet(new Dot(p1, pv1, d4));
+					add(b1.trail(b0.trail(b2)), ex);
+					Sub sub = new Sub(a1, dia, w1, ia + a1, nx, w2, pos);
+					add(new Emiter(i, f1, t0 + t3, sub).setDelay(t3), ex);
 				}
 
 			}

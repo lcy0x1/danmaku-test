@@ -44,13 +44,13 @@ public class SelectPage extends Page {
 		setBounds(0, 0, x, y);
 		set(back, x, y, 0, 0, 200, 50);
 		set(jspm, x, y, 200, 200, 400, 800);
-		set(jsps, x, y, 650, 200, 400, 800);
-		set(strt, x, y, 1100, 200, 200, 50);
-		set(jcb, x, y, 1100, 300, 200, 50);
-		set(cbl, x, y, 1100, 400, 200, 50);
-		set(cbg, x, y, 1100, 500, 200, 50);
-		set(geo, x, y, 1100, 600, 200, 50);
-		set(tex, x, y, 1100, 700, 200, 50);
+		set(jsps, x, y, 650, 200, 600, 800);
+		set(strt, x, y, 1300, 200, 200, 50);
+		set(jcb, x, y, 1300, 300, 200, 50);
+		set(cbl, x, y, 1300, 400, 200, 50);
+		set(cbg, x, y, 1300, 500, 200, 50);
+		set(geo, x, y, 1300, 600, 200, 50);
+		set(tex, x, y, 1300, 700, 200, 50);
 	}
 
 	private void addListeners() {

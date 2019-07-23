@@ -60,12 +60,12 @@ public class StageSet {
 
 		list.add(new SpellSet("Reimu")//
 				.add(S026.class, "NS1 double")//
-				.add(S011.class, "S1 concious")//
+				.add(S024.class, "S1 enclose")//
 				.add(S027.class, "NS2 chaos")//
-				.add(S001.class, "S2 immunity")//
+				.add(S020.class, "S2 square")//
 				.add(S029.class, "NS3 boundary")//
-				.add(S020.class, "S3 square")//
-				.add(S024.class, "S4 enclose"));
+				.add(S011.class, "S3 concious")//
+				.add(S001.class, "LW immunity"));
 
 		list.add(new SpellSet("Sanae")//
 				.add(S009.class, "NS1 rotate")//
@@ -75,10 +75,11 @@ public class StageSet {
 		list.add(new SpellSet("Sakuya")//
 				.add(S018.class, "NS1 warn")//
 				.add(S016.class, "S1 trace")//
-				.add(S017.class, "NS2 ref")//
+				.add(S017.class, "NS2 follow ref")//
 				.add(S023.class, "S2 extend")//
+				.add(S031.class, "NS3 wall ref")//
 				.add(S022.class, "S3 shrink")//
-				.add(S021.class, "S4 trap"));
+				.add(S021.class, "LW trap"));
 
 		list.add(new SpellSet("Yukari")//
 				.add(S028.class, "NS1 wave-particle")//
@@ -94,7 +95,7 @@ public class StageSet {
 				.add(S006.class, "S1"));
 
 		list.add(new SpellSet("Youmu")//
-				.add(S002.class, "S1"));
+				.add(S002.class, "LW"));
 
 		list.add(new SpellSet("Koishi")//
 				.add(S003.class, "S1"));

@@ -85,7 +85,8 @@ public class StageSet {
 				.add(S028.class, "NS1 wave-particle")//
 				.add(S004.class, "S1 tantacle")//
 				.add(S030.class, "NS2 wave-particle")//
-				.add(S025.class, "S2 elec"));
+				.add(S025.class, "S2 elec")//
+				.add(S032.class, "LW boundary"));
 
 		list.add(new SpellSet("Yuuka")//
 				.add(S005.class, "S1")//

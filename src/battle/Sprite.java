@@ -387,6 +387,8 @@ public class Sprite implements Comparable<Sprite> {
 
 		@Override
 		public PosShape getShape(P pos) {
+			if (mode == 2)
+				return new Shape.NonShape(pos);
 			return new Shape.Circle(pos, r);
 		}
 

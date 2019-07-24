@@ -90,13 +90,13 @@ public class S032 extends SpellCard implements Emiter.Ticker {
 					double a1 = a0 + p2 / n * j;
 					double w2 = s * (p2 / t0 * m0 + m1 * rand(p2 / t0));
 					double ia = rand(p2);
-					DotBullet b0 = new DotBullet(new Dot(pos, l0, a1, 0, w1, d4), t0);
+					Entity b0 = new DotBullet(new Dot(pos, l0, a1, 0, w1, d4), t0).setLv(K_FUNCTIONAL);
 					P pv0 = P.polar(w1 * l0, a1 + p2 / 4);
 					P p0 = P.polar(l0, a1).plus(pos).plus(pv0, -t3);
-					DotBullet b1 = new DotBullet(new Dot(p0, pv0, d4), t3);
+					Entity b1 = new DotBullet(new Dot(p0, pv0, d4), t3).setLv(K_FUNCTIONAL);
 					P p1 = P.polar(l0, a1 + w1 * t0).plus(pos);
 					P pv1 = P.polar(w1 * l0, a1 + w1 * t0 + p2 / 4);
-					DotBullet b2 = new DotBullet(new Dot(p1, pv1, d4));
+					Entity b2 = new DotBullet(new Dot(p1, pv1, d4)).setLv(K_FUNCTIONAL);
 					add(b1.trail(b0.trail(b2)), ex);
 					Sub sub = new Sub(a1, dia, w1, ia + a1, nx, w2, pos);
 					add(new Emiter(i, f1, t0 + t3, sub).setDelay(t3), ex);

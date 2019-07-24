@@ -3,8 +3,6 @@ package stage;
 import java.util.ArrayList;
 import java.util.List;
 
-import battle.Control;
-
 public class StageSet {
 
 	public static class Spell {
@@ -18,7 +16,7 @@ public class StageSet {
 			cls = clas;
 		}
 
-		public Control.UpdCtrl getStage(int diff) {
+		public StageSection getStage(int diff) {
 			try {
 				return cls.getConstructor(Integer.TYPE).newInstance(diff);
 			} catch (Exception e) {
@@ -39,7 +37,7 @@ public class StageSet {
 			name = str;
 		}
 
-		private SpellSet add(Class<? extends SpellCard> cls, String str) {
+		private SpellSet add(Class<? extends StageSection> cls, String str) {
 			list.add(new Spell(cls, str));
 			return this;
 		}
@@ -52,11 +50,12 @@ public class StageSet {
 
 		list.add(new SpellSet("Okina")//
 				.add(S007.class, "(N1) ref")//
-				.add(S014.class, "(S1) [Door] The Spiritual Backdoor")//
+				.add(S014.class, "(S1) [Door] The Mystrious Gate")//
 				.add(S013.class, "(N2) wave")//
 				.add(S000.class, "(S2) [Season] Resonance of Four Seasons")//
 				.add(S015.class, "(N3) flow")//
-				.add(S012.class, "(S3) [Spirit] Activated Spirits"));
+				.add(S012.class, "(S3) [Spirit] Activated Spirits")//
+				.add(S034.class, "(N4) shift"));
 
 		list.add(new SpellSet("Reimu")//
 				.add(S026.class, "(N1) double")//
@@ -82,10 +81,11 @@ public class StageSet {
 				.add(S021.class, "(LW) Sakuya's Magical Trap"));
 
 		list.add(new SpellSet("Yukari")//
-				.add(S028.class, "(N1) W-P 1")//
-				.add(S004.class, "(S1) [Mystery] Tantacles of the Unknown")//
-				.add(S030.class, "(N2) W-P 2")//
-				.add(S025.class, "(S2) [Chaos] Evening Stars")//
+				.add(S033.class, "(N1) exp")//
+				.add(S028.class, "(N2) W-P 1")//
+				.add(S004.class, "(S2) [Mystery] Tantacles of the Unknown")//
+				.add(S030.class, "(N3) W-P 2")//
+				.add(S025.class, "(S3) [Chaos] Evening Stars")//
 				.add(S032.class, "(LW) Asymetrical Damaku Barrier"));
 
 		list.add(new SpellSet("Yuuka")//
@@ -118,7 +118,7 @@ public class StageSet {
 		return ans;
 	}
 
-	public static Control.UpdCtrl getStage(int i, int j, int diff) {
+	public static StageSection getStage(int i, int j, int diff) {
 		return list.get(i).list.get(j).getStage(diff);
 	}
 

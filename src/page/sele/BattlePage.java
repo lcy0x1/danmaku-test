@@ -32,7 +32,7 @@ public class BattlePage extends Page {
 
 	protected BattlePage(Page p, int cha, int sta, int diff) {
 		super(p);
-		e = new Engine(StageSet.getStage(cha, sta, diff));
+		e = new Engine.StartProfile(StageSet.getStage(cha, sta, diff)).getInstance();
 		fpc = new GLFPC(e);
 		ini();
 		resized();
@@ -107,9 +107,8 @@ public class BattlePage extends Page {
 				move.x--;
 			if (right)
 				move.x++;
-			move.times(shift ? 2 : 5);
-			e.pl.ext.plus(move).plus(disp).limit(Engine.BOUND);
-			e.update(Timer.p);
+			move.times(shift ? 2 : 5).plus(disp);
+			e.update(new Engine.UpdateProfile(move, Timer.p));
 			jctn.setText("count:" + e.count());
 			int sec = e.time.clock / 1000;
 			jtim.setText("time:" + Data.str(sec / 60, 2) + ":" + Data.str(sec % 60, 2));

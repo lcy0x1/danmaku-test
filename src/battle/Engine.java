@@ -11,11 +11,29 @@ import java.util.TreeMap;
 
 import battle.entity.Player;
 import jogl.util.FakeGraphics;
+import stage.StageSection;
 import util.P;
 
-public class Engine implements Updatable {
+public class Engine {
 
-	public static class Time {
+	public static class StartProfile {
+
+		private final StageSection upd;
+		private final P pos;
+
+		public StartProfile(StageSection sc) {
+			upd = sc;
+			pos = START;
+
+		}
+
+		public Engine getInstance() {
+			return new Engine(upd, pos);
+		}
+
+	}
+
+	public static class Time implements Updatable {
 
 		public static abstract class Mask {
 
@@ -78,11 +96,21 @@ public class Engine implements Updatable {
 		private final List<Mask> mask = new ArrayList<>();
 		private final List<Mask> temp = new ArrayList<>();
 
+		@Override
+		public void post() {
+			time += dispach(this);
+			clock += t;
+			for (Mask m : mask)
+				m.len -= t;
+			mask.removeIf(m -> m.len <= 0);
+			t = 0;
+		}
+
 		public void slowExc(double mult, int len, Updatable... es) {
 			Set<Updatable> l = new HashSet<>();
 			for (Updatable e : es)
 				l.add(e);
-			l.add(RUNNING);
+			l.add(this);
 			temp.add(new MaskExc(mult, len, l));
 		}
 
@@ -103,6 +131,13 @@ public class Engine implements Updatable {
 			temp.add(new MaskInc(mult, len, e));
 		}
 
+		@Override
+		public void update(int dt) {
+			mask.addAll(temp);
+			temp.clear();
+			t = dt;
+		}
+
 		private int dispach(Updatable e) {
 			double ans = t;
 			for (Mask m : mask)
@@ -110,19 +145,17 @@ public class Engine implements Updatable {
 			return (int) ans;
 		}
 
-		private void end() {
-			time += dispach(RUNNING);
-			clock += t;
-			for (Mask m : mask)
-				m.len -= t;
-			mask.removeIf(m -> m.len <= 0);
-			t = 0;
-		}
+	}
 
-		private void start(int dt) {
-			mask.addAll(temp);
-			temp.clear();
-			t = dt;
+	public static class UpdateProfile {
+
+		private final P pos;
+
+		private final int time;
+
+		public UpdateProfile(P p, int t) {
+			pos = p;
+			time = t;
 		}
 
 	}
@@ -134,7 +167,7 @@ public class Engine implements Updatable {
 
 	public final Player pl;
 	public final Time time;
-	public final Control.UpdCtrl stage;
+	public final StageSection stage;
 	public final Random r = new Random();
 
 	private final Map<Integer, List<Entity>> entities = new TreeMap<>();
@@ -142,8 +175,8 @@ public class Engine implements Updatable {
 	private final List<Control.UpdCtrl> updc = new ArrayList<>();
 	private final List<Control.UpdCtrl> utmp = new ArrayList<>();
 
-	public Engine(Control.UpdCtrl sc) {
-		pl = new Player();
+	private Engine(StageSection sc, P plp) {
+		pl = new Player(plp);
 		add(pl);
 		time = new Time();
 		stage = sc;
@@ -171,10 +204,10 @@ public class Engine implements Updatable {
 		RENDERING = null;
 	}
 
-	@Override
-	public void update(int t) {
+	public void update(UpdateProfile up) {
 		RUNNING = this;
-		time.start(t);
+		pl.ext.plus(up.pos).limit(BOUND);
+		time.update(up.time);
 		updc.forEach(e -> e.update(time.dispach(e)));
 		entities.forEach((i, l) -> l.forEach(e -> e.update(time.dispach(e))));
 		entities.forEach((i, l) -> {
@@ -194,7 +227,7 @@ public class Engine implements Updatable {
 		entities.forEach((i, l) -> l.forEach(e -> e.post()));
 		updc.removeIf(e -> e.finished());
 		entities.forEach((i, l) -> l.removeIf(e -> e.isDead()));
-		time.end();
+		time.post();
 		clearTmp();
 		RUNNING = null;
 	}

@@ -3,9 +3,10 @@ package stage;
 import battle.Sprite;
 import battle.bullet.Dot;
 import battle.entity.Life;
+import stage.StageSection.TimedStage;
 import util.P;
 
-public class SpellCard extends StageSection implements Sprite.Dire {
+public class SpellCard extends TimedStage implements Sprite.Dire {
 
 	public static class BossSpell extends SpellCard {
 
@@ -48,12 +49,17 @@ public class SpellCard extends StageSection implements Sprite.Dire {
 	protected SpellCard(int tot, P p) {
 		super(tot);
 		pos = p;
-		esp = Sprite.getSprite(Sprite.P_D, 1, 0, 1).getEntity(this);
+		esp = Sprite.getSprite(Sprite.P_D, 1, 0, 2).getEntity(this);
 	}
 
 	@Override
 	public void draw() {
 		esp.draw();
+	}
+
+	@Override
+	public BossProfile[] getBossPos() {
+		return new BossProfile[] { new BossProfile(0, pos) };
 	}
 
 	@Override

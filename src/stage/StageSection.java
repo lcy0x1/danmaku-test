@@ -7,7 +7,51 @@ import battle.entity.Clearer;
 import battle.entity.Player;
 import util.P;
 
-public class StageSection implements Control.UpdCtrl {
+public abstract class StageSection implements Control.UpdCtrl {
+
+	public static class BossProfile {
+
+		public final int id;
+
+		public final P pos;
+
+		public BossProfile(int n, P p) {
+			id = n;
+			pos = p;
+		}
+
+	}
+
+	public static abstract class TimedStage extends StageSection {
+
+		public int time;
+
+		private final int length;
+
+		protected TimedStage(int tot) {
+			length = tot;
+		}
+
+		@Override
+		public boolean finished() {
+			return time > length;
+		}
+
+		@Override
+		public void post() {
+			if (finished()) {
+				add(new Clearer(pc, 0, 1, 1300, K_BULLET));
+				add(new Clearer(pc, 0, 0.75, 1700, K_FUNCTIONAL));
+				add(new Clearer(pc, 0, 0.5, 2600, K_FINISH));
+			}
+		}
+
+		@Override
+		public void update(int dt) {
+			time += dt;
+		}
+
+	}
 
 	public static final P o = Engine.BOUND;
 	public static final P pc = new P(o.x / 2, o.y / 2);
@@ -32,31 +76,6 @@ public class StageSection implements Control.UpdCtrl {
 		return Engine.RUNNING.r.nextDouble() * a;
 	}
 
-	public int time;
-
-	private final int length;
-
-	protected StageSection(int tot) {
-		length = tot;
-	}
-
-	@Override
-	public boolean finished() {
-		return time > length;
-	}
-
-	@Override
-	public void post() {
-		if (finished()) {
-			add(new Clearer(pc, 0, 1, 1300, K_BULLET));
-			add(new Clearer(pc, 0, 0.75, 1700, K_FUNCTIONAL));
-			add(new Clearer(pc, 0, 0.5, 2600, K_FINISH));
-		}
-	}
-
-	@Override
-	public void update(int dt) {
-		time += dt;
-	}
+	public abstract BossProfile[] getBossPos();
 
 }

@@ -20,9 +20,9 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 
 	private int time, deadTime, dt;
 
-	public Player() {
+	public Player(P plp) {
 		super(C_PLAYER, 0);
-		pos = Engine.START.copy();
+		pos = plp.copy();
 		ext = pos.copy();
 		shape = new Shape.Circle(pos.copy(), 2);
 		img = Sprite.getSprite(Sprite.P_D, 0, 0, 1).getEntity(this);

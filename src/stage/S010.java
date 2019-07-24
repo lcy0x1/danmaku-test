@@ -102,7 +102,7 @@ public class S010 extends SpellCard implements Emiter.Ticker {
 	private static final Sprite.SParam sp0 = Sprite.getSprite(Sprite.P_SR, 11410, 0, 1);
 	private static final Sprite.SParam sp1 = Sprite.getCurve(11402, 0, 1, p2 / 30, 0, false);
 	private static final Sprite.SParam sp2 = Sprite.getCurve(11413, 0, 1, p2 / 30, 0, false);
-	private static final Sprite.SParam sp3 = Sprite.getSprite(Sprite.P_D, 10206, 0, 1);
+	private static final Sprite.SParam sp3 = Sprite.getDot(10206, 0);
 
 	private static final double l0 = 50, w0 = p2 / 1000, da = p2 / 4;
 

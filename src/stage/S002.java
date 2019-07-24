@@ -41,11 +41,11 @@ public class S002 extends SpellCard implements Emiter.Ticker {
 	private static final double[] sls = { 0.2, 0.22, 0.25, 0.29 };
 	private static final int[] d0s = { 8, 10, 12, 14 };
 	private static final int[] d1s = { 24, 32, 40, 48 };
-	private static final Sprite.SParam spr = Sprite.getSprite(Sprite.P_D, 10102, 0, 1);
-	private static final Sprite.SParam sp0 = Sprite.getSprite(Sprite.P_D, 10106, 0, 1);
+	private static final Sprite.SParam spr = Sprite.getDot(10102, 0);
+	private static final Sprite.SParam sp0 = Sprite.getDot(10106, 0);
 
-	private static final Sprite.SParam sp2 = Sprite.getSprite(Sprite.P_D, 30000, 1, 1);
-	private static final Sprite.SParam sp3 = Sprite.getSprite(Sprite.P_D, 30001, 1, 1);
+	private static final Sprite.SParam sp2 = Sprite.getDot(30000, 1, 1);
+	private static final Sprite.SParam sp3 = Sprite.getDot(30001, 1, 1);
 	private int dire = 1;
 
 	private final int diff;

@@ -13,9 +13,9 @@ import util.P;
 
 public class S023 extends SpellCard implements Emiter.Ticker {
 
-	private static final Sprite.SParam d0 = Sprite.getSprite(Sprite.P_D, 20401, 0, 1);
-	private static final Sprite.SParam d1 = Sprite.getSprite(Sprite.P_D, 20403, 0, 1);
-	private static final Sprite.SParam d2 = Sprite.getSprite(Sprite.P_D, 20400, 0, 1);
+	private static final Sprite.SParam d0 = Sprite.getDot(20401, 0);
+	private static final Sprite.SParam d1 = Sprite.getDot(20403, 0);
+	private static final Sprite.SParam d2 = Sprite.getDot(20400, 0);
 
 	private static final int f0 = 3000, f2 = 20, f4 = 200;
 	private static final int t0 = 2000, t1 = 800, t2 = 2200, t4 = 1000;

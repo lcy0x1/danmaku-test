@@ -30,15 +30,15 @@ public class S033 extends SpellCard implements Emiter.Ticker {
 
 	}
 
-	private static final Sprite.SParam d00 = Sprite.getSprite(Sprite.P_D, 30000, 1, 1);
-	private static final Sprite.SParam d01 = Sprite.getSprite(Sprite.P_D, 20201, 0, 1);
-	private static final Sprite.SParam d02 = Sprite.getSprite(Sprite.P_D, 10302, 0, 1);
-	private static final Sprite.SParam d03 = Sprite.getSprite(Sprite.P_D, 11302, 0, 1);
+	private static final Sprite.SParam d00 = Sprite.getDot(30000, 1);
+	private static final Sprite.SParam d01 = Sprite.getDot(20201, 0);
+	private static final Sprite.SParam d02 = Sprite.getDot(10302, 0);
+	private static final Sprite.SParam d03 = Sprite.getDot(11302, 0);
 
-	private static final Sprite.SParam d10 = Sprite.getSprite(Sprite.P_D, 30001, 1, 1);
-	private static final Sprite.SParam d11 = Sprite.getSprite(Sprite.P_D, 20203, 0, 1);
-	private static final Sprite.SParam d12 = Sprite.getSprite(Sprite.P_D, 10306, 0, 1);
-	private static final Sprite.SParam d13 = Sprite.getSprite(Sprite.P_D, 11306, 0, 1);
+	private static final Sprite.SParam d10 = Sprite.getDot(30001, 1);
+	private static final Sprite.SParam d11 = Sprite.getDot(20203, 0);
+	private static final Sprite.SParam d12 = Sprite.getDot(10306, 0);
+	private static final Sprite.SParam d13 = Sprite.getDot(11306, 0);
 
 	private static final Sprite.SParam[] d0s = { d00, d01, d02, d03 };
 	private static final Sprite.SParam[] d1s = { d10, d11, d12, d13 };

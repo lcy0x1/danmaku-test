@@ -123,22 +123,29 @@ public class Sprite implements Comparable<Sprite> {
 
 		}
 
-		private Map<Sprite, SubPool> map = new TreeMap<>();
+		private Map<Integer, Map<Sprite, SubPool>> map = new TreeMap<>();
 
 		public void flush(FakeGraphics fg) {
 			if (Data.DRAWSPRITE)
-				map.forEach((s, p) -> p.flush(fg));
+				map.forEach((i, m) -> m.forEach((s, p) -> p.flush(fg)));
 			if (Data.DEBUG)
-				map.forEach((s, p) -> p.debug(fg));
+				map.forEach((i, m) -> m.forEach((s, p) -> p.debug(fg)));
 			map.clear();
 		}
 
-		private SubPool getPool(Sprite s) {
-			SubPool p;
-			if (!map.containsKey(s))
-				map.put(s, p = new SubPool(s));
+		private SubPool getPool(Sprite s, int layer) {
+			Map<Sprite, SubPool> m;
+
+			if (!map.containsKey(layer))
+				map.put(layer, m = new TreeMap<Sprite, SubPool>());
 			else
-				p = map.get(s);
+				m = map.get(layer);
+
+			SubPool p;
+			if (!m.containsKey(s))
+				m.put(s, p = new SubPool(s));
+			else
+				p = m.get(s);
 			return p;
 		}
 
@@ -151,16 +158,17 @@ public class Sprite implements Comparable<Sprite> {
 	private static class CSP implements SParam {
 
 		private final Sprite s;
-		private final int mode;
+		private final int mode, layer;
 		private final double r;
 
-		private CSP(int id, int t, double m) {
-			this(get(id), t, m);
+		private CSP(int id, int t, double m, int layer) {
+			this(get(id), t, m, layer);
 		}
 
-		private CSP(Sprite spr, int t, double m) {
+		private CSP(Sprite spr, int t, double m, int lay) {
 			s = spr;
 			mode = t;
+			layer = lay;
 			r = s.size * m * MAGNIFY;
 		}
 
@@ -171,7 +179,7 @@ public class Sprite implements Comparable<Sprite> {
 
 		@Override
 		public ESprite getEntity(Shape.LineSegs d) {
-			return new CurveESprite(d, r, s, mode & 1, mode >> 1);
+			return new CurveESprite(d, r, s, mode & 1, mode >> 1, layer);
 		}
 
 		@Override
@@ -190,15 +198,16 @@ public class Sprite implements Comparable<Sprite> {
 
 		private final Sprite s;
 		private final double r;
-		private final int mode, rev;
+		private final int mode, rev, layer;
 		private final Shape.LineSegs dire;
 
-		private CurveESprite(Shape.LineSegs d, double ra, Sprite img, int m, int rv) {
+		private CurveESprite(Shape.LineSegs d, double ra, Sprite img, int m, int rv, int l) {
 			s = img;
 			dire = d;
 			r = ra;
 			mode = m;
 			rev = rv;
+			layer = l;
 		}
 
 		@Override
@@ -212,7 +221,7 @@ public class Sprite implements Comparable<Sprite> {
 					np[i] = ps[i].copy();
 				Curve c = getCurve(s.id, rev, r, np, 0);
 				c.times(1 / h);
-				Engine.RENDERING.getPool(s).addCurve(c, mode);
+				Engine.RENDERING.getPool(s, layer).addCurve(c, mode);
 			}
 		}
 
@@ -227,12 +236,12 @@ public class Sprite implements Comparable<Sprite> {
 
 		private final Sprite s;
 		private final double r, max, maxc;
-		private final int mode, rev;
+		private final int mode, rev, layer;
 		private final boolean conn;
 		private final Shape.LineSegs dire;
 
 		private DotCurveSprite(Shape.LineSegs d, double ra, Sprite img, int m, int rv, double ma, double mc,
-				boolean con) {
+				boolean con, int lay) {
 			s = img;
 			dire = d;
 			r = ra;
@@ -241,6 +250,7 @@ public class Sprite implements Comparable<Sprite> {
 			max = ma;
 			maxc = mc;
 			conn = con;
+			layer = lay;
 		}
 
 		@Override
@@ -311,7 +321,7 @@ public class Sprite implements Comparable<Sprite> {
 					np = new P[] { np[0], np[np.length - 1] };
 				Curve c = getCurve(s.id, rev, r, np, 0);
 				c.times(1 / h);
-				Engine.RENDERING.getPool(s).addCurve(c, mode);
+				Engine.RENDERING.getPool(s, layer).addCurve(c, mode);
 			}
 			list.clear();
 		}
@@ -322,15 +332,16 @@ public class Sprite implements Comparable<Sprite> {
 
 		private final Sprite s;
 		private final double w, h;
-		private final int mode;
+		private final int mode, layer;
 		private final Dire dire;
 
-		private DotESprite(Dire d, double sw, double sh, Sprite img, int m) {
+		private DotESprite(Dire d, double sw, double sh, Sprite img, int m, int lay) {
 			s = img;
 			dire = d;
 			w = sw;
 			h = sh;
 			mode = m;
+			layer = lay;
 		}
 
 		@Override
@@ -342,7 +353,7 @@ public class Sprite implements Comparable<Sprite> {
 				d += ROTRATE * dire.getTime();
 			Coord c = new Coord(pos.x, pos.y, w, h, d + (s.horiz ? 0 : Math.PI / 2));
 			c.times(1 / r);
-			Engine.RENDERING.getPool(s).addDot(c, mode);
+			Engine.RENDERING.getPool(s, layer).addDot(c, mode);
 		}
 
 		@Override
@@ -355,16 +366,17 @@ public class Sprite implements Comparable<Sprite> {
 	private static class DSP implements SParam {
 
 		private final Sprite s;
-		private final int mode;
+		private final int mode, layer;
 		private final double r;
 
-		private DSP(int id, int t, double m) {
-			this(get(id), t, m);
+		private DSP(int id, int t, double m, int layer) {
+			this(get(id), t, m, layer);
 		}
 
-		private DSP(Sprite spr, int t, double m) {
+		private DSP(Sprite spr, int t, double m, int lay) {
 			s = spr;
 			mode = t;
+			layer = lay;
 			r = s.size * m * MAGNIFY;
 		}
 
@@ -372,12 +384,12 @@ public class Sprite implements Comparable<Sprite> {
 		public ESprite getEntity(Dire d) {
 			if (s == null || s.id / 100 == 114)
 				return null;
-			return new DotESprite(d, r * 2, r * 2, s, mode);
+			return new DotESprite(d, r * 2, r * 2, s, mode, layer);
 		}
 
 		@Override
 		public ESprite getEntity(Shape.LineSegs d) {
-			return new CurveESprite(d, r, s, mode & 1, mode >> 1);
+			return new CurveESprite(d, r, s, mode & 1, mode >> 1, layer);
 		}
 
 		@Override
@@ -418,12 +430,12 @@ public class Sprite implements Comparable<Sprite> {
 		private final double ma, mc;
 		private final boolean conn;
 
-		private RCSP(int id, int t, double m, double max, double maxc, boolean con) {
-			this(get(id), t, m, max, maxc, con);
+		private RCSP(int id, int t, double m, double max, double maxc, boolean con, int layer) {
+			this(get(id), t, m, max, maxc, con, layer);
 		}
 
-		private RCSP(Sprite spr, int t, double m, double max, double maxc, boolean con) {
-			super(spr, t, m);
+		private RCSP(Sprite spr, int t, double m, double max, double maxc, boolean con, int layer) {
+			super(spr, t, m, layer);
 			ma = max;
 			conn = con;
 			mc = maxc;
@@ -432,7 +444,8 @@ public class Sprite implements Comparable<Sprite> {
 		@Override
 		public ESprite getEntity(Shape.LineSegs d) {
 			int mode = super.mode;
-			return new DotCurveSprite(d, super.r, super.s, mode & 1, mode >> 1, ma, mc, conn);
+			int l = super.layer;
+			return new DotCurveSprite(d, super.r, super.s, mode & 1, mode >> 1, ma, mc, conn, l);
 		}
 
 	}
@@ -501,6 +514,8 @@ public class Sprite implements Comparable<Sprite> {
 
 	public static final double DEFRAD = 20;
 
+	public static final int BG = Integer.MIN_VALUE, TOP = Integer.MAX_VALUE;
+
 	public static final Sprite[][] NON = new Sprite[1][2];
 	public static final Sprite[][] REG = new Sprite[16][16];
 
@@ -524,18 +539,30 @@ public class Sprite implements Comparable<Sprite> {
 			{ 14, 14 } };
 
 	public static SParam getCurve(int id, int mode, double mult, double a, double c, boolean b) {
-		return new RCSP(id, mode, mult, a, c, b);
+		return new RCSP(id, mode, mult, a, c, b, 0);
+	}
+
+	public static SParam getDot(int id, int mode) {
+		return getSprite(P_D, id, mode, 1, 0);
+	}
+
+	public static SParam getDot(int id, int mode, int layer) {
+		return getSprite(P_D, id, mode, 1, layer);
 	}
 
 	public static SParam getSprite(int type, int id, int mode, double mult) {
+		return getSprite(type, id, mode, mult, 0);
+	}
+
+	public static SParam getSprite(int type, int id, int mode, double mult, int layer) {
 		if (type == P_D)
-			return new DSP(id, mode, mult);
+			return new DSP(id, mode, mult, layer);
 		if (type == P_C)
-			return new CSP(id, mode, mult);
+			return new CSP(id, mode, mult, layer);
 		if (type == P_CR)
-			return new RCSP(id, mode, mult, MAX_ANGLE, 0, false);
+			return new RCSP(id, mode, mult, MAX_ANGLE, 0, false, layer);
 		if (type == P_SR)
-			return new RCSP(id, mode, mult, MIN_ANGLE, MAX_CURVE, true);
+			return new RCSP(id, mode, mult, MIN_ANGLE, MAX_CURVE, true, layer);
 		return null;
 	}
 
@@ -636,10 +663,6 @@ public class Sprite implements Comparable<Sprite> {
 	}
 
 	private int getLayer() {
-		if (id / 100 == 301)
-			return -id + 20200;
-		if (id == 1)
-			return -50000;
 		return -id;// FIXME
 	}
 

@@ -11,8 +11,8 @@ import util.P;
 public class S004 extends SpellCard implements Emiter.Ticker {
 
 	private static final Sprite.SParam spc = Sprite.getSprite(Sprite.P_C, 11406, 3, 2);
-	private static final Sprite.SParam sp0 = Sprite.getSprite(Sprite.P_D, 10102, 0, 1);
-	private static final Sprite.SParam sp1 = Sprite.getSprite(Sprite.P_D, 10106, 0, 1);
+	private static final Sprite.SParam sp0 = Sprite.getDot(10102, 0);
+	private static final Sprite.SParam sp1 = Sprite.getDot(10106, 0);
 
 	private static final int f0 = 40, l = 200;
 	private static final double maxda = p2 / 12, w0 = p2 / 30000, w1 = p2 / 10000, w2 = p2 / 8000;

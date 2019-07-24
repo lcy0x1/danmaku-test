@@ -31,10 +31,10 @@ public class S000 extends SpellCard {
 
 	}
 
-	private static final Sprite.SParam s0 = Sprite.getSprite(Sprite.P_D, 20301, 1, 1);
-	private static final Sprite.SParam s1 = Sprite.getSprite(Sprite.P_D, 20303, 1, 1);
-	private static final Sprite.SParam s2 = Sprite.getSprite(Sprite.P_D, 20305, 1, 1);
-	private static final Sprite.SParam s3 = Sprite.getSprite(Sprite.P_D, 20306, 1, 1);
+	private static final Sprite.SParam s0 = Sprite.getDot(20301, 1);
+	private static final Sprite.SParam s1 = Sprite.getDot(20303, 1);
+	private static final Sprite.SParam s2 = Sprite.getDot(20305, 1);
+	private static final Sprite.SParam s3 = Sprite.getDot(20306, 1);
 
 	private static final int[] ds = { 75000, 80000, 85000, 90000 };
 	private static final int[] ns = { 6, 7, 8, 9 };

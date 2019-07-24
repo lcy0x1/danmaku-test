@@ -40,8 +40,8 @@ public class S031 extends SpellCard implements Emiter.Ticker {
 
 	}
 
-	private static final Sprite.SParam d0 = Sprite.getSprite(Sprite.P_D, 20403, 0, 1);
-	private static final Sprite.SParam d1 = Sprite.getSprite(Sprite.P_D, 20401, 0, 1);
+	private static final Sprite.SParam d0 = Sprite.getDot(20403, 0);
+	private static final Sprite.SParam d1 = Sprite.getDot(20401, 0);
 
 	private static final int f0 = 400, f1 = 100, ref = 2;
 	private static final double v0 = 0.4, v1 = 0.2, da = p2 / 256;

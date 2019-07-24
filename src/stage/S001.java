@@ -36,18 +36,16 @@ public class S001 extends SpellCard implements Emiter.Ticker {
 	private static final Sprite.SParam d0 = Sprite.getDot(10702, 0);
 	private static final Sprite.SParam d1 = Sprite.getDot(30000, 1, 1);
 
-	private static final int f = 20, l = 200;
+	private static final int f = 20, l = 200, m = 55;
 	private static final double fac = 1.5, v0 = 0.1 * fac, w0 = p2 / 4690 * fac, w1 = p2 / 19752 * fac;
 
 	private static final int[] ns = { 5, 6, 7, 8 };
-	private static final int[] ms = { 25, 35, 45, 55 };
 
-	private final int n, m;
+	private final int n;
 
 	public S001(int diff) {
 		super(50000);
 		n = ns[diff];
-		m = ms[diff];
 	}
 
 	@Override

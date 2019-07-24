@@ -47,7 +47,7 @@ public class StageSet {
 	public static final List<SpellSet> list = new ArrayList<>();
 
 	static {
-		
+
 		list.add(new SpellSet("Sakuya (7)")//
 				.add(S018.class, "(N1) warn")//
 				.add(S016.class, "(S1) [Warning] The Last Warning")//
@@ -83,13 +83,12 @@ public class StageSet {
 				.add(S033.class, "(N3) exp")//
 				.add(S035.class, "(S3) Yukari's Damaku Barrier")//
 				.add(S032.class, "(LW) Gensokyo Hakurei Boundary"));
-		
+
 		list.add(new SpellSet("Sanae (3)")//
 				.add(S009.class, "(N1) rotate")//
 				.add(S019.class, "(S2) [Star] Let Me Teach You How to Draw Stars")//
 				.add(S008.class, "(N2) laser ref"));
 
-		
 		list.add(new SpellSet("Yuuka (2)")//
 				.add(S005.class, "S1")//
 				.add(S010.class, "S2 gene"));

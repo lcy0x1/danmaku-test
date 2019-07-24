@@ -32,6 +32,7 @@ public class BattlePage extends Page {
 
 	protected BattlePage(Page p, int cha, int sta, int diff) {
 		super(p);
+		System.gc();
 		e = new Engine.StartProfile(StageSet.getStage(cha, sta, diff)).getInstance();
 		fpc = new GLFPC(e);
 		ini();

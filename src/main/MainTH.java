@@ -11,7 +11,7 @@ import page.MainPage;
 
 public class MainTH {
 
-	public static final int ver = 40007;
+	public static final int ver = 40008;
 
 	public static final boolean WRITE = !new File("./.project").exists();
 
@@ -23,7 +23,7 @@ public class MainTH {
 		Writer.logPrepare();
 		Writer.logSetup();
 		Reader.getData$0();
-		new MainFrame("danmaku ver 4.0.7").initialize();
+		new MainFrame("danmaku ver 4.0.8").initialize();
 		Reader.getData$1();
 		new Timer().start();
 		MainFrame.changePanel(new MainPage());

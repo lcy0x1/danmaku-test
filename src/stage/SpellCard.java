@@ -49,7 +49,7 @@ public class SpellCard extends TimedStage implements Sprite.Dire {
 	protected SpellCard(int tot, P p) {
 		super(tot);
 		pos = p;
-		esp = Sprite.getDot(1, 0, Sprite.BG).getEntity(this);
+		esp = Sprite.getDot(1, 0, 2, Sprite.BG).getEntity(this);
 	}
 
 	@Override

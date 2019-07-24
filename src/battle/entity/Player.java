@@ -25,7 +25,7 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 		pos = plp.copy();
 		ext = pos.copy();
 		shape = new Shape.Circle(pos.copy(), 2);
-		img = Sprite.getSprite(Sprite.P_D, 0, 0, 1, Sprite.TOP).getEntity(this);
+		img = Sprite.getDot(0, 0, Sprite.TOP).getEntity(this);
 	}
 
 	public void attacked(Entity e) {

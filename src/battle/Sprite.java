@@ -538,32 +538,45 @@ public class Sprite implements Comparable<Sprite> {
 			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 0, 2.4, 2.4, 2.4, 2.4 }, { 6, 7, 8.5, 7, 6, 7, 0, 10 },
 			{ 14, 14 } };
 
+	/**
+	 * type: P_CR (curve reflection) and P_SR (straight reflection)<br>
+	 * <br>
+	 * mode: +1: highlight, +2: reverse direction<br>
+	 * <br>
+	 * a: max angle between 2 points to be considered the same curve<br>
+	 * <br>
+	 * c: min curvature to be considered not straight<br>
+	 * CR means 0 and SR means a small endurance <br>
+	 * <br>
+	 * b: when not in the same curve, generate a connecting dot<br>
+	 * CR means false for b and SR means true for b
+	 */
 	public static SParam getCurve(int id, int mode, double mult, double a, double c, boolean b) {
 		return new RCSP(id, mode, mult, a, c, b, 0);
 	}
 
+	/**
+	 * type: P_C (normal curve), P_CR (curve reflection), P_SR (straight
+	 * reflection)<br>
+	 * mode: +1: hight light, +2: reverse direction
+	 */
+	public static SParam getCurve(int type, int id, int mode, double mult) {
+		return getSprite(type, id, mode, mult, 0);
+	}
+
+	/** mode: 0: normal, 1: highlight, 2: transparent */
 	public static SParam getDot(int id, int mode) {
 		return getSprite(P_D, id, mode, 1, 0);
 	}
 
+	/** mode: 0: normal, 1: highlight, 2: transparent */
+	public static SParam getDot(int id, int mode, double mult, int layer) {
+		return getSprite(P_D, id, mode, mult, layer);
+	}
+
+	/** mode: 0: normal, 1: highlight, 2: transparent */
 	public static SParam getDot(int id, int mode, int layer) {
 		return getSprite(P_D, id, mode, 1, layer);
-	}
-
-	public static SParam getSprite(int type, int id, int mode, double mult) {
-		return getSprite(type, id, mode, mult, 0);
-	}
-
-	public static SParam getSprite(int type, int id, int mode, double mult, int layer) {
-		if (type == P_D)
-			return new DSP(id, mode, mult, layer);
-		if (type == P_C)
-			return new CSP(id, mode, mult, layer);
-		if (type == P_CR)
-			return new RCSP(id, mode, mult, MAX_ANGLE, 0, false, layer);
-		if (type == P_SR)
-			return new RCSP(id, mode, mult, MIN_ANGLE, MAX_CURVE, true, layer);
-		return null;
 	}
 
 	public static void read() {
@@ -629,6 +642,18 @@ public class Sprite implements Comparable<Sprite> {
 			end = seg;
 		}
 		return new Curve(end, edr, r, np, rev);
+	}
+
+	private static SParam getSprite(int type, int id, int mode, double mult, int layer) {
+		if (type == P_D)
+			return new DSP(id, mode, mult, layer);
+		if (type == P_C)
+			return new CSP(id, mode, mult, layer);
+		if (type == P_CR)
+			return new RCSP(id, mode, mult, MAX_ANGLE, 0, false, layer);
+		if (type == P_SR)
+			return new RCSP(id, mode, mult, MIN_ANGLE, MAX_CURVE, true, layer);
+		return null;
 	}
 
 	public final GLImage img;

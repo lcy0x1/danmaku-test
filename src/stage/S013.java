@@ -9,8 +9,8 @@ import util.P;
 
 public class S013 extends SpellCard implements Emiter.Ticker {
 
-	private static final Sprite.SParam d0 = Sprite.getDot(10402, 0);
-	private static final Sprite.SParam d1 = Sprite.getDot(10406, 0);
+	private static final Sprite.SParam d0 = Sprite.getDot(10408, 0);
+	private static final Sprite.SParam d1 = Sprite.getDot(10415, 0);
 
 	private static final double l = 50;
 

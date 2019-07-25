@@ -19,12 +19,20 @@ public class Roting extends Mover.TimeMover {
 
 	@Override
 	public P disp(int t) {
-		return P.polar(l, w * t + a).plus(v, t).plus(c);
+		return P.polar(getR(t), w * t + a).plus(v, t).plus(c);
 	}
 
 	@Override
 	public boolean out(P pos, double r) {
-		return P.polar(v.abs() * time - l, v.atan2()).plus(c).moveOut(v, Engine.BOUND, r);
+		return P.polar(v.abs() * time - maxR(), v.atan2()).plus(c).moveOut(v, Engine.BOUND, r);
+	}
+
+	protected double getR(int t) {
+		return l;
+	}
+
+	protected double maxR() {
+		return l;
 	}
 
 }

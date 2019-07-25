@@ -66,17 +66,18 @@ public class StageSet {
 				.add(S011.class, "(S3) [Boundary] Boundary of Conciousness")//
 				.add(S001.class, "(LW) Hakurei Immunity System"));
 
-		list.add(new SpellSet("Okina (7)")//
+		list.add(new SpellSet("Okina (8)")//
 				.add(S007.class, "(N1) ref")//
-				.add(S014.class, "(S1) [Door] The Mystrious Gate")//
-				.add(S013.class, "(N2) wave")//
-				.add(S000.class, "(S2) [Season] Resonance of Four Seasons")//
-				.add(S015.class, "(N3) flow")//
-				.add(S012.class, "(S3) [Spirit] Activated Spirits")//
-				.add(S034.class, "(N4) shift"));
+				.add(S015.class, "(S1) [Spring] Cherry Blossom")//
+				.add(S034.class, "(S2) [Summer] falling Iceburg")//
+				.add(S028.class, "(S3) [Autumn] Wall Whirlwind")//
+				.add(S013.class, "(S4) [Winter] Quiet Snowflakes")//
+				.add(S000.class, "(S5) [Season] Resonance of Four Seasons")//
+				.add(S014.class, "(S6) [Door] The Mystrious Gate")//
+				.add(S012.class, "(S7) [Spirit] Activated Spirits"));
 
 		list.add(new SpellSet("Yukari (7)")//
-				.add(S028.class, "(N1) W-P 1")//
+				.add(S036.class, "(N1) W-P 1")//
 				.add(S004.class, "(S1) [Mystery] Tantacles of the Unknown")//
 				.add(S030.class, "(N2) W-P 2")//
 				.add(S025.class, "(S2) [Chaos] Evening Stars")//

@@ -159,7 +159,8 @@ public interface Mover {
 
 		@Override
 		public boolean out(P pos, double r) {
-			return pos.moveOut(v, Engine.BOUND, r);
+			P pv = a == null ? v : v.copy().plus(a, Math.min(t1, time) - t0);
+			return pos.moveOut(pv, Engine.BOUND, r) && (a == null || pv.dotP(a) > 0 || time > t1);
 		}
 
 	}

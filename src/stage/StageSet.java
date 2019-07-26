@@ -3,6 +3,8 @@ package stage;
 import java.util.ArrayList;
 import java.util.List;
 
+import stage.s0.*;
+
 public class StageSet {
 
 	public static class Spell {
@@ -66,15 +68,23 @@ public class StageSet {
 				.add(S011.class, "(S3) [Boundary] Boundary of Conciousness")//
 				.add(S001.class, "(LW) Hakurei Immunity System"));
 
+		list.add(new SpellSet("Sanae (3)")//
+				.add(S009.class, "(N1) rotate")//
+				.add(S019.class, "(S2) [Star] Let Me Teach You How to Draw Stars")//
+				.add(S008.class, "(N2) laser ref"));
+
+		list.add(new SpellSet("Youmu (1)")//
+				.add(S002.class, "LW"));
+
 		list.add(new SpellSet("Okina (8)")//
 				.add(S007.class, "(N1) ref")//
-				.add(S015.class, "(S1) [Spring] Cherry Blossom")//
-				.add(S034.class, "(S2) [Summer] falling Iceburg")//
-				.add(S028.class, "(S3) [Autumn] Wall Whirlwind")//
-				.add(S013.class, "(S4) [Winter] Quiet Snowflakes")//
-				.add(S000.class, "(S5) [Season] Resonance of Four Seasons")//
-				.add(S014.class, "(S6) [Door] The Mystrious Gate")//
-				.add(S012.class, "(S7) [Spirit] Activated Spirits"));
+				.add(S015.class, "(S1-1) [Spring] Cherry Blossom")//
+				.add(S034.class, "(S1-2) [Summer] falling Iceburg")//
+				.add(S028.class, "(S1-3) [Autumn] Wall Whirlwind")//
+				.add(S013.class, "(S1-4) [Winter] Quiet Snowflakes")//
+				.add(S000.class, "(S2) [Season] Resonance of Four Seasons")//
+				.add(S014.class, "(S3) [Door] The Mystrious Gate")//
+				.add(S012.class, "(S4) [Spirit] Activated Spirits"));
 
 		list.add(new SpellSet("Yukari (7)")//
 				.add(S036.class, "(N1) W-P 1")//
@@ -85,23 +95,14 @@ public class StageSet {
 				.add(S035.class, "(S3) Yukari's Damaku Barrier")//
 				.add(S032.class, "(LW) Gensokyo Hakurei Boundary"));
 
-		list.add(new SpellSet("Sanae (3)")//
-				.add(S009.class, "(N1) rotate")//
-				.add(S019.class, "(S2) [Star] Let Me Teach You How to Draw Stars")//
-				.add(S008.class, "(N2) laser ref"));
-
-		list.add(new SpellSet("Yuuka (2)")//
-				.add(S005.class, "S1")//
-				.add(S010.class, "S2 gene"));
-
-		list.add(new SpellSet("Yuyuko (1)")//
+		list.add(new SpellSet("Yuyuko (2)")//
+				.add(S037.class, "N1")//
 				.add(S006.class, "S1"));
 
-		list.add(new SpellSet("Youmu (1)")//
-				.add(S002.class, "LW"));
-
-		list.add(new SpellSet("Koishi (1)")//
-				.add(S003.class, "S1"));
+		list.add(new SpellSet("Koishi (3)")//
+				.add(S005.class, "S1 [Love] Love Trap")//
+				.add(S010.class, "S2 [Love] Collision of Genes")//
+				.add(S003.class, "S3 [Awaken] The Third Self"));
 
 	}
 

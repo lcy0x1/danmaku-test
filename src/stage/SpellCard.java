@@ -10,12 +10,16 @@ public class SpellCard extends TimedStage implements Sprite.Dire {
 
 	public static class BossSpell extends SpellCard {
 
+		private static final double DEF_HP = 10000;
+
 		private final Life l;
 		private final Dot dot;
 
-		protected BossSpell(int tot, P p, Sprite.DSParam sp) {
+		private boolean added = false;
+
+		protected BossSpell(int tot, P p, int boss) {
 			super(tot, p);
-			l = new Life(tot, tot, dot = new Dot(p.copy(), sp));
+			l = new Life(DEF_HP, DEF_HP, dot = new Dot(p.copy(), Sprite.getBoss(boss)));
 		}
 
 		@Override
@@ -33,7 +37,10 @@ public class SpellCard extends TimedStage implements Sprite.Dire {
 		@Override
 		public void update(int dt) {
 			super.update(dt);
-			l.update(dt);
+			if (!added) {
+				add(l);
+				added = true;
+			}
 		}
 
 	}
@@ -49,7 +56,7 @@ public class SpellCard extends TimedStage implements Sprite.Dire {
 	protected SpellCard(int tot, P p) {
 		super(tot);
 		pos = p;
-		esp = Sprite.getDot(1, 0, 2, Sprite.BG).getEntity(this);
+		esp = Sprite.getDot(1, 0, 2, Sprite.L_BG).getEntity(this);
 	}
 
 	@Override

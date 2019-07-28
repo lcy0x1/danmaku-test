@@ -59,11 +59,10 @@ public class Sprite implements Comparable<Sprite> {
 
 			private final Sprite s;
 			private final List<Coord> reg = new ArrayList<>();
-			private final List<Coord> hlf = new ArrayList<>();
 			private final List<Coord> lit = new ArrayList<>();
-
 			private final List<Curve> rgc = new ArrayList<>();
 			private final List<Curve> ltc = new ArrayList<>();
+			private final Map<Integer, List<Coord>> hlf = new TreeMap<>();
 
 			private SubPool(Sprite sp) {
 				s = sp;
@@ -73,17 +72,28 @@ public class Sprite implements Comparable<Sprite> {
 				(mode == 0 ? rgc : ltc).add(c);
 			}
 
-			private void addDot(Coord c, int mode) {
-				(mode == 0 ? reg : mode == 1 ? lit : hlf).add(c);
+			private void addDot(Coord c, int mode, int tra) {
+				if (tra == MAX_TRA)
+					(mode == 0 ? reg : lit).add(c);
+				else {
+					List<Coord> list = null;
+					if (hlf.containsKey(tra))
+						list = hlf.get(tra);
+					else
+						hlf.put(tra, list = new ArrayList<Coord>());
+					list.add(c);
+				}
 			}
 
 			private void debug(FakeGraphics fg) {
-				int n = 0;
+				int n = reg.size() + lit.size();
 				for (Curve c : rgc)
 					n += c.ps.length;
 				for (Curve c : ltc)
 					n += c.ps.length;
-				Coord[] cs = new Coord[n + reg.size() + lit.size() + hlf.size()];
+				for (List<Coord> lc : hlf.values())
+					n += lc.size();
+				Coord[] cs = new Coord[n];
 				int i = 0;
 				for (Curve c : rgc)
 					for (P p : c.ps)
@@ -97,15 +107,17 @@ public class Sprite implements Comparable<Sprite> {
 					cs[i++] = c;
 				for (Coord c : lit)
 					cs[i++] = c;
-				for (Coord c : hlf)
-					cs[i++] = c;
+				for (List<Coord> lc : hlf.values())
+					for (Coord c : lc)
+						cs[i++] = c;
 				fg.drawCircles(cs);
 			}
 
 			private void flush(FakeGraphics fg) {
-				fg.setComposite(FakeGraphics.BLEND, 64, 0);
-				if (hlf.size() > 0)
-					fg.drawImages(s, hlf.size(), hlf.toArray(new Coord[0]));
+				hlf.forEach((i, l) -> {
+					fg.setComposite(FakeGraphics.BLEND, i, 0);
+					fg.drawImages(s, l.size(), l.toArray(new Coord[0]));
+				});
 
 				fg.setComposite(FakeGraphics.BLEND, 256, 0);
 				for (Curve c : rgc)
@@ -152,6 +164,66 @@ public class Sprite implements Comparable<Sprite> {
 	}
 
 	public static interface SParam extends DSParam, CSParam {
+
+	}
+
+	private static class BossESprite implements ESprite {
+
+		private final int id;
+		private final double w, h;
+		private final int layer;
+		private final Dire dire;
+
+		private BossESprite(int boss, Dire d, double sw, double sh, int lay) {
+			id = boss;
+			dire = d;
+			w = sw;
+			h = sh;
+			layer = lay;
+		}
+
+		@Override
+		public void draw() {
+			double r = Engine.BOUND.y;
+			P pos = dire.getPos();
+			// double d = dire.getDire(); TODO
+			Sprite s = BOSS[id][0];
+			Coord c = new Coord(pos.x, pos.y, w, h, 0);
+			c.times(1 / r);
+			Engine.RENDERING.getPool(s, layer).addDot(c, 0, MAX_TRA);
+		}
+
+		@Override
+		public double radius() {
+			return new P(w, h).times(0.5).abs();
+		}
+
+	}
+
+	private static class BSP implements DSParam {
+
+		private final int s;
+		private final int mode, layer;
+		private final double r;
+
+		private BSP(int spr, int t, double m, int lay) {
+			s = spr;
+			mode = t;
+			layer = lay;
+			r = BOSS[s][0].size * m * MAGNIFY;
+		}
+
+		@Override
+		public ESprite getEntity(Dire d) {
+			return new BossESprite(s, d, r * 2, r * 2, layer);
+		}
+
+		@Override
+		public PosShape getShape(P pos) {
+			if (mode == 2)
+				return new Shape.NonShape(pos);
+			return new Shape.Circle(pos, r);
+		}
 
 	}
 
@@ -332,16 +404,17 @@ public class Sprite implements Comparable<Sprite> {
 
 		private final Sprite s;
 		private final double w, h;
-		private final int mode, layer;
+		private final int mode, layer, tra;
 		private final Dire dire;
 
-		private DotESprite(Dire d, double sw, double sh, Sprite img, int m, int lay) {
+		private DotESprite(Dire d, double sw, double sh, Sprite img, int m, int lay, int trans) {
 			s = img;
 			dire = d;
 			w = sw;
 			h = sh;
 			mode = m;
 			layer = lay;
+			tra = trans;
 		}
 
 		@Override
@@ -353,7 +426,7 @@ public class Sprite implements Comparable<Sprite> {
 				d += ROTRATE * dire.getTime();
 			Coord c = new Coord(pos.x, pos.y, w, h, d + (s.horiz ? 0 : Math.PI / 2));
 			c.times(1 / r);
-			Engine.RENDERING.getPool(s, layer).addDot(c, mode);
+			Engine.RENDERING.getPool(s, layer).addDot(c, mode, tra);
 		}
 
 		@Override
@@ -366,17 +439,18 @@ public class Sprite implements Comparable<Sprite> {
 	private static class DSP implements SParam {
 
 		private final Sprite s;
-		private final int mode, layer;
+		private final int mode, layer, tra;
 		private final double r;
 
-		private DSP(int id, int t, double m, int layer) {
-			this(get(id), t, m, layer);
+		private DSP(int id, int t, double m, int layer, int tra) {
+			this(get(id), t, m, layer, tra);
 		}
 
-		private DSP(Sprite spr, int t, double m, int lay) {
+		private DSP(Sprite spr, int t, double m, int lay, int trans) {
 			s = spr;
 			mode = t;
 			layer = lay;
+			tra = trans;
 			r = s.size * m * MAGNIFY;
 		}
 
@@ -384,7 +458,7 @@ public class Sprite implements Comparable<Sprite> {
 		public ESprite getEntity(Dire d) {
 			if (s == null || s.id / 100 == 114)
 				return null;
-			return new DotESprite(d, r * 2, r * 2, s, mode, layer);
+			return new DotESprite(d, r * 2, r * 2, s, mode, layer, tra);
 		}
 
 		@Override
@@ -450,8 +524,6 @@ public class Sprite implements Comparable<Sprite> {
 
 	}
 
-	public static final int P_D = 0, P_C = 1, P_CR = 2, P_SR = 3;
-
 	public static final int SRC_GREY = 0;
 	public static final int SRC_REDX = 1;
 	public static final int SRC_RED = 2;
@@ -512,31 +584,54 @@ public class Sprite implements Comparable<Sprite> {
 	public static final int SLB_BALL = 0;
 	public static final int SLB_ROSE = 1;
 
-	public static final double DEFRAD = 20;
-
-	public static final int BG = Integer.MIN_VALUE, TOP = Integer.MAX_VALUE;
+	public static final int BS_SAKUYA = 0;
 
 	public static final Sprite[][] NON = new Sprite[1][2];
 	public static final Sprite[][] REG = new Sprite[16][16];
-
 	public static final Sprite[][] OCT = new Sprite[8][8];
 	public static final Sprite[][] LRG = new Sprite[2][4];
 	public static final Sprite[][] OTH = new Sprite[4][];
+
 	public static final Sprite[][][] TOT = { NON, REG, OCT, LRG, OTH };
-	public static final double MAGNIFY = 1.5;
 
-	public static final int ROT_CONST = 3000;
+	public static final Sprite[][] BOSS = new Sprite[1][];
 
-	private static final double LONG_END = 6.0 / 256, LONG_EDR = 6.0 / 16, LONG_SEG = 6.0 / 256;
-	private static final double OVAL_END = 2.0 / 16, OVAL_EDR = 4.0 / 16, OVAL_SEG = 1.0 / 16;
-	private static final double ROTRATE = Math.PI / ROT_CONST, MAX_ANGLE = Math.PI / 4, MIN_ANGLE = 1e-3,
-			MAX_CURVE = 1e-3;
+	public static final int P_D = 0, P_C = 1, P_CR = 2, P_SR = 3;
+
+	public static final int L_BG = Integer.MIN_VALUE;
+	public static final int L_TOP = Integer.MAX_VALUE;
+	public static final int L_PLATK = -2 << 8;
+	public static final int L_BOSS = 1 << 8;
+
+	public static final double DEFRAD = 20;
+
+	private static final int ROT_CONST = 3000;
+	private static final int BOSSSIZE = 30;
+	private static final int MAX_TRA = 256;
+
+	private static final double MAGNIFY = 1.5;
+
+	private static final double LONG_END = 6.0 / 256;
+	private static final double LONG_EDR = 6.0 / 16;
+	private static final double LONG_SEG = 6.0 / 256;
+	private static final double OVAL_END = 2.0 / 16;
+	private static final double OVAL_EDR = 4.0 / 16;
+	private static final double OVAL_SEG = 1.0 / 16;
+
+	private static final double ROTRATE = Math.PI / ROT_CONST;
+	private static final double MAX_ANGLE = Math.PI / 4;
+	private static final double MIN_ANGLE = 1e-3;
+	private static final double MAX_CURVE = 1e-3;
 
 	private static final int[] ROT = { 0, 110, 111, 201 };
 
 	private static final double[][] SIZE = { { 2 },
 			{ 0, 2.4, 4, 4, 2.4, 2.4, 2.4, 2.8, 2.4, 2.4, 4, 0, 2.4, 2.4, 2.4, 2.4 }, { 6, 7, 8.5, 7, 6, 7, 0, 10 },
 			{ 14, 14 } };
+
+	public static DSParam getBoss(int boss) {
+		return new BSP(boss, 0, 1, L_BOSS);
+	}
 
 	/**
 	 * type: P_CR (curve reflection) and P_SR (straight reflection)<br>
@@ -564,22 +659,85 @@ public class Sprite implements Comparable<Sprite> {
 		return getSprite(type, id, mode, mult, 0);
 	}
 
-	/** mode: 0: normal, 1: highlight, 2: transparent */
+	/** mode: 0: normal, 1: highlight, 2: no box */
 	public static SParam getDot(int id, int mode) {
-		return getSprite(P_D, id, mode, 1, 0);
+		return getDot(id, mode, 1, 0, MAX_TRA);
 	}
 
-	/** mode: 0: normal, 1: highlight, 2: transparent */
+	/** mode: 0: normal, 1: highlight, 2: no box */
 	public static SParam getDot(int id, int mode, double mult, int layer) {
-		return getSprite(P_D, id, mode, mult, layer);
+		return getDot(id, mode, mult, layer, MAX_TRA);
 	}
 
-	/** mode: 0: normal, 1: highlight, 2: transparent */
+	/** mode: 0: normal, 1: highlight, 2: no box */
+	public static SParam getDot(int id, int mode, double mult, int layer, int tra) {
+		return new DSP(id, mode, mult, layer, tra);
+	}
+
+	/** mode: 0: normal, 1: highlight, 2: no box */
 	public static SParam getDot(int id, int mode, int layer) {
-		return getSprite(P_D, id, mode, 1, layer);
+		return getDot(id, mode, 1, layer, MAX_TRA);
 	}
 
 	public static void read() {
+		readBullets();
+		readBoss();
+	}
+
+	private static Sprite get(int id) {
+		if (id == -1)
+			return null;
+		return TOT[id / 10000][id / 100 % 100][id % 100];
+	}
+
+	private static Curve getCurve(int id, int rev, double r, P[] np, int mode) {
+		double end, edr, seg;
+		if (id / 100 == 114) {
+			end = LONG_END;
+			edr = LONG_EDR;
+			seg = LONG_SEG;
+		} else if (id / 100 == 104) {
+			end = OVAL_END;
+			edr = OVAL_EDR;
+			seg = OVAL_SEG;
+			rev += 2;
+		} else
+			return null;
+		if (mode == 1) {
+			edr = 0;
+			end = seg;
+		}
+		return new Curve(end, edr, r, np, rev);
+	}
+
+	private static SParam getSprite(int type, int id, int mode, double mult, int layer) {
+		if (type == P_D)
+			return new DSP(id, mode, mult, layer, MAX_TRA);
+		if (type == P_C)
+			return new CSP(id, mode, mult, layer);
+		if (type == P_CR)
+			return new RCSP(id, mode, mult, MAX_ANGLE, 0, false, layer);
+		if (type == P_SR)
+			return new RCSP(id, mode, mult, MIN_ANGLE, MAX_CURVE, true, layer);
+		return null;
+	}
+
+	private static void readBoss() {
+		String path = (MainTH.WRITE ? "/src/" : "/") + "assets/Sakuya.png";
+		GLImage gli;
+		try {
+			gli = GLImage.build(IOUtils.resourceToByteArray(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		BOSS[BS_SAKUYA] = new Sprite[8];
+		for (int i = 0; i < 8; i++)
+			BOSS[BS_SAKUYA][i] = new Sprite(gli.getSubimage(i % 4 * 64, i / 4 * 64, 64, 64));
+
+	}
+
+	private static void readBullets() {
 		String path = (MainTH.WRITE ? "/src/" : "/") + "assets/bullet_000.png";
 		GLImage gli;
 		try {
@@ -615,54 +773,26 @@ public class Sprite implements Comparable<Sprite> {
 
 		new Sprite(gli.getSubimage(258, 17, 64, 64), 0);
 		new Sprite(gli.getSubimage(386, 81, 128, 128), 1);
-
-	}
-
-	private static Sprite get(int id) {
-		if (id == -1)
-			return null;
-		return TOT[id / 10000][id / 100 % 100][id % 100];
-	}
-
-	private static Curve getCurve(int id, int rev, double r, P[] np, int mode) {
-		double end, edr, seg;
-		if (id / 100 == 114) {
-			end = LONG_END;
-			edr = LONG_EDR;
-			seg = LONG_SEG;
-		} else if (id / 100 == 104) {
-			end = OVAL_END;
-			edr = OVAL_EDR;
-			seg = OVAL_SEG;
-			rev += 2;
-		} else
-			return null;
-		if (mode == 1) {
-			edr = 0;
-			end = seg;
-		}
-		return new Curve(end, edr, r, np, rev);
-	}
-
-	private static SParam getSprite(int type, int id, int mode, double mult, int layer) {
-		if (type == P_D)
-			return new DSP(id, mode, mult, layer);
-		if (type == P_C)
-			return new CSP(id, mode, mult, layer);
-		if (type == P_CR)
-			return new RCSP(id, mode, mult, MAX_ANGLE, 0, false, layer);
-		if (type == P_SR)
-			return new RCSP(id, mode, mult, MIN_ANGLE, MAX_CURVE, true, layer);
-		return null;
 	}
 
 	public final GLImage img;
-	private final int id;
 
 	public final P piv;
 	public final double rad, size;
 
+	private final int id;
 	private final boolean horiz, roting;
+
+	private Sprite(GLImage gl) {
+		img = gl;
+		piv = new P(0.5, 0.5);
+
+		id = (int) (Math.random() * 100) - 10000;
+		size = BOSSSIZE;
+		rad = size * 2 / gl.getHeight();
+		horiz = true;
+		roting = false;
+	}
 
 	private Sprite(GLImage gl, int lv) {
 		TOT[lv / 10000][lv / 100 % 100][lv % 100] = this;
@@ -688,7 +818,7 @@ public class Sprite implements Comparable<Sprite> {
 	}
 
 	private int getLayer() {
-		return -id;// FIXME
+		return -id;
 	}
 
 }

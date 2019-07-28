@@ -23,7 +23,7 @@ public abstract class Entity implements Updatable {
 	public final void addCtrl(Control c) {
 		ctrls.add(c);
 		if (c instanceof Updatable)
-			updts.add((Updatable) c);
+			addUpdt((Updatable) c);
 	}
 
 	public final void addUpdt(Updatable d) {

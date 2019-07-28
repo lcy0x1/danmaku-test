@@ -7,11 +7,11 @@ import battle.bullet.Dot;
 
 public class Life extends Entity implements Control {
 
-	private final int ndef, sdef;
+	private final double ndef, sdef;
 	private final Dot dot;
 	public double health = 1;
 
-	public Life(int nd, int sd, Dot d) {
+	public Life(double nd, double sd, Dot d) {
 		super(C_ENEMY, C_PLAYER);
 		ndef = nd;
 		sdef = sd;

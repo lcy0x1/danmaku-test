@@ -8,7 +8,7 @@ import battle.entity.Emiter;
 import stage.SpellCard;
 import util.P;
 
-public class S017 extends SpellCard implements Emiter.Ticker {
+public class S017 extends SpellCard.BossSpell implements Emiter.Ticker {
 
 	private static final Sprite.SParam d0 = Sprite.getDot(20403, 0);
 
@@ -22,7 +22,7 @@ public class S017 extends SpellCard implements Emiter.Ticker {
 	private final int n;
 
 	public S017(int diff) {
-		super(60000, new P(400, 200));
+		super(60000, new P(400, 200), Sprite.BS_SAKUYA);
 		n = ns[diff];
 	}
 

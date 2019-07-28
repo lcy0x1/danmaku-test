@@ -58,7 +58,7 @@ public class S032 extends SpellCard implements Emiter.Ticker {
 	private static final Sprite.SParam d3 = Sprite.getDot(10108, 0);
 	private static final Sprite.SParam[] ds = { d0, d1, d2, d3 };
 
-	private static final Sprite.SParam dsx = Sprite.getDot(10115, 2);
+	private static final Sprite.SParam dsx = Sprite.getDot(10115, 2, 1, 0, 128);
 	private static final Sprite.SParam dx = Sprite.getDot(10115, 0);
 
 	private static final int f0 = 6000, f1 = 20, t0 = 3000, tl = 6000, l0 = 700, l1 = 200, x = 5, t2 = 3000, t3 = 1000;

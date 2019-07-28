@@ -17,6 +17,11 @@ public class BattlePage extends Page {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final int[] KEYS = { KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
+			KeyEvent.VK_SHIFT, KeyEvent.VK_Z };
+
+	private static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3, SHIFT = 4, SHOOT = 5;
+
 	private final JBTN back = new JBTN("back");
 	private final JL jctn = new JL();
 	private final JL jtim = new JL();
@@ -28,7 +33,7 @@ public class BattlePage extends Page {
 
 	private P pre, disp = new P(0, 0);
 
-	private boolean up, down, left, right, shift;
+	private final boolean[] press = new boolean[KEYS.length];
 
 	protected BattlePage(Page p, int cha, int sta, int diff) {
 		super(p);
@@ -40,33 +45,19 @@ public class BattlePage extends Page {
 	}
 
 	@Override
-	protected void keyPressed(KeyEvent ke) {
-		if (ke.getKeyCode() == KeyEvent.VK_UP)
-			up = true;
-		if (ke.getKeyCode() == KeyEvent.VK_DOWN)
-			down = true;
-		if (ke.getKeyCode() == KeyEvent.VK_LEFT)
-			left = true;
-		if (ke.getKeyCode() == KeyEvent.VK_RIGHT)
-			right = true;
-		if (ke.getKeyCode() == KeyEvent.VK_SHIFT)
-			shift = true;
+	protected synchronized void keyPressed(KeyEvent ke) {
+		for (int i = 0; i < KEYS.length; i++)
+			if (ke.getKeyCode() == KEYS[i])
+				press[i] = true;
 	}
 
 	@Override
-	protected void keyReleased(KeyEvent ke) {
+	protected synchronized void keyReleased(KeyEvent ke) {
 		if (ke.getKeyCode() == KeyEvent.VK_ESCAPE)
 			pause = !pause;
-		if (ke.getKeyCode() == KeyEvent.VK_UP)
-			up = false;
-		if (ke.getKeyCode() == KeyEvent.VK_DOWN)
-			down = false;
-		if (ke.getKeyCode() == KeyEvent.VK_LEFT)
-			left = false;
-		if (ke.getKeyCode() == KeyEvent.VK_RIGHT)
-			right = false;
-		if (ke.getKeyCode() == KeyEvent.VK_SHIFT)
-			shift = false;
+		for (int i = 0; i < KEYS.length; i++)
+			if (ke.getKeyCode() == KEYS[i])
+				press[i] = false;
 	}
 
 	@Override
@@ -100,16 +91,16 @@ public class BattlePage extends Page {
 	protected void timer(int t) {
 		if (!pause) {
 			P move = new P(0, 0);
-			if (up)
+			if (press[UP])
 				move.y--;
-			if (down)
+			if (press[DOWN])
 				move.y++;
-			if (left)
+			if (press[LEFT])
 				move.x--;
-			if (right)
+			if (press[RIGHT])
 				move.x++;
-			move.times(shift ? 2 : 5).plus(disp);
-			e.update(new Engine.UpdateProfile(move, Timer.p));
+			move.times(press[SHIFT] ? 2 : 5).plus(disp);
+			e.update(new Engine.UpdateProfile(move, Timer.p, press[SHOOT]));
 			jctn.setText("count:" + e.count());
 			int sec = e.time.clock / 1000;
 			jtim.setText("time:" + Data.str(sec / 60, 2) + ":" + Data.str(sec % 60, 2));

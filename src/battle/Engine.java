@@ -20,15 +20,17 @@ public class Engine {
 
 		private final StageSection upd;
 		private final P pos;
+		private final int t0;
 
 		public StartProfile(StageSection sc) {
 			upd = sc;
 			pos = START;
+			t0 = 0;
 
 		}
 
 		public Engine getInstance() {
-			return new Engine(upd, pos);
+			return new Engine(upd, new Player(pos, t0));
 		}
 
 	}
@@ -150,12 +152,13 @@ public class Engine {
 	public static class UpdateProfile {
 
 		private final P pos;
-
 		private final int time;
+		private final boolean attack;
 
-		public UpdateProfile(P p, int t) {
+		public UpdateProfile(P p, int t, boolean atk) {
 			pos = p;
 			time = t;
+			attack = atk;
 		}
 
 	}
@@ -175,8 +178,8 @@ public class Engine {
 	private final List<Control.UpdCtrl> updc = new ArrayList<>();
 	private final List<Control.UpdCtrl> utmp = new ArrayList<>();
 
-	private Engine(StageSection sc, P plp) {
-		pl = new Player(plp);
+	private Engine(StageSection sc, Player p) {
+		pl = p;
 		add(pl);
 		time = new Time();
 		stage = sc;
@@ -204,10 +207,21 @@ public class Engine {
 		RENDERING = null;
 	}
 
+	public List<Entity> getReceiver(int base) {
+		List<Entity> ans = new ArrayList<>();
+		entities.forEach((i, l) -> {
+			if ((i & base) > 0)
+				ans.addAll(l);
+		});
+		return ans;
+	}
+
 	public void update(UpdateProfile up) {
 		RUNNING = this;
 		pl.ext.plus(up.pos).limit(BOUND);
+		pl.atker.attack = up.attack;
 		time.update(up.time);
+
 		updc.forEach(e -> e.update(time.dispach(e)));
 		entities.forEach((i, l) -> l.forEach(e -> e.update(time.dispach(e))));
 		entities.forEach((i, l) -> {

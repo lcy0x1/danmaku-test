@@ -1,6 +1,7 @@
 package battle.bullet;
 
 import battle.Control;
+import battle.Engine;
 import battle.Shape;
 import battle.Sprite;
 import battle.Sprite.DSParam;
@@ -207,6 +208,17 @@ public class Dot implements Sprite.Dire, Control.UpdCtrl {
 	public Dot delay(int t) {
 		time -= t;
 		return this;
+	}
+
+	@Override
+	public void draw() {
+		if (finished())
+			return;
+		if (spr.getSprite() == null)
+			return;
+		if (pos.out(Engine.BOUND, spr.radius()))
+			return;
+		spr.getSprite().draw();
 	}
 
 	@Override

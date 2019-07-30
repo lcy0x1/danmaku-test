@@ -20,6 +20,15 @@ public class TimeCurve extends Curve.ListCurve implements Emiter.Ticker {
 
 	}
 
+	public TimeCurve(SParam cesp, int n, int dt, P p, Mover m, int del) {
+		super(cesp);
+		sp = cesp;
+		move = m;
+		pos = p;
+		Engine.RUNNING.add(new Emiter(0, dt, dt * n + del, this).setDelay(del));
+
+	}
+
 	@Override
 	public void tick(Emiter e, int it, int ex) {
 		DotBullet db = new DotBullet(new Dot(pos.copy(), sp, move.copy()));

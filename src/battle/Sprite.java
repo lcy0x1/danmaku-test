@@ -299,7 +299,7 @@ public class Sprite implements Comparable<Sprite> {
 
 		@Override
 		public double radius() {
-			return r;
+			return r / s.rad;
 		}
 
 	}
@@ -367,7 +367,7 @@ public class Sprite implements Comparable<Sprite> {
 
 		@Override
 		public double radius() {
-			return r;
+			return r / s.rad;
 		}
 
 		private P connect(P p0, P p1, P p2, P p3) {
@@ -431,7 +431,7 @@ public class Sprite implements Comparable<Sprite> {
 
 		@Override
 		public double radius() {
-			return new P(w, h).times(s.piv).toBound(w, h);
+			return new P(w, h).times(s.piv).toBound(w, h) / s.rad;
 		}
 
 	}

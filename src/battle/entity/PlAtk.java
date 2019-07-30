@@ -19,10 +19,7 @@ public abstract class PlAtk extends Entity {
 
 		@Override
 		public void draw() {
-			if (dot.finished())
-				return;
-			if (dot.spr.getSprite() != null)
-				dot.spr.getSprite().draw();
+			dot.draw();
 		}
 
 		@Override

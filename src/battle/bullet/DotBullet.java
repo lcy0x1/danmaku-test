@@ -18,18 +18,18 @@ public class DotBullet extends Bullet implements DotCont {
 		addUpdt(dot = d);
 	}
 
-	public DotBullet(int base, int atk, Dot d) {
-		super(base, atk);
-		addCtrl(dot = d);
-	}
-
-	public DotBullet(int atk, int base, Dot d, int t, boolean add) {
+	public DotBullet(Dot d, int t, boolean add) {
 		super(t);
 		dot = d;
 		if (add)
 			addCtrl(d);
 		else
 			addUpdt(d);
+	}
+
+	public DotBullet(int base, int atk, Dot d) {
+		super(base, atk);
+		addCtrl(dot = d);
 	}
 
 	@Override
@@ -41,10 +41,7 @@ public class DotBullet extends Bullet implements DotCont {
 
 	@Override
 	public void draw() {
-		if (dot.finished())
-			return;
-		if (dot.spr.getSprite() != null)
-			dot.spr.getSprite().draw();
+		dot.draw();
 	}
 
 	@Override

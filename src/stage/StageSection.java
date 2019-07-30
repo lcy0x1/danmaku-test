@@ -26,7 +26,7 @@ public abstract class StageSection implements Control.UpdCtrl {
 
 		public int time;
 
-		private final int length;
+		public final int length;
 
 		protected TimedStage(int tot) {
 			length = tot;

@@ -3,41 +3,16 @@ package stage.s0;
 import battle.Sprite;
 import battle.bullet.Curve;
 import battle.bullet.Curve.ListCurve;
-import battle.bullet.Dot;
-import battle.bullet.DotBullet;
 import battle.bullet.Func;
+import battle.bullet.Func.Adder;
+import battle.bullet.Func.QuadVLF;
 import battle.bullet.Func.VeloListFunc;
 import battle.bullet.Laser;
-import battle.bullet.Mover.FuncMover;
 import battle.entity.Emiter;
 import stage.SpellCard;
 import util.P;
 
 public class S006 extends SpellCard implements Emiter.Ticker {
-
-	private static class Adder implements Emiter.Ticker {
-
-		private final ListCurve c;
-		private final VeloListFunc vlf;
-		private final double a;
-		private final int i;
-
-		private Adder(ListCurve lc, VeloListFunc func, double a0, int s) {
-			c = lc;
-			vlf = func;
-			a = a0;
-			i = s;
-		}
-
-		@Override
-		public void tick(Emiter e, int it, int ex) {
-			Dot d = new Dot(pc.copy(), sps[i], new FuncMover(vlf, 0, 0, a));
-			DotBullet b = new DotBullet(d, lt);
-			c.addP(b);
-			add(b, ex);
-		}
-
-	}
 
 	private static class PathFunc implements Func {
 
@@ -103,7 +78,7 @@ public class S006 extends SpellCard implements Emiter.Ticker {
 			for (int i = 0; i < n; i++) {
 				double a = a0 + p2 / n * i;
 				ListCurve c = new ListCurve(sps[it % 2]);
-				Adder ad = new Adder(c, vlfs[it % 2], a, it % 2);
+				Adder ad = new Adder(pc, c, vlfs[it % 2], a, sps[it % 2], lt);
 				add(new Emiter(0, dt, dt * mx, ad), ex);
 				add(new Laser(c, lt), ex);
 			}
@@ -116,7 +91,7 @@ public class S006 extends SpellCard implements Emiter.Ticker {
 			for (int i = 0; i < 2; i++) {
 				double a = 0;
 				int s = i * 2 - 1;
-				VeloListFunc vlf = vlfs[i] = new VeloListFunc();
+				VeloListFunc vlf = vlfs[i] = new QuadVLF();
 				vlf.add(P.polar(v0, a), 20 * fac);
 				for (int j = 0; j < x; j++) {
 					vlf.add(P.polar(v0, a), 10 * fac);

@@ -76,15 +76,16 @@ public class StageSet {
 		list.add(new SpellSet("Youmu (1)")//
 				.add(S002.class, "LW"));
 
-		list.add(new SpellSet("Okina (8)")//
+		list.add(new SpellSet("Okina (9)")//
 				.add(S007.class, "(N1) ref")//
 				.add(S015.class, "(S1-1) [Spring] Cherry Blossom")//
 				.add(S034.class, "(S1-2) [Summer] falling Iceburg")//
 				.add(S028.class, "(S1-3) [Autumn] Wall Whirlwind")//
 				.add(S013.class, "(S1-4) [Winter] Quiet Snowflakes")//
-				.add(S000.class, "(S2) [Season] Resonance of Four Seasons")//
-				.add(S014.class, "(S3) [Door] The Mystrious Gate")//
-				.add(S012.class, "(S4) [Spirit] Activated Spirits"));
+				.add(S014.class, "(N2) gate")//
+				.add(S000.class, "(S2) [Life] Resonance of Four Seasons")//
+				.add(S012.class, "(S3) [Spirit] Spiritual Commutor")//
+				.add(S039.class, "(LW) Berserk Spirit and Chaotic Life"));
 
 		list.add(new SpellSet("Yukari (7)")//
 				.add(S036.class, "(N1) W-P 1")//
@@ -96,13 +97,16 @@ public class StageSet {
 				.add(S032.class, "(LW) Gensokyo Hakurei Boundary"));
 
 		list.add(new SpellSet("Yuyuko (2)")//
-				.add(S037.class, "N1")//
-				.add(S006.class, "S1"));
+				.add(S006.class, "(S1) [Ghost] Ghost Migration")//
+				.add(S038.class, "(LW) Butterflies of the Death"));
 
 		list.add(new SpellSet("Koishi (3)")//
 				.add(S005.class, "S1 [Love] Love Trap")//
 				.add(S010.class, "S2 [Love] Collision of Genes")//
 				.add(S003.class, "S3 [Awaken] The Third Self"));
+
+		list.add(new SpellSet("Temp ")//
+				.add(S037.class, "(N1) "));
 
 	}
 

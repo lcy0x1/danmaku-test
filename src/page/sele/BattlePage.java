@@ -9,6 +9,9 @@ import main.Timer;
 import page.JBTN;
 import page.JL;
 import page.Page;
+import stage.SpellCard.BossSpell;
+import stage.StageSection;
+import stage.StageSection.TimedStage;
 import stage.StageSet;
 import util.Data;
 import util.P;
@@ -26,6 +29,8 @@ public class BattlePage extends Page {
 	private final JL jctn = new JL();
 	private final JL jtim = new JL();
 	private final JL jdct = new JL();
+	private final JL jtrm = new JL();
+	private final JL jlhp = new JL();
 	private final GLFPC fpc;
 	private final Engine e;
 
@@ -84,6 +89,8 @@ public class BattlePage extends Page {
 		set(jctn, x, y, 1800, 100, 400, 50);
 		set(jtim, x, y, 1800, 150, 400, 50);
 		set(jdct, x, y, 1800, 200, 400, 50);
+		set(jtrm, x, y, 1800, 250, 400, 50);
+		set(jlhp, x, y, 1800, 300, 400, 50);
 		fpc.setBounds(x / 2 - y * 2 / 5, 0, y * 4 / 5, y);
 	}
 
@@ -105,6 +112,21 @@ public class BattlePage extends Page {
 			int sec = e.time.clock / 1000;
 			jtim.setText("time:" + Data.str(sec / 60, 2) + ":" + Data.str(sec % 60, 2));
 			jdct.setText("death:" + e.pl.deadCount);
+
+			StageSection ss = e.stage;
+			if (ss instanceof TimedStage) {
+				TimedStage st = (TimedStage) ss;
+				int ttim = st.length;
+				int ctim = ttim - st.time;
+				jtrm.setText("time remain: " + ctim / 1000 + "/" + ttim / 1000);
+			} else
+				jtrm.setText("");
+			if (ss instanceof BossSpell) {
+				BossSpell bs = (BossSpell) ss;
+				double hp = bs.getHP();
+				jlhp.setText("HP: " + (int) (hp * 100) + "%");
+			} else
+				jlhp.setText("");
 		}
 		disp.setTo(0, 0);
 		fpc.paint();
@@ -119,6 +141,8 @@ public class BattlePage extends Page {
 		add(jctn);
 		add(jtim);
 		add(jdct);
+		add(jtrm);
+		add(jlhp);
 		add(fpc);
 		addListeners();
 	}

@@ -13,6 +13,7 @@ public class Life extends Entity implements Control {
 
 	public Life(double nd, double sd, Dot d) {
 		super(C_ENEMY, C_PLAYER);
+		setLv(K_FUNCTIONAL);
 		ndef = nd;
 		sdef = sd;
 		dot = d;
@@ -22,10 +23,7 @@ public class Life extends Entity implements Control {
 
 	@Override
 	public void draw() {
-		if (dot.finished())
-			return;
-		if (dot.spr.getSprite() != null)
-			dot.spr.getSprite().draw();
+		dot.draw();
 	}
 
 	@Override

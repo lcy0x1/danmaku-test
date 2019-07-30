@@ -27,6 +27,10 @@ public class SpellCard extends TimedStage implements Sprite.Dire {
 			return super.finished() || l.isDead();
 		}
 
+		public double getHP() {
+			return l.health;
+		}
+
 		@Override
 		public void post() {
 			dot.tmp.setTo(pos);

@@ -15,15 +15,15 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 
 	public static abstract class PlAtker implements Updatable {
 
-		private static class LinearAtker extends PlAtker {
+		private static class LHAtker extends PlAtker {
 
 			private static final Sprite.SParam sp = Sprite.getDot(10701, 0, 1, Sprite.L_PLATK, 128);
 			private static final double v0 = 0.5, w = Math.PI / 3000;
 
-			private static final int DEF_ATK = 100;
+			private static final int DEF_ATK = 5;
 
-			private LinearAtker(Player p) {
-				super(p, 200);
+			private LHAtker(Player p) {
+				super(p, 100);
 			}
 
 			@Override
@@ -50,9 +50,39 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 
 		}
 
-		private static PlAtker getAtker(Player p, int t) {
+		private static class LWAtker extends PlAtker {
 
-			return new LinearAtker(p);
+			private static final Sprite.SParam sp = Sprite.getDot(11013, 0, 1, Sprite.L_PLATK, 128);
+			private static final double v0 = 0.5, da0 = Math.PI / 48, da1 = Math.PI / 6;
+			private static final int n = 3, r = 60;
+
+			private static final int DEF_ATK = 5;
+
+			private LWAtker(Player p) {
+				super(p, 100);
+			}
+
+			@Override
+			protected void attack(int id, int it, int ex) {
+				P pos = super.pl.pos;
+				for (int i = -3; i <= n; i++) {
+					int ix = i < 0 ? i + 1 : i > 0 ? i - 1 : i;
+					double a0 = da0 * ix - Math.PI / 2;
+					double a1 = da1 * i - Math.PI / 2;
+					P d0 = P.polar(r, a1).plus(pos);
+					Dot dt0 = new Dot(d0, P.polar(v0, a0), sp);
+					Engine.RUNNING.add(new PlAtk.DotNPA(DEF_ATK, dt0));
+				}
+			}
+
+		}
+
+		private static PlAtker getAtker(Player p, int t) {
+			if (t == 0)
+				return new LHAtker(p);
+			if (t == 1)
+				return new LWAtker(p);
+			return null;
 
 		}
 

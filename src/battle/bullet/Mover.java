@@ -122,15 +122,18 @@ public interface Mover {
 	public static class LineMover extends TimeMover {
 
 		public final P a, v;
-
 		public final int t0, t1;
+
+		private boolean str = false;
 
 		public LineMover(P vp) {
 			this(vp, null, 0, 0);
+			str = true;
 		}
 
 		public LineMover(P vp, double ap, int st, int et) {
 			this(vp, P.polar(ap, vp.atan2()), st, et);
+			str = true;
 		}
 
 		public LineMover(P vp, P ap, int tt) {
@@ -160,6 +163,8 @@ public interface Mover {
 
 		@Override
 		public boolean out(P pos, double r) {
+			if (str)
+				return pos.moveOut(v, Engine.BOUND, r);
 			P pv = a == null ? v : v.copy().plus(a, FM.min(t1, time) - t0);
 			return pos.moveOut(pv, Engine.BOUND, r) && (a == null || pv.dotP(a) > 0 || time > t1);
 		}

@@ -66,7 +66,7 @@ public class S004 extends SpellCard implements Emiter.Ticker {
 	public void update(int dt) {
 		if (time == 0) {
 			for (int i = 0; i < n; i++) {
-				list[i] = new Curve.ListCurve(spc);
+				list[i] = new Curve.ListCurve(spc, true);
 				add(new Laser(list[i]).setLv(K_FINISH));
 			}
 			add(new Emiter(0, f0, this, this));

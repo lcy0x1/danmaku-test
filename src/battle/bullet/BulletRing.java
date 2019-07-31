@@ -10,7 +10,7 @@ import util.P;
 
 public class BulletRing extends Dot {
 
-	private class SubBullet extends Bullet implements Sprite.Dire, Control {
+	private static class SubBullet extends Bullet implements Sprite.Dire, Control {
 
 		private final BulletRing par;
 		private final P pos;
@@ -40,7 +40,9 @@ public class BulletRing extends Dot {
 
 		@Override
 		public boolean finished() {
-			return par.move.out(pos, esp.radius());
+			if (par.lt > 0)
+				return getTime() > par.lt;
+			return pos.out(Engine.BOUND, esp.radius());
 		}
 
 		@Override
@@ -66,13 +68,18 @@ public class BulletRing extends Dot {
 	}
 
 	private final SubBullet[] list;
-	private final int n;
+	private final int n, lt;
 	private final P cen;
 
 	public BulletRing(P c, Sprite.SParam sp, int num, Mover m) {
+		this(c, sp, num, m, -1);
+	}
+
+	public BulletRing(P c, Sprite.SParam sp, int num, Mover m, int t) {
 		super(c.copy(), sp, m);
 		n = num;
 		cen = c;
+		lt = t;
 		list = new SubBullet[n];
 		for (int i = 0; i < n; i++)
 			Engine.RUNNING.add(list[i] = new SubBullet(this, i, cen.copy(), sp));
@@ -84,6 +91,8 @@ public class BulletRing extends Dot {
 
 	@Override
 	public boolean finished() {
+		if (lt > 0)
+			return getTime() > lt;
 		for (SubBullet sb : list)
 			if (!sb.isDead())
 				return false;

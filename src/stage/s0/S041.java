@@ -35,12 +35,14 @@ public class S041 extends SpellCard implements Emiter.Ticker {
 
 	private static class TimeFunc implements Func {
 
-		private static final double w0 = p2 / 4000, tx = 1000;
+		private static final double tx = 1000;
 
-		private final double x;
+		private final double x, v0, w0;
 
-		private TimeFunc(double a) {
+		private TimeFunc(double a, double v, double w) {
 			x = a;
+			v0 = v;
+			w0 = w;
 		}
 
 		@Override
@@ -51,7 +53,7 @@ public class S041 extends SpellCard implements Emiter.Ticker {
 		@Override
 		public P func(int time, int i) {
 			double dx = x * (1 - pow(E, -time / tx));
-			return new P(dx * sin((time + i * f1) * w0), time * v0);
+			return new P(dx * (1 + sin((time + i * f1) * w0)) / 2, time * v0);
 		}
 
 	}
@@ -60,19 +62,21 @@ public class S041 extends SpellCard implements Emiter.Ticker {
 	private static final Sprite.SParam dl1 = Sprite.getDot(10410, 0, 1);
 	private static final Sprite.SParam[] dls = { dl0, dl1 };
 
-	private static final int f0 = 500, f1 = 100;
-	private static final int m0 = 5, ra = 50;
-	private static final double v0 = 0.2;
+	private static final int f0 = 600, f1 = 100;
+	private static final int m0 = 5, ra = 100;
 
 	private static final int[] ns = { 3, 4, 5, 6 };
 
 	private Func vlfs[] = new Func[2];
 
 	private final int n0;
+	private final double v0, w0;
 
 	public S041(int diff) {
 		super(60000, new P(400, 200));
-		n0 = ns[diff] * 12;
+		n0 = ns[diff] * 8;
+		v0 = 0.1 + ns[diff] * 0.03;
+		w0 = p2 / 720 * v0;
 	}
 
 	@Override
@@ -90,8 +94,8 @@ public class S041 extends SpellCard implements Emiter.Ticker {
 	@Override
 	public void update(int dt) {
 		if (time == 0) {
-			vlfs[0] = new TimeFunc(ra);
-			vlfs[1] = new TimeFunc(-ra);
+			vlfs[0] = new TimeFunc(ra, v0, w0);
+			vlfs[1] = new TimeFunc(-ra, v0, w0);
 			add(new Emiter(4, f0 * 2, this, this).setDelay(f0));
 			add(new Emiter(5, f0 * 2, this, this));
 		}

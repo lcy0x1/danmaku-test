@@ -77,7 +77,7 @@ public class StageSet {
 		list.add(new SpellSet("Youmu (1)")//
 				.add(S002.class, "LW"));
 
-		list.add(new SpellSet("Okina (9)")//
+		list.add(new SpellSet("Okina (10)")//
 				.add(S007.class, "(N1) ref")//
 				.add(S015.class, "(S1-1) [Spring] Cherry Blossom")//
 				.add(S034.class, "(S1-2) [Summer] falling Iceburg")//
@@ -85,6 +85,7 @@ public class StageSet {
 				.add(S013.class, "(S1-4) [Winter] Quiet Snowflakes")//
 				.add(S014.class, "(N2) gate")//
 				.add(S000.class, "(S2) [Life] Resonance of Four Seasons")//
+				.add(S041.class, "(N3) oscillation")//
 				.add(S012.class, "(S3) [Spirit] Spiritual Commutor")//
 				.add(S039.class, "(LW) Berserk Spirit and Chaotic Life"));
 
@@ -107,8 +108,7 @@ public class StageSet {
 				.add(S003.class, "S3 [Awaken] The Third Self"));
 
 		list.add(new SpellSet("Temp ")//
-				.add(S037.class, "(N1) ")//
-				.add(S041.class, "(S1) "));
+				.add(S037.class, "(N1) "));
 
 	}
 

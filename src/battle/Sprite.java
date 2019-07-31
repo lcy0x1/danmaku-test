@@ -15,6 +15,7 @@ import jogl.util.FakeGraphics.Curve;
 import jogl.util.GLImage;
 import main.MainTH;
 import util.Data;
+import util.FM;
 import util.P;
 
 public class Sprite implements Comparable<Sprite> {
@@ -85,6 +86,17 @@ public class Sprite implements Comparable<Sprite> {
 				}
 			}
 
+			private int count() {
+				int n = reg.size() + lit.size();
+				for (Curve c : rgc)
+					n += c.ps.length;
+				for (Curve c : ltc)
+					n += c.ps.length;
+				for (List<Coord> lc : hlf.values())
+					n += lc.size();
+				return n;
+			}
+
 			private void debug(FakeGraphics fg) {
 				int n = reg.size() + lit.size();
 				for (Curve c : rgc)
@@ -136,6 +148,12 @@ public class Sprite implements Comparable<Sprite> {
 		}
 
 		private Map<Integer, Map<Sprite, SubPool>> map = new TreeMap<>();
+
+		public int count() {
+			int[] sum = new int[1];
+			map.forEach((i, m) -> m.forEach((s, p) -> sum[0] += p.count()));
+			return sum[0];
+		}
 
 		public void flush(FakeGraphics fg) {
 			if (Data.DRAWSPRITE)
@@ -342,11 +360,11 @@ public class Sprite implements Comparable<Sprite> {
 						P p2 = ps[i];
 						double d0 = p0.dis(p1);
 						double d1 = p1.dis(p2);
-						double ax = Math.PI - Math.atan2(rx, d0) - Math.atan2(rx, d1);
+						double ax = FM.PI - FM.atan2(rx, d0) - FM.atan2(rx, d1);
 						if (ax > max)
 							ax = max;
 						double a1 = p0.atan2(p1) - p1.atan2(p2);
-						if (Math.cos(ax) > Math.cos(a1)) {
+						if (FM.cos(ax) > FM.cos(a1)) {
 							if (conn && i < ps.length - 1) {
 								P p3 = ps[i + 1];
 								P pv = connect(p0, p1, p2, p3);
@@ -403,7 +421,7 @@ public class Sprite implements Comparable<Sprite> {
 	private static class DotESprite implements ESprite {
 
 		private final Sprite s;
-		private final double w, h;
+		private final double w, h, radius;
 		private final int mode, layer, tra;
 		private final Dire dire;
 
@@ -415,6 +433,7 @@ public class Sprite implements Comparable<Sprite> {
 			mode = m;
 			layer = lay;
 			tra = trans;
+			radius = new P(w, h).times(s.piv).toBound(w, h) / s.rad;
 		}
 
 		@Override
@@ -424,14 +443,14 @@ public class Sprite implements Comparable<Sprite> {
 			double d = dire.getDire();
 			if (s.roting)
 				d += ROTRATE * dire.getTime();
-			Coord c = new Coord(pos.x, pos.y, w, h, d + (s.horiz ? 0 : Math.PI / 2));
+			Coord c = new Coord(pos.x, pos.y, w, h, d + (s.horiz ? 0 : FM.PI / 2));
 			c.times(1 / r);
 			Engine.RENDERING.getPool(s, layer).addDot(c, mode, tra);
 		}
 
 		@Override
 		public double radius() {
-			return new P(w, h).times(s.piv).toBound(w, h) / s.rad;
+			return radius;
 		}
 
 	}
@@ -618,8 +637,8 @@ public class Sprite implements Comparable<Sprite> {
 	private static final double OVAL_EDR = 4.0 / 16;
 	private static final double OVAL_SEG = 1.0 / 16;
 
-	private static final double ROTRATE = Math.PI / ROT_CONST;
-	private static final double MAX_ANGLE = Math.PI / 4;
+	private static final double ROTRATE = FM.PI / ROT_CONST;
+	private static final double MAX_ANGLE = FM.PI / 4;
 	private static final double MIN_ANGLE = 1e-3;
 	private static final double MAX_CURVE = 1e-3;
 
@@ -787,7 +806,7 @@ public class Sprite implements Comparable<Sprite> {
 		img = gl;
 		piv = new P(0.5, 0.5);
 
-		id = (int) (Math.random() * 100) - 10000;
+		id = (int) (FM.random() * 100) - 10000;
 		size = BOSSSIZE;
 		rad = size * 2 / gl.getHeight();
 		horiz = true;

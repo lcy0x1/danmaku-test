@@ -1,6 +1,7 @@
 package battle.bullet;
 
 import battle.Engine;
+import util.FM;
 import util.P;
 
 public interface Mover {
@@ -46,7 +47,7 @@ public interface Mover {
 			P ori = pos.copy().plus(disp(time), -1);
 			double dis = ori.toBound(o);
 			double rm = ir + v * time + ar * it * it / 2;
-			if (time > it && Math.abs(rm) > dis && rm * v > 0)
+			if (time > it && FM.abs(rm) > dis && rm * v > 0)
 				return true;
 			return false;
 		}
@@ -79,7 +80,7 @@ public interface Mover {
 
 		@Override
 		public boolean out(P pos, double r) {
-			return !f.exist(time + dt, ind);
+			return !f.exist(pos, r, time + dt, ind);
 		}
 
 	}
@@ -159,7 +160,7 @@ public interface Mover {
 
 		@Override
 		public boolean out(P pos, double r) {
-			P pv = a == null ? v : v.copy().plus(a, Math.min(t1, time) - t0);
+			P pv = a == null ? v : v.copy().plus(a, FM.min(t1, time) - t0);
 			return pos.moveOut(pv, Engine.BOUND, r) && (a == null || pv.dotP(a) > 0 || time > t1);
 		}
 

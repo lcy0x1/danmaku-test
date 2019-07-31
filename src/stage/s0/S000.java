@@ -22,7 +22,7 @@ public class S000 extends SpellCard {
 
 		@Override
 		public P disp(int t) {
-			return new P(Math.sin(t * wx + ix) + 1, Math.sin(t * wy + iy) + 1).times(0.5).times(o);
+			return new P(sin(t * wx + ix) + 1, sin(t * wy + iy) + 1).times(0.5).times(o);
 		}
 
 		@Override

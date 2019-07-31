@@ -35,14 +35,14 @@ public class S003 extends SpellCard implements Emiter.Ticker {
 		n = ns[diff];
 		m2 = m2s[diff];
 		dt = dts[diff];
-		w1 = Math.PI * 2 / f / dws[diff];
+		w1 = PI * 2 / f / dws[diff];
 	}
 
 	@Override
 	public void tick(Emiter e, int it, int ex) {
 		double a1 = it * f * w1;
 		for (int i = 0; i < n; i++) {
-			double a0 = Math.PI * 2 / n * i + a1 + p2 / n / m * (it % m);
+			double a0 = PI * 2 / n * i + a1 + p2 / n / m * (it % m);
 			int xt = (it % m) * dt * (f1 * 2 + f) + it / m * f1;
 			Koishi k = new Koishi(sps[it % m], sxs[it % m], (m2 + 1) * f1, xt, m2 * f1);
 			Dot d = new Dot(pc.copy(), k).setMove(P.polar(v0, a0));

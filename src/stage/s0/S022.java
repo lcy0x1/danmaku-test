@@ -51,9 +51,9 @@ public class S022 extends SpellCard.BossSpell implements Emiter.Ticker {
 	public void tick(Emiter e, int it, int ex) {
 		if (e.id == 0) {
 
-			add(new Emiter(1, f1, t0, this));
-			add(new Emiter(2, f2, t0 + t1, this).setDelay(t2));
-			add(new Emiter(3, f3, t0, this));
+			add(new Emiter(1, f1, t0, this), ex);
+			add(new Emiter(2, f2, t0 + t1, this).setDelay(t2), ex);
+			add(new Emiter(3, f3, t0, this), ex);
 
 		}
 		if (e.id == 1) {
@@ -63,7 +63,7 @@ public class S022 extends SpellCard.BossSpell implements Emiter.Ticker {
 			for (int i = 0; i < n; i++) {
 				double a1 = a0 + p2 / n * i;
 				DotBullet d = new DotBullet(new Dot(pos.copy(), P.polar(v0, a1), d1));
-				add(d);
+				add(d, ex);
 				list.add(d);
 			}
 		}
@@ -74,7 +74,7 @@ public class S022 extends SpellCard.BossSpell implements Emiter.Ticker {
 			for (int i = 0; i < m; i++) {
 				double b1 = b0 + p2 / m * i;
 				DotBullet d = new DotBullet(new Dot(pos.copy(), P.polar(v1, b1), d0));
-				add(d);
+				add(d, ex);
 				list.add(d);
 			}
 		}
@@ -111,8 +111,8 @@ public class S022 extends SpellCard.BossSpell implements Emiter.Ticker {
 
 	private P move(P tsi, double tim) {
 		double dsi = tsi.dis(tmpp);
-		double c0 = Math.pow(dsi / rad / RAD, 2);
-		double c1 = fac * tim * Math.pow(Math.E, -c0);
+		double c0 = pow(dsi / rad / RAD, 2);
+		double c1 = fac * tim * pow(E, -c0);
 		double c2 = dsi * P.middleC(c1);
 		return P.polar(c2, tsi.atan2(tmpp)).plus(tsi);
 	}

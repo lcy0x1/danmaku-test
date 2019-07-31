@@ -68,10 +68,11 @@ public class StageSet {
 				.add(S011.class, "(S3) [Boundary] Boundary of Conciousness")//
 				.add(S001.class, "(LW) Hakurei Immunity System"));
 
-		list.add(new SpellSet("Sanae (3)")//
+		list.add(new SpellSet("Sanae (4)")//
 				.add(S009.class, "(N1) rotate")//
-				.add(S019.class, "(S2) [Star] Let Me Teach You How to Draw Stars")//
-				.add(S008.class, "(N2) laser ref"));
+				.add(S040.class, "(N2) segment ref")//
+				.add(S008.class, "(N3) laser ref")//
+				.add(S019.class, "(S2) [Star] Let Me Teach You How to Draw Stars"));
 
 		list.add(new SpellSet("Youmu (1)")//
 				.add(S002.class, "LW"));
@@ -106,7 +107,8 @@ public class StageSet {
 				.add(S003.class, "S3 [Awaken] The Third Self"));
 
 		list.add(new SpellSet("Temp ")//
-				.add(S037.class, "(N1) "));
+				.add(S037.class, "(N1) ")//
+				.add(S041.class, "(S1) "));
 
 	}
 

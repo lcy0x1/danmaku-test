@@ -45,8 +45,8 @@ public class S023 extends SpellCard.BossSpell implements Emiter.Ticker {
 				db.getEntCtrl().killed(K_FUNCTIONAL);
 			home.clear();
 
-			add(new Emiter(2, f2, t0 + t1, this).setDelay(t2));
-			add(new Emiter(4, f4, t4, this));
+			add(new Emiter(2, f2, t0 + t1, this).setDelay(t2), ex);
+			add(new Emiter(4, f4, t4, this), ex);
 
 		}
 

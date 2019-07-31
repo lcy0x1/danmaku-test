@@ -69,7 +69,7 @@ public class S025 extends SpellCard implements Emiter.Ticker {
 				pa.times(a2 / pa.abs());
 			pos.plus(pv, t);
 			pos.limit(lim0, lim1);
-			pv.times(Math.pow(Math.E, -t * c1));
+			pv.times(pow(E, -t * c1));
 			pv.plus(pa, t);
 			if (pv.abs() > v2)
 				pv.times(v2 / pv.abs());
@@ -77,8 +77,8 @@ public class S025 extends SpellCard implements Emiter.Ticker {
 		}
 
 		private P wall() {
-			double px = Math.pow(lim0.x - pos.x, -2) - Math.pow(lim1.x - pos.x, -2);
-			double py = Math.pow(lim0.y - pos.y, -2) - Math.pow(lim1.y - pos.y, -2);
+			double px = pow(lim0.x - pos.x, -2) - pow(lim1.x - pos.x, -2);
+			double py = pow(lim0.y - pos.y, -2) - pow(lim1.y - pos.y, -2);
 			if (!Double.isFinite(px))
 				px = 0;
 			if (!Double.isFinite(py))

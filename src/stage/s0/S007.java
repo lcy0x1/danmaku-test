@@ -45,7 +45,7 @@ public class S007 extends SpellCard implements Emiter.Ticker {
 			Mover mov = new Mover.RefMover(pv, -1);
 			Dot d = new Dot(pc.copy(), e.id > 0 ? sp0 : sp1, mov);
 			DotBullet b = new DotBullet(d);
-			add(new Emiter(lt - dt, new Trail(d, pv)));
+			add(new Emiter(lt - dt, new Trail(d, pv)), ex);
 			add(b, ex);
 		}
 
@@ -79,7 +79,7 @@ public class S007 extends SpellCard implements Emiter.Ticker {
 			add(new Emiter(e.id, f2, f2 * m, new Adder(a0, v, it * f1)), ex);
 		} else {
 			a = rand(p2);
-			add(new Emiter(it % 2 * 2 - 1, f1, f1 * n, this));
+			add(new Emiter(it % 2 * 2 - 1, f1, f1 * n, this), ex);
 		}
 	}
 

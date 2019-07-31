@@ -10,6 +10,7 @@ import battle.Updatable;
 import battle.bullet.Mover.CurveMover;
 import battle.bullet.Mover.LineMover;
 import battle.bullet.Mover.TimeMover;
+import util.FM;
 import util.P;
 
 public class Dot implements Sprite.Dire, Control.UpdCtrl {
@@ -124,7 +125,7 @@ public class Dot implements Sprite.Dire, Control.UpdCtrl {
 
 		@Override
 		public double radius() {
-			return Math.max(d0.radius(), dc.radius());
+			return FM.max(d0.radius(), dc.radius());
 		}
 
 		@Override

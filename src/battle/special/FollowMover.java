@@ -7,6 +7,7 @@ import battle.Entity;
 import battle.Shape;
 import battle.bullet.Dot;
 import battle.bullet.Mover;
+import util.FM;
 import util.P;
 
 public abstract class FollowMover implements Mover {
@@ -81,11 +82,11 @@ public abstract class FollowMover implements Mover {
 		if (tar == null)
 			return;
 		double a0 = d.tmp.atan2(tar);
-		double da = (pv.atan2() - a0 + Math.PI * 5) % (Math.PI * 2) - Math.PI;
-		if (Math.abs(da) < mw * t)
+		double da = (pv.atan2() - a0 + FM.PI * 5) % (FM.PI * 2) - FM.PI;
+		if (FM.abs(da) < mw * t)
 			pv.rotate(da);
 		else
-			pv.rotate(-mw * t * Math.signum(da));
+			pv.rotate(-mw * t * FM.signum(da));
 	}
 
 	protected abstract P getTarget(P p);

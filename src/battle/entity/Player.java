@@ -9,6 +9,7 @@ import battle.Updatable;
 import battle.bullet.Dot;
 import battle.special.FollowMover;
 import util.Data;
+import util.FM;
 import util.P;
 
 public class Player extends Entity implements Sprite.Dire, Shape {
@@ -18,7 +19,7 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 		private static class LHAtker extends PlAtker {
 
 			private static final Sprite.SParam sp = Sprite.getDot(10701, 0, 1, Sprite.L_PLATK, 128);
-			private static final double v0 = 0.5, w = Math.PI / 3000;
+			private static final double v0 = 0.5, w = FM.PI / 3000;
 
 			private static final int DEF_ATK = 5;
 
@@ -38,12 +39,12 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 				Engine.RUNNING.add(new PlAtk.DotNPA(DEF_ATK, dt1));
 
 				P d2 = new P(-10, 0).plus(pos);
-				P pv2 = P.polar(v0, -Math.PI / 4);
+				P pv2 = P.polar(v0, -FM.PI / 4);
 				Dot dt2 = new Dot(d2, sp, FollowMover.getMover(pv2, w, C_ENEMY));
 				Engine.RUNNING.add(new PlAtk.DotNPA(DEF_ATK, dt2));
 
 				P d3 = new P(10, 0).plus(pos);
-				P pv3 = P.polar(v0, -3 * Math.PI / 4);
+				P pv3 = P.polar(v0, -3 * FM.PI / 4);
 				Dot dt3 = new Dot(d3, sp, FollowMover.getMover(pv3, w, C_ENEMY));
 				Engine.RUNNING.add(new PlAtk.DotNPA(DEF_ATK, dt3));
 			}
@@ -53,7 +54,7 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 		private static class LWAtker extends PlAtker {
 
 			private static final Sprite.SParam sp = Sprite.getDot(11013, 0, 1, Sprite.L_PLATK, 128);
-			private static final double v0 = 0.5, da0 = Math.PI / 48, da1 = Math.PI / 6;
+			private static final double v0 = 0.5, da0 = FM.PI / 48, da1 = FM.PI / 6;
 			private static final int n = 3, r = 60;
 
 			private static final int DEF_ATK = 5;
@@ -67,8 +68,8 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 				P pos = super.pl.pos;
 				for (int i = -3; i <= n; i++) {
 					int ix = i < 0 ? i + 1 : i > 0 ? i - 1 : i;
-					double a0 = da0 * ix - Math.PI / 2;
-					double a1 = da1 * i - Math.PI / 2;
+					double a0 = da0 * ix - FM.PI / 2;
+					double a1 = da1 * i - FM.PI / 2;
 					P d0 = P.polar(r, a1).plus(pos);
 					Dot dt0 = new Dot(d0, P.polar(v0, a0), sp);
 					Engine.RUNNING.add(new PlAtk.DotNPA(DEF_ATK, dt0));
@@ -155,7 +156,7 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 		double ans = Double.MAX_VALUE;
 		for (int i = 0; i <= n; i++) {
 			shape.pos.setTo(pos.middle(ext, 1.0 / n * i));
-			ans = Math.min(ans, s.dis(shape));
+			ans = FM.min(ans, s.dis(shape));
 		}
 		return ans;
 	}

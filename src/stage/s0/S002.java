@@ -63,11 +63,11 @@ public class S002 extends SpellCard implements Emiter.Ticker {
 			add(new Emiter(1, f1, f1 * 8, this), ex);
 			Engine.RUNNING.time.slowExc(sls[diff], (int) (f1 * 8 / sls[diff]), getPlayer());
 		} else if (e.id == 1)
-			adds(dire, (dire * it - 2) * Math.PI * 2 / 8, 3, ex);
+			adds(dire, (dire * it - 2) * PI * 2 / 8, 3, ex);
 		else if (e.id == 3)
 			add(new Emiter(4, f1, f1 * 8, this), ex);
 		else if (e.id == 4)
-			adds(dire, (dire * it - 2) * Math.PI * 2 / 8, 2, ex);
+			adds(dire, (dire * it - 2) * PI * 2 / 8, 2, ex);
 	}
 
 	@Override

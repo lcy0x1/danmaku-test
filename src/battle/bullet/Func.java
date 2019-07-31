@@ -8,6 +8,7 @@ import battle.Sprite;
 import battle.bullet.Curve.ListCurve;
 import battle.bullet.Mover.FuncMover;
 import battle.entity.Emiter;
+import util.FM;
 import util.P;
 
 public interface Func {
@@ -32,9 +33,10 @@ public interface Func {
 
 		@Override
 		public void tick(Emiter e, int it, int ex) {
-			Dot d = new Dot(pos.copy(), sp, new FuncMover(vlf, 0, 0, a));
+			Dot d = new Dot(pos.copy(), sp, new FuncMover(vlf, 0, it, a));
 			DotBullet b = new DotBullet(d, lt);
-			c.addP(b);
+			if (c != null)
+				c.addP(b);
 			Engine.RUNNING.add(b);
 		}
 
@@ -53,7 +55,7 @@ public interface Func {
 
 		@Override
 		protected double getTX(int dt, int t0) {
-			return (dt - t0 / Math.PI * Math.sin(Math.PI * dt / t0)) / 2;
+			return (dt - t0 / FM.PI * FM.sin(FM.PI * dt / t0)) / 2;
 		}
 
 	}
@@ -81,7 +83,7 @@ public interface Func {
 		}
 
 		@Override
-		public boolean exist(int time, int i) {
+		public boolean exist(P pos, double r, int time, int i) {
 			return true;
 		}
 
@@ -104,7 +106,7 @@ public interface Func {
 
 	}
 
-	public boolean exist(int time, int i);
+	public boolean exist(P pos, double r, int time, int i);
 
 	public P func(int time, int i);
 

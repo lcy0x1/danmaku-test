@@ -1,9 +1,8 @@
 package stage.s0;
 
 import battle.Sprite;
+import battle.bullet.BulletRing;
 import battle.bullet.Curve.ListCurve;
-import battle.bullet.Dot;
-import battle.bullet.DotBullet;
 import battle.bullet.Func;
 import battle.bullet.Func.VeloListFunc;
 import battle.bullet.Func.QuadVLF;
@@ -28,14 +27,14 @@ public class S039 extends SpellCard implements Emiter.Ticker {
 		}
 
 		@Override
-		public boolean exist(int time, int i) {
+		public boolean exist(P pos, double r, int time, int i) {
 			return time < lt1;
 		}
 
 		@Override
 		public P func(int time, int i) {
-			double t = time * (1 - Math.cos(Math.PI * time / lt1 / 2));
-			return new P(x * Math.sin(t * w0), t * v0);
+			double t = time * (1 - cos(PI * time / lt1 / 2));
+			return new P(x * sin(t * w0), t * v0);
 		}
 
 	}
@@ -96,7 +95,7 @@ public class S039 extends SpellCard implements Emiter.Ticker {
 			}
 		}
 		if (e.id / 2 == 1) {
-			add(new Emiter(e.id + 4, f2, f2 * m2, this));
+			add(new Emiter(e.id + 4, f2, f2 * m2, this), ex);
 		}
 		if (e.id / 2 == 2) {
 			int x = e.id % 2;
@@ -117,10 +116,7 @@ public class S039 extends SpellCard implements Emiter.Ticker {
 		if (e.id / 2 == 3) {
 			int x = e.id % 2;
 			double a0 = rand(p2);
-			for (int i = 0; i < n1; i++) {
-				double a = a0 + p2 / n1 * i;
-				add(new DotBullet(new Dot(pos.copy(), P.polar(v1, a), va, at, dss[x])), ex);
-			}
+			add(new BulletRing(pos, dss[x], n1, new Mover.LineMover(P.polar(v1, a0), va, 0, at)), ex);
 		}
 	}
 

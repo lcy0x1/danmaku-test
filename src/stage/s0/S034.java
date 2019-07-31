@@ -60,7 +60,7 @@ public class S034 extends SpellCard implements Emiter.Ticker {
 				double y1 = (y0 + o.y / n * i) % o.y;
 				int x = (int) rand(8);
 				P pv = P.polar(v0, p2 / 4 + rand(da / 2) - da / 2);
-				P pa = new P(0, va + dva * Math.abs(o.x / 2 - x1));
+				P pa = new P(0, va + dva * abs(o.x / 2 - x1));
 				Dot dt0 = new Dot(new P(x1, y1 - o.y), new InRange(ds[x], dss[x], rad));
 				add(new DotBullet(dt0.setMove(pv, pa, 0, t0)), ex);
 				if (new P(x1, y1).dis(p) < rad)

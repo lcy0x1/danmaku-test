@@ -61,8 +61,8 @@ public class S031 extends SpellCard.BossSpell implements Emiter.Ticker {
 	@Override
 	public void tick(Emiter e, int it, int ex) {
 		if (e.id == 0) {
-			add(new Emiter(1, f1, f1 * m, new Sub(rand(p2), n, pos, v0, da, ref, d0)));
-			add(new Emiter(2, f1, f1 * m * 2, new Sub(rand(p2), n, pos, v1, 0, 0, d1)));
+			add(new Emiter(1, f1, f1 * m, new Sub(rand(p2), n, pos, v0, da, ref, d0)), ex);
+			add(new Emiter(2, f1, f1 * m * 2, new Sub(rand(p2), n, pos, v1, 0, 0, d1)), ex);
 		}
 
 	}

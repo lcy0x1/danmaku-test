@@ -28,15 +28,14 @@ public class S006 extends SpellCard implements Emiter.Ticker {
 		}
 
 		@Override
-		public boolean exist(int time, int i) {
+		public boolean exist(P pos, double r, int time, int i) {
 			return (i - 1) * 200 < time;
 		}
 
 		@Override
 		public P func(int time, int i) {
-			double tot = time - i * xt < 0 ? 0
-					: ((m - 1 - i) * l0 * (Math.min(xt * m, time) - i * xt) / (xt * m - i * xt));
-			return P.polar(tot, a0 + Math.sin(r0 + (-time + i * vt) * w0) * ma).plus(ori);
+			double tot = time - i * xt < 0 ? 0 : ((m - 1 - i) * l0 * (min(xt * m, time) - i * xt) / (xt * m - i * xt));
+			return P.polar(tot, a0 + sin(r0 + (-time + i * vt) * w0) * ma).plus(ori);
 		}
 
 	}

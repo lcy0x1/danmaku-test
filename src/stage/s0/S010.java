@@ -71,7 +71,7 @@ public class S010 extends SpellCard implements Emiter.Ticker {
 
 		@Override
 		public void update(Dot d, int t) {
-			P p = P.polar(amp * Math.sin(it + fre * time), pv.atan2() + p2 / 4).plus(ori);
+			P p = P.polar(amp * sin(it + fre * time), pv.atan2() + p2 / 4).plus(ori);
 			d.tmp.setTo(p.flip(new P(0, 0), o));
 			time += t;
 		}
@@ -131,8 +131,8 @@ public class S010 extends SpellCard implements Emiter.Ticker {
 		if (e.id == 0) {
 			for (int i = 0; i < n; i++) {
 				double dir = pvs[i].getDire();
-				double dif0 = Math.abs(dir - pre[i]);
-				double dif1 = Math.abs(pre[i] - ppp[i]);
+				double dif0 = abs(dir - pre[i]);
+				double dif1 = abs(pre[i] - ppp[i]);
 				if (dif0 > 1e-5 && dif1 < 1e-5 && it > 5)
 					adds(ex);
 				ppp[i] = pre[i];

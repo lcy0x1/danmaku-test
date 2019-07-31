@@ -32,7 +32,7 @@ public class S037 extends SpellCard implements Emiter.Ticker {
 
 		@Override
 		public boolean out(P pos, double r) {
-			return pos.moveOut(v, o, r) && Math.cos(v.atan2() - p0.atan2(p1)) > err;
+			return pos.moveOut(v, o, r) && cos(v.atan2() - p0.atan2(p1)) > err;
 		}
 
 		@Override
@@ -84,10 +84,10 @@ public class S037 extends SpellCard implements Emiter.Ticker {
 	@Override
 	public void tick(Emiter e, int it, int ex) {
 		if (e.id == 0) {
-			double a0 = w1 / w0 * Math.cos(w0 * it * f0);
+			double a0 = w1 / w0 * cos(w0 * it * f0);
 			for (int i = 0; i < n; i++) {
 				double a1 = a0 + p2 / n * i;
-				add(new Emiter(0, dx, dx * m, new Sub(pos, getPlayer().pos, a1, va, w1 * Math.sin(w0 * it * f0))));
+				add(new Emiter(0, dx, dx * m, new Sub(pos, getPlayer().pos, a1, va, w1 * sin(w0 * it * f0))), ex);
 			}
 		}
 	}

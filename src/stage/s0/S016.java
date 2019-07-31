@@ -111,7 +111,7 @@ public class S016 extends SpellCard.BossSpell implements Emiter.Ticker {
 			ans = rand(p2);
 			pass = true;
 			for (P p : avi) {
-				if (Math.cos(ans - pos.atan2(p)) > dr)
+				if (cos(ans - pos.atan2(p)) > dr)
 					pass = false;
 			}
 		}

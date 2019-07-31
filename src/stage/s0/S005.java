@@ -23,7 +23,7 @@ public class S005 extends SpellCard implements Emiter.Ticker {
 		}
 
 		@Override
-		public boolean exist(int time, int i) {
+		public boolean exist(P pos, double r, int time, int i) {
 			return (i - 1) * 200 < time;
 		}
 
@@ -34,10 +34,10 @@ public class S005 extends SpellCard implements Emiter.Ticker {
 				tot = 0;
 			else {
 				double max = (m - 1 - i) * dr;
-				double mt = 1.0 * (Math.min(xt * m, time) - i * xt) / (xt * m - i * xt);
-				tot = max * Math.sin(mt * Math.PI / 2);
+				double mt = 1.0 * (min(xt * m, time) - i * xt) / (xt * m - i * xt);
+				tot = max * sin(mt * PI / 2);
 			}
-			double a = a0 + Math.sin(r0 + (-time + i * w0 / vt) * p2 / w0) * ma;
+			double a = a0 + sin(r0 + (-time + i * w0 / vt) * p2 / w0) * ma;
 			return P.polar(tot, a).plus(pc);
 		}
 

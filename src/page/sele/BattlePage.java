@@ -31,6 +31,7 @@ public class BattlePage extends Page {
 	private final JL jdct = new JL();
 	private final JL jtrm = new JL();
 	private final JL jlhp = new JL();
+	private final JL jeff = new JL();
 	private final GLFPC fpc;
 	private final Engine e;
 
@@ -91,11 +92,13 @@ public class BattlePage extends Page {
 		set(jdct, x, y, 1800, 200, 400, 50);
 		set(jtrm, x, y, 1800, 250, 400, 50);
 		set(jlhp, x, y, 1800, 300, 400, 50);
+		set(jeff, x, y, 1800, 350, 400, 50);
 		fpc.setBounds(x / 2 - y * 2 / 5, 0, y * 4 / 5, y);
 	}
 
 	@Override
 	protected void timer(int t) {
+		long t0 = 0, t1 = 0;
 		if (!pause) {
 			P move = new P(0, 0);
 			if (press[UP])
@@ -107,8 +110,10 @@ public class BattlePage extends Page {
 			if (press[RIGHT])
 				move.x++;
 			move.times(press[SHIFT] ? 2 : 5).plus(disp);
+			t0 = System.nanoTime();
 			e.update(new Engine.UpdateProfile(move, Timer.p, press[SHOOT]));
-			jctn.setText("count:" + e.count());
+			t1 = System.nanoTime();
+			jctn.setText("count:" + e.drawLoad + "/" + e.count());
 			int sec = e.time.clock / 1000;
 			jtim.setText("time:" + Data.str(sec / 60, 2) + ":" + Data.str(sec % 60, 2));
 			jdct.setText("death:" + e.pl.deadCount);
@@ -129,7 +134,10 @@ public class BattlePage extends Page {
 				jlhp.setText("");
 		}
 		disp.setTo(0, 0);
+		long t2 = System.nanoTime();
 		fpc.paint();
+		long t3 = System.nanoTime();
+		jeff.setText("calc: " + ((t1 - t0) >> 20) + "ms, graph: " + ((t3 - t2) >> 20) + "ms");
 	}
 
 	private void addListeners() {
@@ -143,6 +151,7 @@ public class BattlePage extends Page {
 		add(jdct);
 		add(jtrm);
 		add(jlhp);
+		add(jeff);
 		add(fpc);
 		addListeners();
 	}

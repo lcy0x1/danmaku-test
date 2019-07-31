@@ -25,10 +25,10 @@ public strictfp class P {
 				P v1 = p1.sf(p);
 				P l = p0.sf(p1);
 				// dis to point
-				dis = Math.min(dis, v0.abs());
+				dis = FM.min(dis, v0.abs());
 				// dis to line
 				if (l.dotP(v0) >= 0 && l.dotP(v1) <= 0)
-					dis = Math.min(dis, Math.abs(l.crossP(v0)) / l.abs());
+					dis = FM.min(dis, FM.abs(l.crossP(v0)) / l.abs());
 			}
 			return dis;
 		}
@@ -57,10 +57,10 @@ public strictfp class P {
 				P v1 = p1.sf(p);
 				P l = p0.sf(p1);
 				// dis to point
-				dis = Math.min(dis, v0.abs());
+				dis = FM.min(dis, v0.abs());
 				// dis to line
 				if (l.dotP(v0) >= 0 && l.dotP(v1) <= 0)
-					dis = Math.min(dis, Math.abs(l.crossP(v0)) / l.abs());
+					dis = FM.min(dis, FM.abs(l.crossP(v0)) / l.abs());
 				// intersect
 				if (v0.crossP(up) * v0.crossP(v1) < 0 && -v0.dotP(up) * v1.abs() > v0.dotP(v1))
 					count++;
@@ -87,18 +87,18 @@ public strictfp class P {
 		double d2 = b * b - 4 * a * c;
 		if (d2 < 0)
 			return Double.NaN;
-		double d = Math.sqrt(d2);
+		double d = FM.sqrt(d2);
 		double t0 = (-b + d) / (2 * a);
 		double t1 = (-b - d) / (2 * a);
 		return t0 < t1 ? t1 : t0;
 	}
 
 	public static double middleC(double d) {
-		return (1 - Math.cos(Math.PI * d)) / 2;
+		return (1 - FM.cos(FM.PI * d)) / 2;
 	}
 
 	public static P polar(double r, double t) {
-		return new P(r * Math.cos(t), r * Math.sin(t));
+		return new P(r * FM.cos(t), r * FM.sin(t));
 	}
 
 	public static float reg(float cx) {
@@ -110,7 +110,7 @@ public strictfp class P {
 	}
 
 	private static double randpi() {
-		return Math.PI * Math.random();
+		return FM.PI * FM.random();
 	}
 
 	public double x, y;
@@ -136,15 +136,15 @@ public strictfp class P {
 	}
 
 	public double abs() {
-		return dis(new P(0, 0));
+		return dis(0, 0);
 	}
 
 	public double atan2() {
-		return Math.atan2(y, x);
+		return FM.atan2(y, x);
 	}
 
 	public double atan2(P p) {
-		return Math.atan2(p.y - y, p.x - x);
+		return FM.atan2(p.y - y, p.x - x);
 	}
 
 	public P copy() {
@@ -156,11 +156,11 @@ public strictfp class P {
 	}
 
 	public double dis(double px, double py) {
-		return Math.sqrt(Math.pow(px - x, 2) + Math.pow(py - y, 2));
+		return FM.sqrt(FM.sq(px - x) + FM.sq(py - y));
 	}
 
 	public double dis(P p) {
-		return Math.sqrt(Math.pow(p.x - x, 2) + Math.pow(p.y - y, 2));
+		return FM.sqrt(FM.sq(p.x - x) + FM.sq(p.y - y));
 	}
 
 	public P divide(P p) {
@@ -177,7 +177,7 @@ public strictfp class P {
 	public boolean equals(Object obj) {
 		if (P.class.isAssignableFrom(obj.getClass())) {
 			P i = (P) obj;
-			if (Math.abs(i.x - x) + Math.abs(i.y - y) < 1e-10)
+			if (FM.abs(i.x - x) + FM.abs(i.y - y) < 1e-10)
 				return true;
 		}
 		return false;
@@ -221,7 +221,7 @@ public strictfp class P {
 	}
 
 	public P middleC(P p, double per) {
-		return copy().plus(sf(p), (1 - Math.cos(Math.PI * per)) / 2);
+		return copy().plus(sf(p), (1 - FM.cos(FM.PI * per)) / 2);
 	}
 
 	public boolean moveOut(P v, P b2, double r) {
@@ -288,7 +288,7 @@ public strictfp class P {
 	}
 
 	public P rotate(double t) {
-		return setTo(x * Math.cos(t) - y * Math.sin(t), y * Math.cos(t) + x * Math.sin(t));
+		return setTo(x * FM.cos(t) - y * FM.sin(t), y * FM.cos(t) + x * FM.sin(t));
 	}
 
 	public P setTo(double tx, double ty) {
@@ -331,7 +331,7 @@ public strictfp class P {
 	}
 
 	public double toBound(double px, double py) {
-		return Math.max(Math.max(dis(0, 0), dis(px, 0)), Math.max(dis(0, py), dis(px, py)));
+		return FM.max(FM.max(dis(0, 0), dis(px, 0)), FM.max(dis(0, py), dis(px, py)));
 	}
 
 	public double toBound(P o) {

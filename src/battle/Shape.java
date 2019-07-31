@@ -1,6 +1,7 @@
 package battle;
 
 import main.Printer;
+import util.FM;
 import util.P;
 
 public interface Shape {
@@ -42,7 +43,7 @@ public interface Shape {
 					if (ps.length == 1)
 						continue;
 					P.Line l = new P.Line(ps);
-					dis = Math.min(dis, l.dis(c.pos));
+					dis = FM.min(dis, l.dis(c.pos));
 				}
 				return dis - r - c.r;
 			}

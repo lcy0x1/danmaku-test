@@ -5,9 +5,10 @@ import battle.Engine;
 import battle.Updatable;
 import battle.entity.Clearer;
 import battle.entity.Player;
+import util.FM;
 import util.P;
 
-public abstract class StageSection implements Control.UpdCtrl {
+public abstract class StageSection extends FM implements Control.UpdCtrl {
 
 	public static class BossProfile {
 
@@ -56,7 +57,7 @@ public abstract class StageSection implements Control.UpdCtrl {
 	public static final P o = Engine.BOUND;
 	public static final P pc = new P(o.x / 2, o.y / 2);
 
-	public static final double p2 = Math.PI * 2;
+	public static final double p2 = FM.PI * 2;
 
 	public static void add(Updatable e) {
 		Engine.RUNNING.add(e);

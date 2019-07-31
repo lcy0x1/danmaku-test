@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import battle.entity.Player;
 import jogl.util.FakeGraphics;
 import stage.StageSection;
+import util.FM;
 import util.P;
 
 public class Engine {
@@ -173,6 +174,8 @@ public class Engine {
 	public final StageSection stage;
 	public final Random r = new Random();
 
+	public int drawLoad = 0;
+
 	private final Map<Integer, List<Entity>> entities = new TreeMap<>();
 	private final List<Entity> temp = new ArrayList<>();
 	private final List<Control.UpdCtrl> updc = new ArrayList<>();
@@ -203,6 +206,7 @@ public class Engine {
 		RENDERING = new Sprite.Pool();
 		updc.forEach(e -> e.draw());
 		entities.forEach((i, l) -> l.forEach(e -> e.draw()));
+		drawLoad = RENDERING.count();
 		RENDERING.flush(fg);
 		RENDERING = null;
 	}
@@ -217,6 +221,7 @@ public class Engine {
 	}
 
 	public void update(UpdateProfile up) {
+		FM.clear(false);
 		RUNNING = this;
 		pl.ext.plus(up.pos).limit(BOUND);
 		pl.atker.attack = up.attack;
@@ -244,6 +249,7 @@ public class Engine {
 		time.post();
 		clearTmp();
 		RUNNING = null;
+		FM.clear(false);
 	}
 
 	private void clearTmp() {

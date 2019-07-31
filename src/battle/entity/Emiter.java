@@ -55,6 +55,8 @@ public class Emiter implements Control.UpdCtrl {
 
 	@Override
 	public void update(int dt) {
+		if (dt == 0)
+			return;
 		if (tc != null)
 			tc.update(dt);
 		if (time >= 0) {

@@ -86,7 +86,7 @@ public class S018 extends SpellCard.BossSpell implements Emiter.Ticker {
 				double dis = pos.dis(p);
 				if (dis < minr)
 					dis = minr;
-				if (Math.cos(ans - pos.atan2(p)) > Math.cos(dr / dis))
+				if (cos(ans - pos.atan2(p)) > cos(dr / dis))
 					pass = false;
 			}
 		}

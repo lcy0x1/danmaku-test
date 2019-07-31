@@ -22,7 +22,7 @@ public class S028 extends SpellCard implements Emiter.Ticker {
 
 		@Override
 		protected double getR(int t) {
-			return super.maxR() * (1 + Math.sin(t * w + a)) / 2;
+			return super.maxR() * (1 + sin(t * w + a)) / 2;
 		}
 
 	}

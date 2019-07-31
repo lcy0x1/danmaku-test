@@ -8,6 +8,7 @@ import java.util.Queue;
 import battle.Control;
 import battle.Shape;
 import battle.Sprite;
+import util.FM;
 import util.P;
 
 public abstract class Curve extends Shape.LineSegs implements Control.UpdCtrl {
@@ -101,7 +102,7 @@ public abstract class Curve extends Shape.LineSegs implements Control.UpdCtrl {
 		}
 
 		private boolean exist(int i) {
-			return func.exist(time, i);
+			return func.exist(null, 0, time, i);
 		}
 
 	}
@@ -153,7 +154,7 @@ public abstract class Curve extends Shape.LineSegs implements Control.UpdCtrl {
 		@Override
 		public void post() {
 			// it should not effect the graphics too much
-			int i = 0, max = Math.max(1, qd.size() / 40);
+			int i = 0, max = FM.max(1, qd.size() / 40);
 			while (qd.peek() != null && qd.peek().isDead()) {
 				qd.poll();
 				i++;

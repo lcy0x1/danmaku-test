@@ -41,8 +41,8 @@ public class S021 extends SpellCard.BossSpell implements Emiter.Ticker {
 				P pv = P.polar(v0 + dt, a1);
 				add(new DotBullet(new Dot(p0, pv, va, t0, d0), t1).setLv(K_FUNCTIONAL), ex);
 			}
-			add(new Emiter(1, f1, t1, this).setDelay(t0));
-			add(new Emiter(2, f2, t1, this).setDelay(t0 + t2));
+			add(new Emiter(1, f1, t1, this).setDelay(t0), ex);
+			add(new Emiter(2, f2, t1, this).setDelay(t0 + t2), ex);
 		}
 		if (e.id == 1) {
 			if (it == 0)

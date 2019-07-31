@@ -38,7 +38,7 @@ public class S032 extends SpellCard implements Emiter.Ticker {
 			P pv = P.polar(-v2, a0 + da);
 			P pvx = P.polar(1e-5, a0 + da);
 			P pv0 = P.polar(1e-5, a1);
-			int dt = (int) ((Math.sqrt(v2 * v2 + 2 * ac0 * lt) - v2) / ac0) / 20 * 20;
+			int dt = (int) ((sqrt(v2 * v2 + 2 * ac0 * lt) - v2) / ac0) / 20 * 20;
 			double xt = dlt - dt * dt * ac0 / 2 - dt * v2;
 			P p0 = P.polar(xt, pv.atan2()).plus(p);
 			int xtl = (t0 - time) / 40 * 20;
@@ -85,7 +85,7 @@ public class S032 extends SpellCard implements Emiter.Ticker {
 			double w1 = s * (w00 + rand(w01 - w00));
 			for (int i = 0; i < m; i++) {
 				double a0 = a + p2 / n / m * i;
-				double dia = da * Math.pow(rand(1), 2) - da / 2;
+				double dia = da * pow(rand(1), 2) - da / 2;
 				double w2 = s * (w10 + rand(w11 - w10));
 				double ia = rand(p2);
 				for (int j = 0; j < n; j++) {

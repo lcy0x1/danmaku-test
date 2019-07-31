@@ -17,6 +17,7 @@ import com.jogamp.opengl.GL2ES3;
 
 import battle.Sprite;
 import util.Data;
+import util.FM;
 import util.P;
 
 public class GLGraphics implements GeoAuto {
@@ -56,17 +57,17 @@ public class GLGraphics implements GeoAuto {
 			P[] p0 = new P[2], p1 = new P[2];
 			P pc = P.polar(end / lp, d0).plus(ps[0]);
 			P ec = P.polar(end / lp, d1).plus(ps[n - 1]);
-			p0[0] = P.polar(ra, d0 + Math.PI / 2).plus(pc);
-			p0[1] = P.polar(ra, d0 - Math.PI / 2).plus(pc);
-			p1[0] = P.polar(ra, d1 - Math.PI / 2).plus(ec);
-			p1[1] = P.polar(ra, d1 + Math.PI / 2).plus(ec);
+			p0[0] = P.polar(ra, d0 + FM.PI / 2).plus(pc);
+			p0[1] = P.polar(ra, d0 - FM.PI / 2).plus(pc);
+			p1[0] = P.polar(ra, d1 - FM.PI / 2).plus(ec);
+			p1[1] = P.polar(ra, d1 + FM.PI / 2).plus(ec);
 
 			P[][] s0 = new P[2][ps.length - 1];
 			for (int i = 0; i < n - 1; i++) {
 				d0 = ps[i + 1].atan2(ps[i]);
 				P pm = ps[i + 1].middle(ps[i], 0.5);
-				s0[0][i] = P.polar(ra, d0 + Math.PI / 2).plus(pm);
-				s0[1][i] = P.polar(ra, d0 - Math.PI / 2).plus(pm);
+				s0[0][i] = P.polar(ra, d0 + FM.PI / 2).plus(pm);
+				s0[1][i] = P.polar(ra, d0 - FM.PI / 2).plus(pm);
 			}
 
 			for (int k = 0; k < 1; k++) {
@@ -110,11 +111,11 @@ public class GLGraphics implements GeoAuto {
 				c.times(gra.sh);
 				gra.translate(c.x, c.y);
 				for (int j = 0; j < CIR; j++) {
-					double t0 = j * Math.PI * 2 / CIR;
-					double t1 = t0 + Math.PI * 2 / CIR;
+					double t0 = j * FM.PI * 2 / CIR;
+					double t1 = t0 + FM.PI * 2 / CIR;
 					addP(0, 0);
-					addP(c.w / 2 * Math.cos(t0), c.h / 2 * Math.sin(t0));
-					addP(c.w / 2 * Math.cos(t1), c.h / 2 * Math.sin(t1));
+					addP(c.w / 2 * FM.cos(t0), c.h / 2 * FM.sin(t0));
+					addP(c.w / 2 * FM.cos(t1), c.h / 2 * FM.sin(t1));
 				}
 				gra.setTransform(glt);
 			}
@@ -311,10 +312,10 @@ public class GLGraphics implements GeoAuto {
 		P[] p0 = new P[2], p1 = new P[2];
 		P pc = P.polar(end / lp, d0).plus(ps[0]);
 		P ec = P.polar(end / lp, d1).plus(ps[n - 1]);
-		p0[0] = P.polar(ra, d0 + Math.PI / 2).plus(pc);
-		p0[1] = P.polar(ra, d0 - Math.PI / 2).plus(pc);
-		p1[0] = P.polar(ra, d1 - Math.PI / 2).plus(ec);
-		p1[1] = P.polar(ra, d1 + Math.PI / 2).plus(ec);
+		p0[0] = P.polar(ra, d0 + FM.PI / 2).plus(pc);
+		p0[1] = P.polar(ra, d0 - FM.PI / 2).plus(pc);
+		p1[0] = P.polar(ra, d1 - FM.PI / 2).plus(ec);
+		p1[1] = P.polar(ra, d1 + FM.PI / 2).plus(ec);
 
 		double cl0 = end, cl1 = end;
 		P[][] s0 = new P[2][ps.length - 1];
@@ -322,8 +323,8 @@ public class GLGraphics implements GeoAuto {
 			cl1 += lp * ps[i + 1].dis(ps[i]);
 			d0 = ps[i + 1].atan2(ps[i]);
 			P pm = ps[i + 1].middle(ps[i], 0.5);
-			s0[0][i] = P.polar(ra, d0 + Math.PI / 2).plus(pm);
-			s0[1][i] = P.polar(ra, d0 - Math.PI / 2).plus(pm);
+			s0[0][i] = P.polar(ra, d0 + FM.PI / 2).plus(pm);
+			s0[1][i] = P.polar(ra, d0 - FM.PI / 2).plus(pm);
 			cl0 = cl1;
 		}
 
@@ -416,8 +417,8 @@ public class GLGraphics implements GeoAuto {
 
 	@Override
 	public void rotate(double d) {
-		float c = (float) Math.cos(d);
-		float s = (float) Math.sin(d);
+		float c = (float) FM.cos(d);
+		float s = (float) FM.sin(d);
 		float f0 = trans[0] * c + trans[1] * s;
 		float f1 = trans[0] * -s + trans[1] * c;
 		float f3 = trans[3] * c + trans[4] * s;

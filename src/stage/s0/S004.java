@@ -40,7 +40,7 @@ public class S004 extends SpellCard implements Emiter.Ticker {
 				double a0 = p2 / n * i + a;
 				P p = P.polar(l, a0).plus(pc);
 				double a1 = it * f0 * w1;
-				double da = maxda * Math.sin(a0 + a1);
+				double da = maxda * sin(a0 + a1);
 				P pv = P.polar(-v0, a0 + da);
 				DotBullet d = new DotBullet(new Dot(p, pv, spc));
 				list[i].addP(d);
@@ -53,7 +53,7 @@ public class S004 extends SpellCard implements Emiter.Ticker {
 				double a0 = p2 / n * i + a;
 				P p = P.polar(l, a0).plus(pc);
 				double a1 = it * f1 * w1;
-				double da = maxda * Math.sin(a0 + a1);
+				double da = maxda * sin(a0 + a1);
 				double a2 = a0 + da + it * f1 * w2;
 				add(new DotBullet(new Dot(p.copy(), P.polar(v1, a2), sp0)), ex);
 				add(new DotBullet(new Dot(p.copy(), P.polar(-v2, a2), sp1)), ex);

@@ -76,7 +76,7 @@ public class S019 extends SpellCard implements Emiter.Ticker {
 					if (ai == 1) {
 						P p0 = ps[i][3].middle(ps[i][2], 1.0 / n * (at + 0.5));
 						lp.add(p0);
-						P pv = P.polar(ps[i][0].dis(p0) * 2 * Math.cos(p2 / 5) / bt, ps[i][0].atan2(p0));
+						P pv = P.polar(ps[i][0].dis(p0) * 2 * cos(p2 / 5) / bt, ps[i][0].atan2(p0));
 						Dot b0 = new Dot(p0, d2).delay(bt);
 						Dot b1 = new Dot(p0, d3);
 						Dot b2 = new Dot(p0, pv, d3).delay(bt);
@@ -146,8 +146,8 @@ public class S019 extends SpellCard implements Emiter.Ticker {
 			while (dis <= 400 || dis >= 600) {
 				if (count > 200)
 					break;
-				p0 = t0.get((int) (Math.random() * t0.size()));
-				p1 = t1.get((int) (Math.random() * t1.size()));
+				p0 = t0.get((int) (random() * t0.size()));
+				p1 = t1.get((int) (random() * t1.size()));
 				dis = p0.dis(p1);
 				count++;
 			}
@@ -168,14 +168,14 @@ public class S019 extends SpellCard implements Emiter.Ticker {
 	private void setup(P p0, P p1, int ex) {
 		double dis = p0.dis(p1);
 		double h0 = 1e-5, h1 = p2 - 1e-5, h = 1.5;
-		while (Math.abs(dis / (2 * Math.sin(h / 2)) * h - 600) < 1) {
+		while (abs(dis / (2 * sin(h / 2)) * h - 600) < 1) {
 			h = (h0 + h1) / 2;
-			if (dis * h < Math.sin(h / 2) * 1200)
+			if (dis * h < sin(h / 2) * 1200)
 				h0 = h;
 			else
 				h1 = h;
 		}
-		double r = dis / (2 * Math.sin(h / 2));
+		double r = dis / (2 * sin(h / 2));
 		int s = rand(1) < 0.5 ? 1 : -1;
 		P cen = P.polar(r, p0.atan2(p1) + s * (p2 / 4 - h / 2)).plus(p0);
 		CosCurve cc = new CosCurve(cen, r, cen.atan2(p0), s * h / tx, tx);

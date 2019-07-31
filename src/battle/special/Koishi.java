@@ -5,6 +5,7 @@ import battle.Shape.PosShape;
 import battle.Sprite;
 import battle.Sprite.ESprite;
 import battle.bullet.Dot;
+import util.FM;
 
 public class Koishi implements Dot.PosSprite {
 
@@ -62,7 +63,7 @@ public class Koishi implements Dot.PosSprite {
 
 	@Override
 	public double radius() {
-		return Math.max(d0.radius(), d1.radius());
+		return FM.max(d0.radius(), d1.radius());
 	}
 
 	@Override

@@ -112,6 +112,7 @@ public abstract class Curve extends Shape.LineSegs implements Control.UpdCtrl {
 		private Queue<DotCont> qd = new ArrayDeque<>();
 
 		private final boolean perm;
+		private boolean added = false;
 
 		public ListCurve(Sprite.SParam cesp) {
 			this(cesp, false);
@@ -123,6 +124,7 @@ public abstract class Curve extends Shape.LineSegs implements Control.UpdCtrl {
 		}
 
 		public void addP(DotCont d) {
+			added = true;
 			d.clearCtrl(Dot.class);
 			d.addCtrl(new Control.ElemCtrl<DotCont>(d, this));
 			qd.add(d);
@@ -132,7 +134,7 @@ public abstract class Curve extends Shape.LineSegs implements Control.UpdCtrl {
 		public boolean finished() {
 			if (perm)
 				return false;
-			return qd.size() == 0;
+			return added && qd.size() == 0;
 		}
 
 		@Override

@@ -108,7 +108,8 @@ public class StageSet {
 				.add(S003.class, "S3 [Awaken] The Third Self"));
 
 		list.add(new SpellSet("Temp ")//
-				.add(S037.class, "(N1) "));
+				.add(S037.class, "(N1) ")//
+				.add(S042.class, "(S1) "));
 
 	}
 

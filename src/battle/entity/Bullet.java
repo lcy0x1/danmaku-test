@@ -19,7 +19,8 @@ public abstract class Bullet extends Entity {
 
 	public Bullet(int base, int atk, int t) {
 		super(base, atk);
-		addCtrl(new Control.TimeCtrl(t));
+		if (t >= 0)
+			addCtrl(new Control.TimeCtrl(t));
 	}
 
 	@Override

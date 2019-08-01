@@ -101,7 +101,6 @@ public class S039 extends SpellCard implements Emiter.Ticker {
 			int x = e.id % 2;
 
 			for (int j = 0; j < 2; j++) {
-
 				double a0 = rand(p2);
 				for (int i = 0; i < n0; i++) {
 					double a = a0 + p2 / n0 * i;

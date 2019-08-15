@@ -52,7 +52,7 @@ public class S042 extends SpellCard implements Emiter.Ticker {
 	private static final Sprite.SParam[] dss = { ds0, ds1 };
 
 	private static final int f0 = 4000, t0 = 500, f1 = 20, f2 = 40, at = 2000;
-	private static final int n0 = 9;
+	private static final int n0 = 9, m1 = 12;
 	private static final double v0 = 0.2, va = 2e-4, w0 = p2 / 9 / 30, w1 = p2 / 36;
 
 	private static final int[] lts = { 2000, 1000 };
@@ -60,12 +60,11 @@ public class S042 extends SpellCard implements Emiter.Ticker {
 	private static final int[] ns = { 6, 7, 8, 9 };
 	private static final int[] ms = { 3, 4, 5, 6 };
 
-	private final int m0, n1, m1;
+	private final int m0, n1;
 
 	public S042(int diff) {
 		super(60000);
 		n1 = ns[diff] * 4;
-		m1 = ms[diff] * 2;
 		m0 = ms[diff] * 6;
 	}
 

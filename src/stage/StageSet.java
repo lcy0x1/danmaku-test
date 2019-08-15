@@ -109,7 +109,9 @@ public class StageSet {
 
 		list.add(new SpellSet("Temp ")//
 				.add(S037.class, "(N1) ")//
-				.add(S042.class, "(S1) "));
+				.add(S042.class, "(S1) ")//
+				.add(S043.class, "(N2) ")//
+				.add(S044.class, "(S2) "));
 
 	}
 

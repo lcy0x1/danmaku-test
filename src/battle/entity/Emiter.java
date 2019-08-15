@@ -35,12 +35,16 @@ public class Emiter implements Control.UpdCtrl {
 		tick = tic;
 	}
 
-	public Emiter(int delay, Ticker tic) {
-		id = 0;
+	public Emiter(int ID, int delay, Ticker tic) {
+		id = ID;
 		ctrl = tc = new Control.TimeCtrl(delay + 20);
 		tick = tic;
 		f = 20;
 		time = -delay;
+	}
+
+	public Emiter(int delay, Ticker tic) {
+		this(0, delay, tic);
 	}
 
 	@Override

@@ -103,7 +103,7 @@ public class S025 extends SpellCard implements Emiter.Ticker {
 	private static final P lim0 = new P(-50, -50), lim1 = new P(850, 1050);
 
 	private static final int[] ns = { 45, 60, 75, 90 };
-	private static final int[] ms = { 8, 10, 12, 14 };
+	private static final int[] ms = { 6, 7, 8, 9 };
 	private static final int[] rs = { 100, 120, 140, 160 };
 	private static final int[] fs = { 2000, 1700, 1400, 1100 };
 

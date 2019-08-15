@@ -89,13 +89,15 @@ public class StageSet {
 				.add(S012.class, "(S3) [Spirit] Spiritual Commutor")//
 				.add(S039.class, "(LW) Berserk Spirit and Chaotic Life"));
 
-		list.add(new SpellSet("Yukari (7)")//
+		list.add(new SpellSet("Yukari (9)")//
 				.add(S036.class, "(N1) W-P 1")//
 				.add(S004.class, "(S1) [Mystery] Tantacles of the Unknown")//
-				.add(S030.class, "(N2) W-P 2")//
+				.add(S033.class, "(N2) Chasing Reality")//
 				.add(S025.class, "(S2) [Chaos] Evening Stars")//
-				.add(S033.class, "(N3) exp")//
-				.add(S035.class, "(S3) Yukari's Damaku Barrier")//
+				.add(S030.class, "(N3) W-P 2")//
+				.add(S042.class, "(S3) [Boundary] Primitization of Epiphenomenon")//
+				.add(S044.class, "(S4) [Boundary] Boundary of Terror and Beauty")//
+				.add(S035.class, "(S5) Yukari's Damaku Barrier")//
 				.add(S032.class, "(LW) Gensokyo Hakurei Boundary"));
 
 		list.add(new SpellSet("Yuyuko (2)")//
@@ -109,9 +111,7 @@ public class StageSet {
 
 		list.add(new SpellSet("Temp ")//
 				.add(S037.class, "(N1) ")//
-				.add(S042.class, "(S1) ")//
-				.add(S043.class, "(N2) ")//
-				.add(S044.class, "(S2) "));
+				.add(S043.class, "(S4) Now or Later"));
 
 	}
 

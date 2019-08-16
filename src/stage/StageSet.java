@@ -59,13 +59,14 @@ public class StageSet {
 				.add(S022.class, "(S3) [Time] The Shrinking Universe")//
 				.add(S021.class, "(LW) Sakuya's Magical Trap"));
 
-		list.add(new SpellSet("Reimu (7)")//
+		list.add(new SpellSet("Reimu (8)")//
 				.add(S026.class, "(N1) double")//
 				.add(S024.class, "(S1) [Exterminate] The Unbreakable Seal")//
 				.add(S027.class, "(N2) chaos")//
-				.add(S020.class, "(S2) [Exterminate] Spell of the Boundary")//
+				.add(S020.class, "(S2) [Boundary] Spell of the Boundary")//
 				.add(S029.class, "(N3) boundary")//
 				.add(S011.class, "(S3) [Boundary] Boundary of Conciousness")//
+				.add(S046.class, "(S4) Final Extermination")//
 				.add(S001.class, "(LW) Hakurei Immunity System"));
 
 		list.add(new SpellSet("Sanae (4)")//
@@ -89,13 +90,14 @@ public class StageSet {
 				.add(S012.class, "(S3) [Spirit] Spiritual Commutor")//
 				.add(S039.class, "(LW) Berserk Spirit and Chaotic Life"));
 
-		list.add(new SpellSet("Yukari (9)")//
-				.add(S036.class, "(N1) W-P 1")//
+		list.add(new SpellSet("Yukari (10)")//
+				.add(S045.class, "(N1) double Rot 1")//
 				.add(S004.class, "(S1) [Mystery] Tantacles of the Unknown")//
-				.add(S033.class, "(N2) Chasing Reality")//
+				.add(S036.class, "(N2) W-P 1")//
 				.add(S025.class, "(S2) [Chaos] Evening Stars")//
 				.add(S030.class, "(N3) W-P 2")//
 				.add(S042.class, "(S3) [Boundary] Primitization of Epiphenomenon")//
+				.add(S033.class, "(N4) Chasing Reality")//
 				.add(S044.class, "(S4) [Boundary] Boundary of Terror and Beauty")//
 				.add(S035.class, "(S5) Yukari's Damaku Barrier")//
 				.add(S032.class, "(LW) Gensokyo Hakurei Boundary"));
@@ -109,7 +111,7 @@ public class StageSet {
 				.add(S010.class, "S2 [Love] Collision of Genes")//
 				.add(S003.class, "S3 [Awaken] The Third Self"));
 
-		list.add(new SpellSet("Temp ")//
+		list.add(new SpellSet("Temp (2)")//
 				.add(S037.class, "(N1) ")//
 				.add(S043.class, "(S4) Now or Later"));
 

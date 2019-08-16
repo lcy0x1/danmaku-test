@@ -92,7 +92,7 @@ public class S033 extends SpellCard implements Emiter.Ticker {
 				ans[i].trail(adder(lv + 1, p1));
 			else {
 				DotBullet b0 = new DotBullet(new Dot(dot.pos, d1s[lv], new Mover.HomingLM(v2)));
-				if (lv + 2 < m)
+				if (lv + 3 < m)
 					b0.trail(new Emiter(0, new Sub(this, dot.pos, lv + 1)));
 				ans[i].trail(b0);
 			}

@@ -1,8 +1,7 @@
 package stage.s0;
 
 import battle.Sprite;
-import battle.bullet.Dot;
-import battle.bullet.DotBullet;
+import battle.bullet.BulletRing;
 import battle.entity.Emiter;
 import stage.SpellCard;
 import util.P;
@@ -31,13 +30,9 @@ public class S045 extends SpellCard implements Emiter.Ticker {
 
 			double a0 = da * sin(w1 / 2 * (t + sin(w2 * t) / w2));
 			double a1 = -da * sin(w1 / 2 * (t - sin(w2 * t) / w2));
-			for (int i = 0; i < n; i++) {
-				double a2 = a0 + p2 / n * i;
-				double a3 = a1 + p2 / n * i;
-				add(new DotBullet(new Dot(pos.copy(), P.polar(v1, a2), dr0)), ex);
-				add(new DotBullet(new Dot(pos.copy(), P.polar(v0, a3), dr1)), ex);
 
-			}
+			add(new BulletRing(pos, dr0, n, P.polar(v1, a0)), ex);
+			add(new BulletRing(pos, dr1, n, P.polar(v0, a1)), ex);
 		}
 	}
 

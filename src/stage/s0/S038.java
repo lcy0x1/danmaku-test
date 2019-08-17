@@ -56,7 +56,7 @@ public class S038 extends SpellCard implements Emiter.Ticker {
 		if (e.id == 2) {
 			double a0 = pos.atan2(getPlayer().pos);
 			for (int j = 0; j < m; j++)
-				add(new BulletRing(pos, d2, n2, new Mover.LineMover(P.polar(v1 + dv * j, a0))), ex);
+				add(new BulletRing(pos, d2, n2, P.polar(v1 + dv * j, a0)), ex);
 			for (int i = 0; i < n2; i++) {
 				double a1 = a0 + p2 / n2 * i + p2 / n2 / 2;
 				ListCurve lc = new ListCurve(d3);

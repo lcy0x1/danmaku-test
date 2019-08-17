@@ -1,8 +1,10 @@
 package stage.s0;
 
 import battle.Sprite;
+import battle.bullet.BulletRing;
 import battle.bullet.Dot;
 import battle.bullet.DotBullet;
+import battle.bullet.Mover;
 import battle.entity.Emiter;
 import stage.SpellCard;
 import util.P;
@@ -47,12 +49,12 @@ public class S046 extends SpellCard implements Emiter.Ticker {
 					P pv = P.polar(v0, p2 / n0 * i - p2 / 4 + p2 / 8 * 3 * (j * 2 - 1));
 					add(new DotBullet(new Dot(p0, pv, drs[i % 2])), ex);
 				}
-				if (Double.isFinite(as[i]))
-					for (int j = 0; j < n; j++) {
-						P p0 = P.polar(l0, p2 / n0 * i - p2 / 4).plus(pc);
-						P pv = P.polar(v0, p2 / n * j + as[i] + p2 / n / 2 * (i % 2));
-						add(new DotBullet(new Dot(p0, pv, drs[i % 2])), ex);
-					}
+				if (Double.isFinite(as[i])) {
+					P p0 = P.polar(l0, p2 / n0 * i - p2 / 4).plus(pc);
+					P pv = P.polar(v0, as[i] + p2 / n / 2 * (i % 2));
+					Mover mov = new Mover.LineMover(pv);
+					add(new BulletRing(p0, drs[i % 2], n, mov), ex);
+				}
 			}
 		}
 		if (e.id == 1) {
@@ -80,7 +82,7 @@ public class S046 extends SpellCard implements Emiter.Ticker {
 				add(new DotBullet(new Dot(pos.copy(), pv, -va, t0, dss[i % 2])).setLv(K_FUNCTIONAL));
 			}
 			add(new Emiter(0, f0, this, this).setDelay(t0));
-			add(new Emiter(1, f1, f1 * n0, this).setDelay(t0));
+			add(new Emiter(1, f1, f1 * n0 + t0, this).setDelay(t0));
 			add(new Emiter(2, f2, this, this).setDelay(f1 * n0 + t0));
 		}
 		super.update(dt);

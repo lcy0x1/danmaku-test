@@ -2,6 +2,7 @@ package stage.s0;
 
 import battle.Sprite;
 import battle.bullet.Mover;
+import battle.bullet.BulletRing;
 import battle.bullet.Dot;
 import battle.bullet.DotBullet;
 import battle.entity.Emiter;
@@ -128,14 +129,8 @@ public class S044 extends SpellCard implements Emiter.Ticker {
 		}
 		if (e.id == 2) {
 			for (ColorBullet c : cb) {
-				if (c.state == 3) {
-					double a0 = rand(p2);
-					for (int i = 0; i < m; i++) {
-						double a1 = a0 + p2 / m * i;
-						P pv = P.polar(v0, a1);
-						add(new DotBullet(new Dot(c.host.pos.copy(), pv, dbs[c.dire])), ex);
-					}
-				}
+				if (c.state == 3)
+					add(new BulletRing(c.host.pos.copy(), dbs[c.dire], m, P.polar(v0, rand(p2))), ex);
 			}
 		}
 		if (e.id == 3) {

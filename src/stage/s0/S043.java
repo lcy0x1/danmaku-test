@@ -5,6 +5,7 @@ import battle.Sprite;
 import battle.Shape.PosShape;
 import battle.Sprite.ESprite;
 import battle.bullet.Mover;
+import battle.bullet.BulletRing;
 import battle.bullet.Dot;
 import battle.bullet.DotBullet;
 import battle.entity.Emiter;
@@ -66,12 +67,9 @@ public class S043 extends SpellCard implements Emiter.Ticker {
 				dc = d0;
 			if (st == 2) {
 				int x = dc == d0 ? 0 : 1;
-				double a0 = rand(p2);
-				for (int i = 0; i < n; i++) {
-					double a1 = a0 + p2 / n * i;
-					P pv = P.polar(v0 + 1e-5, a1);
-					add(new DotBullet(new Dot(host.pos.copy(), pv, x == 0 ? sa : -sa, x == 0 ? t1 : t2, drs[x])));
-				}
+				P pv = P.polar(v0 + 1e-5, rand(p2));
+				Mover mov = new Mover.LineMover(pv, x == 0 ? sa : -sa, 0, x == 0 ? t1 : t2);
+				add(new BulletRing(host.pos.copy(), drs[x], n, mov));
 			}
 			state = st;
 		}

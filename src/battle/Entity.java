@@ -5,7 +5,7 @@ import java.util.List;
 
 public abstract class Entity implements Updatable {
 
-	public static final int C_ENEMY = 1, C_PLAYER = 2, C_BULLET = 4, C_PATK = 8;
+	public static final int C_ENEMY = 1, C_PLAYER = 2, C_BULLET = 4, C_PATK = 8, C_CLEARER = 16;
 
 	protected final int base, atk;
 	private final List<Control> ctrls = new ArrayList<Control>();

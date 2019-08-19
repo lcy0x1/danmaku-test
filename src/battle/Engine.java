@@ -181,6 +181,8 @@ public class Engine {
 	private final List<Control.UpdCtrl> updc = new ArrayList<>();
 	private final List<Control.UpdCtrl> utmp = new ArrayList<>();
 
+	private boolean clearMark = false;
+
 	private Engine(StageSection sc, Player p) {
 		pl = p;
 		add(pl);
@@ -194,6 +196,10 @@ public class Engine {
 			temp.add((Entity) e);
 		else if (e instanceof Control.UpdCtrl)
 			utmp.add((Control.UpdCtrl) e);
+	}
+
+	public void clear() {
+		clearMark = true;
 	}
 
 	public int count() {
@@ -265,6 +271,14 @@ public class Engine {
 		temp.clear();
 		utmp.forEach(e -> updc.add(e));
 		utmp.clear();
+		if (clearMark) {
+			clearMark = false;
+			updc.removeIf(e -> e != stage);
+			entities.forEach((i, l) -> {
+				if ((i & (Entity.C_PATK | Entity.C_PLAYER | Entity.C_CLEARER)) == 0)
+					l.clear();
+			});
+		}
 	}
 
 }

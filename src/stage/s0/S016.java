@@ -21,7 +21,6 @@ public class S016 extends SpellCard.LifeSpell implements Emiter.Ticker {
 	private static final int f0 = 8000, f1 = 20, f2 = 160, t2 = 30, t3 = 120;
 	private static final int del3 = 4000, ref = 1, n3 = 20, x = 10;
 	private static final double v1 = 0.05, v2 = 0.8, vc = 1.2, dr = 0.9998;
-	private static final P pos = new P(400, 200);
 
 	private static final int[] ns = { 2, 2, 2, 2 };
 	private static final int[] ts = { 40, 50, 60, 70 };
@@ -34,7 +33,7 @@ public class S016 extends SpellCard.LifeSpell implements Emiter.Ticker {
 	private Dot[] tmpp;
 
 	public S016(int diff) {
-		super(60000, pc.copy(), Sprite.BS_SAKUYA);
+		super(60000, new P(400, 200), Sprite.BS_SAKUYA);
 		n = ns[diff];
 		t1 = ts[diff];
 		v0 = vs[diff];

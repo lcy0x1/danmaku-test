@@ -14,7 +14,7 @@ public class Clearer extends Entity {
 	private double nr;
 
 	public Clearer(int atk, P pos, double r, double v, int t, int lv) {
-		super(0, atk);
+		super(C_CLEARER, atk);
 		shape = new Shape.Circle(pos, r);
 		addCtrl(new Control.TimeCtrl(t));
 		nr = r;

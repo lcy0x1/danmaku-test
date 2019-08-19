@@ -21,7 +21,7 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 			private static final Sprite.SParam sp = Sprite.getDot(10701, 0, 1, Sprite.L_PLATK, 128);
 			private static final double v0 = 0.5, w = FM.PI / 3000;
 
-			private static final int DEF_ATK = 5;
+			private static final int DEF_ATK = 10;
 
 			private LHAtker(Player p) {
 				super(p, 100);
@@ -57,7 +57,7 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 			private static final double v0 = 0.5, da0 = FM.PI / 48, da1 = FM.PI / 6;
 			private static final int n = 3, r = 60;
 
-			private static final int DEF_ATK = 5;
+			private static final int DEF_ATK = 10;
 
 			private LWAtker(Player p) {
 				super(p, 100);

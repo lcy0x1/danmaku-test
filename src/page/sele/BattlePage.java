@@ -9,7 +9,7 @@ import main.Timer;
 import page.JBTN;
 import page.JL;
 import page.Page;
-import stage.SpellCard.BossSpell;
+import stage.SpellCard.LifeSpell;
 import stage.StageSection;
 import stage.StageSection.TimedStage;
 import stage.StageSet;
@@ -126,8 +126,8 @@ public class BattlePage extends Page {
 				jtrm.setText("time remain: " + ctim / 1000 + "/" + ttim / 1000);
 			} else
 				jtrm.setText("");
-			if (ss instanceof BossSpell) {
-				BossSpell bs = (BossSpell) ss;
+			if (ss instanceof LifeSpell) {
+				LifeSpell bs = (LifeSpell) ss;
 				double hp = bs.getHP();
 				jlhp.setText("HP: " + (int) (hp * 100) + "%");
 			} else

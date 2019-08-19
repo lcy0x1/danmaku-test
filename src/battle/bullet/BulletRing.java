@@ -74,10 +74,6 @@ public class BulletRing extends Dot {
 	public BulletRing(P c, Sprite.SParam sp, int num, Mover m) {
 		this(c, sp, num, m, -1);
 	}
-	
-	public BulletRing(P c, Sprite.SParam sp, int num, P pv) {
-		this(c, sp, num, new Mover.LineMover(pv), -1);
-	}
 
 	public BulletRing(P c, Sprite.SParam sp, int num, Mover m, int t) {
 		super(c.copy(), sp, m);
@@ -87,6 +83,10 @@ public class BulletRing extends Dot {
 		list = new SubBullet[n];
 		for (int i = 0; i < n; i++)
 			Engine.RUNNING.add(list[i] = new SubBullet(this, i, cen.copy(), sp));
+	}
+
+	public BulletRing(P c, Sprite.SParam sp, int num, P pv) {
+		this(c, sp, num, new Mover.LineMover(pv), -1);
 	}
 
 	@Override

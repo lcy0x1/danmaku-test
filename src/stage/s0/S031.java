@@ -8,7 +8,7 @@ import battle.entity.Emiter;
 import stage.SpellCard;
 import util.P;
 
-public class S031 extends SpellCard.BossSpell implements Emiter.Ticker {
+public class S031 extends SpellCard.LifeSpell implements Emiter.Ticker {
 
 	private static class Sub implements Emiter.Ticker {
 

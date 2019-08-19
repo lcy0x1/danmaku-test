@@ -649,7 +649,7 @@ public class Sprite implements Comparable<Sprite> {
 			{ 14, 14 } };
 
 	public static DSParam getBoss(int boss) {
-		return new BSP(boss, 0, 1, L_BOSS);
+		return new BSP(BS_SAKUYA, 0, 1, L_BOSS);// TODO add more bosses later
 	}
 
 	/**

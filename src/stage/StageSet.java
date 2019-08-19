@@ -2,7 +2,6 @@ package stage;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import stage.s0.*;
 
 public class StageSet {
@@ -37,6 +36,10 @@ public class StageSet {
 
 		private SpellSet(String str) {
 			name = str;
+		}
+
+		public StageSection getStage(int diff) {
+			return new StageSecs(new StageSecs.SpellItr(this, diff));
 		}
 
 		private SpellSet add(Class<? extends StageSection> cls, String str) {
@@ -133,6 +136,8 @@ public class StageSet {
 	}
 
 	public static StageSection getStage(int i, int j, int diff) {
+		if (j < 0)
+			return list.get(i).getStage(diff);
 		return list.get(i).list.get(j).getStage(diff);
 	}
 

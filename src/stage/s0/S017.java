@@ -8,7 +8,7 @@ import battle.entity.Emiter;
 import stage.SpellCard;
 import util.P;
 
-public class S017 extends SpellCard.BossSpell implements Emiter.Ticker {
+public class S017 extends SpellCard.LifeSpell implements Emiter.Ticker {
 
 	private static final Sprite.SParam d0 = Sprite.getDot(20403, 0);
 

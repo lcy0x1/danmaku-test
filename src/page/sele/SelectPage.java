@@ -17,7 +17,8 @@ public class SelectPage extends Page {
 	private static final long serialVersionUID = 1L;
 
 	private final JBTN back = new JBTN("back");
-	private final JBTN strt = new JBTN("start");
+	private final JBTN stsp = new JBTN("start spell");
+	private final JBTN stst = new JBTN("start stage");
 
 	private final JTG cbl = new JTG("clear bullet");
 	private final JTG cbg = new JTG("clear BG");
@@ -45,17 +46,19 @@ public class SelectPage extends Page {
 		set(back, x, y, 0, 0, 200, 50);
 		set(jspm, x, y, 200, 200, 400, 800);
 		set(jsps, x, y, 650, 200, 600, 800);
-		set(strt, x, y, 1300, 200, 200, 50);
-		set(jcb, x, y, 1300, 300, 200, 50);
-		set(cbl, x, y, 1300, 400, 200, 50);
-		set(cbg, x, y, 1300, 500, 200, 50);
-		set(geo, x, y, 1300, 600, 200, 50);
-		set(tex, x, y, 1300, 700, 200, 50);
+		set(stst, x, y, 1300, 200, 200, 50);
+		set(stsp, x, y, 1300, 300, 200, 50);
+		set(jcb, x, y, 1300, 400, 200, 50);
+		set(cbl, x, y, 1300, 500, 200, 50);
+		set(cbg, x, y, 1300, 600, 200, 50);
+		set(geo, x, y, 1300, 700, 200, 50);
+		set(tex, x, y, 1300, 800, 200, 50);
 	}
 
 	private void addListeners() {
 		back.setLnr(e -> changePanel(getFront()));
-		strt.setLnr(e -> changePanel(new BattlePage(this, sele, ssub, jcb.getSelectedIndex())));
+		stst.setLnr(e -> changePanel(new BattlePage(this, sele, -1, jcb.getSelectedIndex())));
+		stsp.setLnr(e -> changePanel(new BattlePage(this, sele, ssub, jcb.getSelectedIndex())));
 
 		cbl.setLnr(x -> Data.CLEARBL = cbl.isSelected());
 		cbg.setLnr(x -> Data.CLEARBG = cbg.isSelected());
@@ -88,7 +91,8 @@ public class SelectPage extends Page {
 
 	private void ini() {
 		add(back);
-		add(strt);
+		add(stst);
+		add(stsp);
 		add(jspm);
 		add(jsps);
 		add(jcb);
@@ -110,6 +114,7 @@ public class SelectPage extends Page {
 	private void setMain(int s) {
 		change(true);
 		sele = s;
+		stst.setEnabled(sele >= 0);
 		if (s == -1) {
 			jls.clearSelection();
 			jls.setListData(new String[0]);
@@ -125,7 +130,7 @@ public class SelectPage extends Page {
 
 	private void setSub(int s) {
 		ssub = s;
-		strt.setEnabled(ssub >= 0);
+		stsp.setEnabled(ssub >= 0);
 	}
 
 }

@@ -2,15 +2,48 @@ package stage;
 
 import battle.Control;
 import battle.Engine;
+import battle.Sprite;
 import battle.Updatable;
-import battle.entity.Clearer;
 import battle.entity.Player;
 import util.FM;
 import util.P;
 
 public abstract class StageSection extends FM implements Control.UpdCtrl {
 
-	public static class BossProfile {
+	public static class BossDire implements Sprite.Dire {
+
+		private final StageSection ss;
+		private final Sprite.ESprite esp;
+		private final P pos;
+
+		public BossDire(StageSection sec, int id, P p) {
+			esp = Sprite.getBoss(id).getEntity(this);
+			pos = p;
+			ss = sec;
+		}
+
+		public void draw() {
+			esp.draw();
+		}
+
+		@Override
+		public double getDire() {
+			return 0;
+		}
+
+		@Override
+		public P getPos() {
+			return pos;
+		}
+
+		@Override
+		public int getTime() {
+			return ss.time;
+		}
+
+	}
+
+	public static class BossProfile implements Comparable<BossProfile> {
 
 		public final int id;
 
@@ -21,11 +54,14 @@ public abstract class StageSection extends FM implements Control.UpdCtrl {
 			pos = p;
 		}
 
+		@Override
+		public int compareTo(BossProfile o) {
+			return Integer.compare(id, o.id);
+		}
+
 	}
 
 	public static abstract class TimedStage extends StageSection {
-
-		public int time;
 
 		public final int length;
 
@@ -36,20 +72,6 @@ public abstract class StageSection extends FM implements Control.UpdCtrl {
 		@Override
 		public boolean finished() {
 			return time > length;
-		}
-
-		@Override
-		public void post() {
-			if (finished()) {
-				add(new Clearer(pc, 0, 1, 1300, K_BULLET));
-				add(new Clearer(pc, 0, 0.75, 1700, K_FUNCTIONAL));
-				add(new Clearer(pc, 0, 0.5, 2600, K_FINISH));
-			}
-		}
-
-		@Override
-		public void update(int dt) {
-			time += dt;
 		}
 
 	}
@@ -77,6 +99,13 @@ public abstract class StageSection extends FM implements Control.UpdCtrl {
 		return Engine.RUNNING.r.nextDouble() * a;
 	}
 
-	public abstract BossProfile[] getBossPos();
+	public int time;
+
+	public abstract BossProfile[] getBoss();
+
+	@Override
+	public void update(int dt) {
+		time += dt;
+	}
 
 }

@@ -142,6 +142,7 @@ public class Dot implements Sprite.Dire, Control.UpdCtrl {
 
 	private double dire = Double.NaN;
 	private int time;
+	private boolean delayed = false;
 
 	public Dot(DSParam img, TimeMover tm) {
 		this(tm.disp(0), img, tm);
@@ -208,6 +209,7 @@ public class Dot implements Sprite.Dire, Control.UpdCtrl {
 
 	public Dot delay(int t) {
 		time -= t;
+		delayed = true;
 		return this;
 	}
 
@@ -279,7 +281,7 @@ public class Dot implements Sprite.Dire, Control.UpdCtrl {
 	@Override
 	public void update(int t) {
 		tmp.setTo(pos);
-		if (time >= 0 && move != null)
+		if ((!delayed || time >= 0) && move != null)
 			move.update(this, t);
 		spr.update(t);
 		time += t;

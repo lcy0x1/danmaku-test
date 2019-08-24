@@ -19,7 +19,7 @@ public class Player extends Entity implements Sprite.Dire, Shape {
 		private static class LHAtker extends PlAtker {
 
 			private static final Sprite.SParam sp = Sprite.getDot(10701, 0, 1, Sprite.L_PLATK, 128);
-			private static final double v0 = 0.5, w = FM.PI / 3000;
+			private static final double v0 = 0.5, w = FM.PI / 1000;
 
 			private static final int DEF_ATK = 10;
 

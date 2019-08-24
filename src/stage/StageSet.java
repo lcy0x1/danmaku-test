@@ -116,7 +116,8 @@ public class StageSet {
 
 		list.add(new SpellSet("Temp (2)")//
 				.add(S037.class, "(N1) ")//
-				.add(S043.class, "(S4) Now or Later"));
+				.add(S043.class, "(S4) Now or Later")//
+				.add(S047.class, "(S1) Time Reverse"));
 
 	}
 

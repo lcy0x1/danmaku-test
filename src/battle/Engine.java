@@ -40,7 +40,7 @@ public class Engine {
 
 		public static abstract class Mask {
 
-			private int len;
+			public int len;
 
 			public Mask(int l) {
 				len = l;
@@ -109,6 +109,10 @@ public class Engine {
 			t = 0;
 		}
 
+		public void slow(Mask m) {
+			temp.add(m);
+		}
+
 		public void slowExc(double mult, int len, Updatable... es) {
 			Set<Updatable> l = new HashSet<>();
 			for (Updatable e : es)
@@ -166,6 +170,8 @@ public class Engine {
 
 	public static final P BOUND = new P(800, 1000), START = new P(400, 900);
 
+	public static final int CLEAR_POINTS = 1;
+
 	public static Engine RUNNING = null;
 	public static Sprite.Pool RENDERING = null;
 
@@ -181,7 +187,7 @@ public class Engine {
 	private final List<Control.UpdCtrl> updc = new ArrayList<>();
 	private final List<Control.UpdCtrl> utmp = new ArrayList<>();
 
-	private boolean clearMark = false;
+	private int clearMark = -1;
 
 	private Engine(StageSection sc, Player p) {
 		pl = p;
@@ -198,8 +204,8 @@ public class Engine {
 			utmp.add((Control.UpdCtrl) e);
 	}
 
-	public void clear() {
-		clearMark = true;
+	public void clear(int type) {
+		clearMark = type;
 	}
 
 	public int count() {
@@ -269,14 +275,14 @@ public class Engine {
 			l.add(e);
 		});
 		temp.clear();
-		utmp.forEach(e -> updc.add(e));
+		updc.addAll(utmp);
 		utmp.clear();
-		if (clearMark) {
-			clearMark = false;
+		if (clearMark > 0) {
+			clearMark = -1;
 			updc.removeIf(e -> e != stage);
 			entities.forEach((i, l) -> {
 				if ((i & (Entity.C_PATK | Entity.C_PLAYER | Entity.C_CLEARER)) == 0)
-					l.clear();
+					l.forEach(e -> e.getEntCtrl().killed(Control.K_FINISH));
 			});
 		}
 	}

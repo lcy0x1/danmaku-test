@@ -224,28 +224,29 @@ public interface Mover {
 		@Override
 		public void update(Dot d, int t) {
 			d.tmp.plus(v, t);
+			int s = t < 0 ? 1 : -1;
 			if (rem == 0)
 				return;
 
 			if (rem != 0 && d.tmp.x + r > dr.x && (mode & RIGHT) > 0) {
 				d.tmp.x = 2 * dr.x - 2 * r - d.tmp.x;
 				v.x *= -1;
-				rem--;
+				rem += s;
 			}
 			if (rem != 0 && d.tmp.x - r < ul.x && (mode & LEFT) > 0) {
 				d.tmp.x = 2 * ul.x + 2 * r - d.tmp.x;
 				v.x *= -1;
-				rem--;
+				rem += s;
 			}
 			if (rem != 0 && d.tmp.y + r > dr.y && (mode & DOWN) > 0) {
 				d.tmp.y = 2 * dr.y - 2 * r - d.tmp.y;
 				v.y *= -1;
-				rem--;
+				rem += s;
 			}
 			if (rem != 0 && d.tmp.y - r < ul.y && (mode & UP) > 0) {
 				d.tmp.y = 2 * ul.y + 2 * r - d.tmp.y;
 				v.y *= -1;
-				rem--;
+				rem += s;
 			}
 
 		}

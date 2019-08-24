@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import battle.Engine;
 import stage.StageSet.Spell;
 import stage.StageSet.SpellSet;
 import util.P;
@@ -148,11 +147,8 @@ public class StageSecs extends StageSection {
 		cur.post();
 		if (finished())
 			return;
-		if (cur.finished()) {
-			System.out.println("nexting");
+		if (cur.finished())
 			cur = list.next();
-			Engine.RUNNING.clear();
-		}
 	}
 
 	@Override

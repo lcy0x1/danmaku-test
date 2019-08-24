@@ -1,8 +1,8 @@
 package stage;
 
+import battle.Engine;
 import battle.Sprite;
 import battle.bullet.Dot;
-import battle.entity.Clearer;
 import battle.entity.Life;
 import stage.StageSection.TimedStage;
 import util.P;
@@ -60,7 +60,7 @@ public class SpellCard extends TimedStage {
 	}
 
 	protected SpellCard(int tot, P p) {
-		this(tot, p, -1);
+		this(tot, p, 0);
 	}
 
 	protected SpellCard(int tot, P p, int boss) {
@@ -82,8 +82,9 @@ public class SpellCard extends TimedStage {
 
 	@Override
 	public void post() {
-		if (finished())
-			add(new Clearer(pc, 0, 1, 1300, K_FINISH));
+		if (finished()) {
+			Engine.RUNNING.clear(Engine.CLEAR_POINTS);
+		}
 	}
 
 }
